@@ -1,0 +1,22 @@
+{
+  "presets": [
+    ["env", {
+      "modules": false
+    }],
+    "react"
+  ],
+  "plugins": [
+    "transform-es2015-spread",
+    "transform-object-rest-spread",
+    ["module-resolver/lib/index.js", {
+      "alias": {
+        "": "./src"
+      }
+    }],
+    ["jsx-import/src/index.js", {
+      "identifier": "Preact",
+      "moduleName": "preact"
+    }],
+    ["transform-react-jsx", {"pragma": "Preact.h"}]
+  ]
+}
