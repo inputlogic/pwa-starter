@@ -3,15 +3,30 @@ const state = {
   initial: 1
 }
 
+// no touchy
+const listeners = {}
+
+function notifyListeners (paths) {
+  const fns = listeners[paths]
+  if (fns && fns.length) {
+    fns.forEach(fn => fn())
+  }
+}
+
+export function subscribe (paths, listener) {
+  listeners[paths] = listeners[paths] || []
+  listeners[paths].push(listener)
+}
+
 export function getState () {
-  return Object.freeze(state)
+  return Object.freeze({...state})
 }
 
 export function get (paths) {
   paths = paths.split('.')
-  let val = Object.freeze(state)
+  let val = Object.freeze({...state})
   for (let x = 0; x < paths.length; x++) {
-    if (val == null) return
+    if (val == null) break
     val = val[paths[x]]
   }
   return val
@@ -26,5 +41,6 @@ export function set (paths, valToSet) {
     }
     return obj[prop]
   }, state)
-  return Object.freeze(state)
+  notifyListeners(paths)
+  return Object.freeze({...state})
 }

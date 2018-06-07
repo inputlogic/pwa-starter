@@ -23,7 +23,7 @@ export default {
       include: 'node_modules/**', // Default: undefined
 
       // if false then skip sourceMap generation for CommonJS modules
-      sourceMap: false // Default: true
+      sourceMap: false // Default: true,
     }),
     babel({
       exclude: 'node_modules/**' // only transpile our source code
