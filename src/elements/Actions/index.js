@@ -1,13 +1,20 @@
 import loadImage from '/util/loadImage'
+import WithState from '/hoc/WithState'
 import {set} from '/store'
 
 export default () =>
-  <div className='actions layout-center'>
-    <div class='file-input'>
-      <input type='file' id='input-photo' accept='image/*' onChange={onPhotoInputChange} />
-      <label for='input-photo'>+</label>
-    </div>
-  </div>
+  <WithState mapper={({newImage}) => ({newImage})}>
+    {({newImage}) =>
+      newImage
+        ? null
+        : <div className='actions layout-center'>
+          <div class='file-input'>
+            <input type='file' id='input-photo' accept='image/*' onChange={onPhotoInputChange} />
+            <label for='input-photo'>+</label>
+          </div>
+        </div>
+    }
+  </WithState>
 
 function onPhotoInputChange (ev) {
   const cameraCanvas = document.getElementById('camera-canvas')

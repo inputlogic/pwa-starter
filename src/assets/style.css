@@ -7,7 +7,7 @@ body {
   font-size: 17px;
   line-height: 1.428571429;
   color: #1a1a1a;
-  background-color: lemonchiffon;
+  background-color: white;
   margin: 0;
   padding: 0;
 }
@@ -44,6 +44,7 @@ pre {
 
 header {
   padding: 1em 0;
+  background-color: lemonchiffon;
 }
 
 /* Layout */

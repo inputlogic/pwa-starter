@@ -1,24 +1,18 @@
 import Preact from 'preact'
 
-import Router from '/hoc/Router'
-import NotFound from '/pages/NotFound'
+// import Router from '/hoc/Router'
+// import NotFound from '/pages/NotFound'
 
+import Header from '/elements/Header'
 import Actions from '/elements/Actions'
 import Canvas from '/elements/Canvas'
 
 import {subscribe, getState} from '/store'
 
-const Header = () =>
-  <header class='layout-center'>
-    <h1>Daily</h1>
-  </header>
-
-export const MainApp = ({currentPath}) =>
+export const MainApp = () =>
   <div className='main-app-container' >
     <Header />
     <Canvas />
-    <Router currentPath={currentPath} />
-    <NotFound />
     <Actions />
   </div>
 
