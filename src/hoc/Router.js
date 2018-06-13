@@ -49,8 +49,8 @@ export default function ({currentPath}) {
   for (let route in routes) {
     const routeArgs = exec(currentPath, routes[route].path)
     if (routeArgs) {
-      const Page = routes[route].Page
       set('route', {name: route, path: routes[route].path, args: routeArgs})
+      const Page = routes[route].Page
       return <Page {...routeArgs} />
     }
   }

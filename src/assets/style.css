@@ -1,0 +1,142 @@
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.428571429;
+  color: #1a1a1a;
+  background-color: lemonchiffon;
+  margin: 0;
+  padding: 0;
+}
+
+.main-app-container {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+
+/* Typography */
+
+a {
+  color: #1a1a1a;
+}
+
+h1 {
+  color: #1a1a1a;
+  font-weight: 400;
+  font-size: 35px;
+  line-height: 1.2;
+  margin-top: 0;
+}
+
+pre {
+  font-size: 14px;
+}
+
+.bigger {
+  font-size: 42px;
+}
+
+/* Header */
+
+header {
+  padding: 1em 0;
+}
+
+/* Layout */
+
+#main {
+  margin: 0 auto;
+  height: 100%;
+}
+
+.page {
+  z-index: 1;
+  position: absolute;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  height: -webkit-calc(100% - 72px);
+  height: -moz-calc(100% - 72px);
+  height: -o-calc(100% - 72px);
+  height: -ms-calc(100% - 72px);
+  height: calc(100% - 72px);
+  top: 72px;
+  left: 0;
+  overflow: hidden;
+  background: white;
+}
+
+.layer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+
+.layer > canvas {
+  z-index: 1;
+  position: absolute;
+  width: 100%;
+  height: auto;
+}
+
+.layout-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.layout-fill {
+  display: flex;
+  flex-direction: column;
+}
+
+.layout-fill > div {
+  flex: 1;
+}
+
+/* Actions */
+
+.actions {
+  position: fixed;
+  z-index: 11;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2em 1em;
+}
+
+.actions input[type='file'] {
+  display: none;
+}
+
+.actions button,
+.actions label {
+  border: 0;
+  background: transparent;
+  font-size: 48px;
+}
+
+/* Keyframes */
+
+@keyframes fadein {
+  from { opacity: 0; transform: translateY(-100px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes riseup {
+  from { opacity: 0; transform: translateY(100px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

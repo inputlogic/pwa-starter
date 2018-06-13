@@ -8,6 +8,7 @@ const state = {
 }
 
 // no touchy
+const ANY = '*'
 const listeners = {}
 
 function notifyListeners (path) {
@@ -18,6 +19,10 @@ function notifyListeners (path) {
 }
 
 export function subscribe (path, listener) {
+  if (!listener) {
+    listener = path
+    path = ANY
+  }
   listeners[path] = listeners[path] || []
   listeners[path].push(listener)
   return function unsubscribe () {
@@ -40,6 +45,7 @@ export function get (paths) {
 }
 
 export function set (path, valToSet) {
+  console.log('set', path, valToSet)
   let changed = false
   let paths = path.split('.')
   paths.reduce((obj, prop, idx) => {
@@ -55,6 +61,7 @@ export function set (path, valToSet) {
       notifyListeners(paths.join('.'))
       paths = paths.slice(0, -1)
     }
+    notifyListeners(ANY)
   }
   return Object.freeze({...state})
 }
