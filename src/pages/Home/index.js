@@ -1,17 +1,22 @@
 import {getState, subscribe, set} from '/store'
 
-subscribe('initial', () => {
-  console.log('subscribe', getState())
+subscribe('parent', () => {
+  console.log('parent', getState().parent.nested.child)
 })
 
-subscribe('other.path', () => {
-  console.log('not called')
+subscribe('parent.nested', () => {
+  console.log('parent.nested', getState().parent.nested.child)
+})
+
+const unsub = subscribe('parent.nested.child', () => {
+  console.log('parent.nested.child', getState().parent.nested.child)
+  unsub()
 })
 
 const onClick = ev => {
   ev.preventDefault()
   let state = getState()
-  set('initial', state.initial + 1)
+  set('parent.nested.child', state.parent.nested.child + 1)
 }
 
 export default (props) =>

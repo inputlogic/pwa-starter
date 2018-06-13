@@ -1,21 +1,28 @@
 // Set initial state here
 const state = {
-  initial: 1
+  parent: {
+    nested: {
+      child: 1
+    }
+  }
 }
 
 // no touchy
 const listeners = {}
 
-function notifyListeners (paths) {
-  const fns = listeners[paths]
+function notifyListeners (path) {
+  const fns = listeners[path]
   if (fns && fns.length) {
     fns.forEach(fn => fn())
   }
 }
 
-export function subscribe (paths, listener) {
-  listeners[paths] = listeners[paths] || []
-  listeners[paths].push(listener)
+export function subscribe (path, listener) {
+  listeners[path] = listeners[path] || []
+  listeners[path].push(listener)
+  return function unsubscribe () {
+    listeners[path] = listeners[path].filter(fn => fn !== listener)
+  }
 }
 
 export function getState () {
@@ -32,15 +39,22 @@ export function get (paths) {
   return val
 }
 
-export function set (paths, valToSet) {
-  paths = paths.split('.')
-  paths.reduce(function (obj, prop, idx) {
+export function set (path, valToSet) {
+  let changed = false
+  let paths = path.split('.')
+  paths.reduce((obj, prop, idx) => {
     obj[prop] = obj[prop] || {}
     if (paths.length === (idx + 1)) {
       obj[prop] = valToSet
+      changed = true
     }
     return obj[prop]
   }, state)
-  notifyListeners(paths)
+  if (changed) {
+    while (paths.length) {
+      notifyListeners(paths.join('.'))
+      paths = paths.slice(0, -1)
+    }
+  }
   return Object.freeze({...state})
 }
