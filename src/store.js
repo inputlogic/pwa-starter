@@ -1,67 +1,30 @@
-// Set initial state here
+import {DEBUG} from '/consts'
+
 const state = {
+  clicks: 1,
+  wins: 1,
   parent: {
     nested: {
       child: 1
     }
   }
 }
+const components = []
 
-// no touchy
-const ANY = '*'
-const listeners = {}
-
-function notifyListeners (path) {
-  const fns = listeners[path]
-  if (fns && fns.length) {
-    fns.forEach(fn => fn())
-  }
+export const subscribe = component => {
+  components.push(component)
+  return getState()
 }
 
-export function subscribe (path, listener) {
-  if (!listener) {
-    listener = path
-    path = ANY
-  }
-  listeners[path] = listeners[path] || []
-  listeners[path].push(listener)
-  return function unsubscribe () {
-    listeners[path] = listeners[path].filter(fn => fn !== listener)
-  }
+export const unsubscribe = component => {
+  const idx = components.findIndex(c => c === component)
+  idx > -1 && components.splice(idx, 1)
 }
 
-export function getState () {
-  return Object.freeze({...state})
-}
+export const getState = () => Object.freeze({...state})
 
-export function get (paths) {
-  paths = paths.split('.')
-  let val = Object.freeze({...state})
-  for (let x = 0; x < paths.length; x++) {
-    if (val == null) break
-    val = val[paths[x]]
-  }
-  return val
-}
-
-export function set (path, valToSet) {
-  console.log('set', path, valToSet)
-  let changed = false
-  let paths = path.split('.')
-  paths.reduce((obj, prop, idx) => {
-    obj[prop] = obj[prop] || {}
-    if (paths.length === (idx + 1)) {
-      obj[prop] = valToSet
-      changed = true
-    }
-    return obj[prop]
-  }, state)
-  if (changed) {
-    while (paths.length) {
-      notifyListeners(paths.join('.'))
-      paths = paths.slice(0, -1)
-    }
-    notifyListeners(ANY)
-  }
-  return Object.freeze({...state})
+export const setState = updatedState => {
+  Object.assign(state, updatedState)
+  DEBUG && console.log('setState', updatedState, state)
+  components.forEach(c => c.setState(state))
 }

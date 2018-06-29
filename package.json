@@ -1,7 +1,7 @@
 {
-  "name": "daily",
+  "name": "pwa-starter",
   "version": "0.0.1",
-  "description": "Share your daily stories in pictures",
+  "description": "PWA Starter with Preact",
   "main": "bundle.js",
   "scripts": {
     "prebuild": "npm run std --silent",
@@ -17,9 +17,8 @@
   },
   "keywords": [],
   "author": "Adrian Unger",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
-    "check-arg-types": "1.1.0",
     "preact": "8.2.9"
   },
   "devDependencies": {

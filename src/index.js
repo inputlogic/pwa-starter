@@ -1,26 +1,19 @@
 import Preact from 'preact'
 
-// import Router from '/hoc/Router'
-// import NotFound from '/pages/NotFound'
-
+import Router from '/hoc/Router'
 import Header from '/elements/Header'
-import Actions from '/elements/Actions'
-import Canvas from '/elements/Canvas'
-
-import {subscribe, getState} from '/store'
+import NotFound from '/pages/NotFound'
 
 export const MainApp = () =>
   <div className='main-app-container' >
     <Header />
-    <Canvas />
-    <Actions />
+    <Router currentPath={window.location.pathname} />
+    <NotFound />
   </div>
 
 if (typeof window !== 'undefined') {
-  Preact.render(<MainApp currentPath={window.location.pathname} />, document.body, document.body.children[0])
-  if (window.location.hostname.indexOf('local') !== -1) {
-    subscribe(() => {
-      console.log('state', getState())
-    })
-  }
+  Preact.render(
+    <MainApp />,
+    document.body, document.body.children[0]
+  )
 }

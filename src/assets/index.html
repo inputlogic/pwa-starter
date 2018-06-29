@@ -7,7 +7,27 @@
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
-    <main></main>
+    <div class='main-app-container' >
+      <header id='header' class='layout-center'>
+        <h1>Daily</h1>
+      </header>
+
+      <div id='canvases' class='page'>
+        <div class='layer' id='camera-canvas-wrapper'>
+          <canvas id='camera-canvas' />
+        </div>
+        <div class='layer'>
+          <canvas id='draw-canvas' />
+        </div>
+      </div>
+
+      <div id='actions' class='layout-center'>
+        <div class='file-input'>
+          <input type='file' id='input-photo' accept='image/*' />
+          <label for='input-photo'>+</label>
+        </div>
+      </div>
+    </div>
     <script src="./bundle.js"></script>
   </body>
 </html>

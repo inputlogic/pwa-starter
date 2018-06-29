@@ -1,4 +1,4 @@
-import {get} from '/store'
+import {getState} from '/store'
 
 const Base = () =>
   <div>
@@ -6,4 +6,4 @@ const Base = () =>
   </div>
 
 export default (props) =>
-  !get('route') ? Base() : null
+  !getState().route ? Base() : null

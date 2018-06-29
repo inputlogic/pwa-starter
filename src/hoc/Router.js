@@ -1,4 +1,4 @@
-import {set} from '/store'
+import {setState} from '/store'
 import routes from '/routes'
 
 function segmentize (url) {
@@ -49,7 +49,13 @@ export default function ({currentPath}) {
   for (let route in routes) {
     const routeArgs = exec(currentPath, routes[route].path)
     if (routeArgs) {
-      set('route', {name: route, path: routes[route].path, args: routeArgs})
+      setState({
+        route: {
+          name: route,
+          path: routes[route].path,
+          args: routeArgs
+        }
+      })
       const Page = routes[route].Page
       return <Page {...routeArgs} />
     }

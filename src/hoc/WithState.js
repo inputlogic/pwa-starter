@@ -1,26 +1,30 @@
 import Preact from 'preact'
-import {getState, subscribe} from '/store'
-
-const equal = (o1, o2) => JSON.stringify(o1) === JSON.stringify(o2)
+import equal from '/util/equal'
+import {getState, subscribe, unsubscribe} from '/store'
 
 export default class WithState extends Preact.Component {
   constructor (props) {
     super(props)
-    this.state = {_mappedState: props.mapper(getState(), props)}
-  }
-
-  componentDidMount () {
-    const syncState = () => {
-      const newProps = this.props.mapper(getState(), this.props)
-      if (!equal(newProps, this.state._mappedState)) {
-        this.setState({_mappedState: {...newProps}})
-      }
-    }
-    this.unsubscribe = subscribe(syncState)
+    const allState = subscribe(this)
+    this.state = {...allState, _mappedState: props.mapper(allState, props)}
   }
 
   componentWillUnmount () {
-    this.unsubscribe()
+    unsubscribe(this)
+  }
+
+  shouldComponentUpdate (nextProps, nextState) {
+    return !equal(
+      nextProps.mapper(nextState, nextProps),
+      this.state._mappedState
+    )
+  }
+
+  componentDidUpdate () {
+    const _mappedState = this.props.mapper(getState(), this.props)
+    if (!equal(_mappedState, this.state._mappedState)) {
+      this.setState({_mappedState})
+    }
   }
 
   render ({children}, {_mappedState}) {

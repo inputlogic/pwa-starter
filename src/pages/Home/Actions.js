@@ -1,6 +1,6 @@
 import loadImage from '/util/loadImage'
 import WithState from '/hoc/WithState'
-import {set} from '/store'
+import {setState} from '/store'
 
 export default () =>
   <WithState mapper={({newImage}) => ({newImage})}>
@@ -34,12 +34,12 @@ function onPhotoInputChange (ev) {
     pixelRatio: window.devicePixelRatio
   }
 
-  loadImage(ev.target.files[0], result => {
-    if (result.type === 'error') {
-      console.error('Error loading image', result)
+  loadImage(ev.target.files[0], newImage => {
+    if (newImage.type === 'error') {
+      console.error('Error loading image', newImage)
     } else {
-      console.log('Generated canvas width and height', result, result.width, result.height)
-      set('newImage', result)
+      console.log('Generated canvas width and height', newImage, newImage.width, newImage.height)
+      setState({newImage})
     }
   }, options)
 }
