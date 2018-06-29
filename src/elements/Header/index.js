@@ -1,5 +1,5 @@
 import WithState from '/hoc/WithState'
-import clickState from '/util/clickState'
+import {clickState} from '/store'
 
 export default () =>
   <WithState mapper={({clicks}) => ({clicks})}>

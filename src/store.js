@@ -28,3 +28,12 @@ export const setState = updatedState => {
   DEBUG && console.log('setState', updatedState, state)
   components.forEach(c => c.setState(state))
 }
+
+export const clickState = state => ev => {
+  ev.preventDefault()
+  setState(
+    typeof state === 'function'
+      ? state(getState())
+      : state
+  )
+}
