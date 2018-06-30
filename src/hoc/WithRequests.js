@@ -37,32 +37,25 @@ export default class WithRequests extends Preact.Component {
             results[k] = parse ? parse(r) : defaultParse(r)
             resolve()
           })
-          .catch(err => {
-            console.error(k, url, err)
-            reject(err)
-          })
+          .catch(err => reject(err))
       })
     })
 
     Promise
       .all(proms)
-      .then(() => {
-        this.setState({_results: results, isLoading: false})
-      })
-      .catch(err => {
-        console.error('_makeRequests', err)
-      })
+      .then(() => this.setState({_results: results, isLoading: false}))
+      .catch(err => this.setState({err}))
   }
 
   componentDidMount () {
     this._makeRequests()
   }
 
-  render ({children}, {_results = {}, isLoading}) {
+  render ({children}, {_results = {}, isLoading, err}) {
     const child = children[0]
     if (!child || typeof child !== 'function') {
       throw new Error('WithRequests requires a function as its only child')
     }
-    return child({..._results, isLoading})
+    return child({..._results, isLoading, err})
   }
 }

@@ -5,8 +5,8 @@ import {getState, subscribe, unsubscribe} from '/store'
 export default class WithState extends Preact.Component {
   constructor (props) {
     super(props)
-    const allState = subscribe(this)
-    this.state = {...allState, _mappedState: props.mapper(allState, props)}
+    const state = subscribe(this)
+    this.state = {...state, _mappedState: props.mapper(state, props)}
   }
 
   componentWillUnmount () {
