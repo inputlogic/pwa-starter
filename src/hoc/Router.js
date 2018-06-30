@@ -1,11 +1,11 @@
-import Preact from 'preact'
+import WithState from '/hoc/WithState'
 import {setState} from '/store'
 
-function segmentize (url) {
+const segmentize = (url) => {
   return url.replace(/(^\/+|\/+$)/g, '').split('/')
 }
 
-function exec (url, route) {
+const exec = (url, route) => {
   let reg = /(?:\?([^#]*))?(#.*)?$/
   let c = url.match(reg)
   let matches = {}
@@ -45,27 +45,35 @@ function exec (url, route) {
   return matches
 }
 
-export default class Router extends Preact.Component {
-  componentDidMount () {
-    window.addEventListener('replaceState', function (e) {
-      console.warn('THEY DID IT AGAIN!')
-    })
-  }
-
-  render ({currentPath, routes}) {
-    for (let route in routes) {
-      const routeArgs = exec(currentPath, routes[route].path)
-      if (routeArgs) {
-        setState({
-          route: {
-            name: route,
-            path: routes[route].path,
-            args: routeArgs
-          }
-        })
-        const Page = routes[route].Page
-        return <Page {...routeArgs} />
-      }
+if (typeof window !== 'undefined') {
+  document.addEventListener('click', ev => {
+    if (ev.target.nodeName === 'A') {
+      ev.preventDefault()
+      ev.stopImmediatePropagation()
+      window.scrollTo(0, 0)
+      const url = ev.target.getAttribute('href')
+      window.history['pushState'](null, null, url)
+      setState({currentPath: url})
     }
-  }
+  })
 }
+
+export default ({routes}) =>
+  <WithState mapper={({currentPath}) => ({currentPath})}>
+    {({currentPath}) => {
+      for (let route in routes) {
+        const routeArgs = exec(currentPath, routes[route].path)
+        if (routeArgs) {
+          setState({
+            route: {
+              name: route,
+              path: routes[route].path,
+              args: routeArgs
+            }
+          })
+          const Page = routes[route].Page
+          return <Page {...routeArgs} />
+        }
+      }
+    }}
+  </WithState>
