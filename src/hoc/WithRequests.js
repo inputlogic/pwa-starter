@@ -4,6 +4,8 @@ import {getState} from '/store'
 
 const defaultParse = r => r.result || r
 
+// @TODO: Cache timeout
+// @TODO: cancel requests that are no longer valid
 const XHRS = {}
 
 export default class WithRequests extends Preact.Component {
