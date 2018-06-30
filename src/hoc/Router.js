@@ -1,5 +1,5 @@
+import Preact from 'preact'
 import {setState} from '/store'
-import routes from '/routes'
 
 function segmentize (url) {
   return url.replace(/(^\/+|\/+$)/g, '').split('/')
@@ -45,19 +45,27 @@ function exec (url, route) {
   return matches
 }
 
-export default function ({currentPath}) {
-  for (let route in routes) {
-    const routeArgs = exec(currentPath, routes[route].path)
-    if (routeArgs) {
-      setState({
-        route: {
-          name: route,
-          path: routes[route].path,
-          args: routeArgs
-        }
-      })
-      const Page = routes[route].Page
-      return <Page {...routeArgs} />
+export default class Router extends Preact.Component {
+  componentDidMount () {
+    window.addEventListener('replaceState', function (e) {
+      console.warn('THEY DID IT AGAIN!')
+    })
+  }
+
+  render ({currentPath, routes}) {
+    for (let route in routes) {
+      const routeArgs = exec(currentPath, routes[route].path)
+      if (routeArgs) {
+        setState({
+          route: {
+            name: route,
+            path: routes[route].path,
+            args: routeArgs
+          }
+        })
+        const Page = routes[route].Page
+        return <Page {...routeArgs} />
+      }
     }
   }
 }
