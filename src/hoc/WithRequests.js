@@ -20,9 +20,8 @@ export default class WithRequests extends Preact.Component {
   _makeRequests () {
     const requests = this.state.requests || {}
     const keys = Object.keys(requests)
-    if (!keys || !keys.length) {
-      return
-    }
+
+    if (!keys || !keys.length) return
 
     const results = {}
     const proms = keys.map(k => {
@@ -31,14 +30,11 @@ export default class WithRequests extends Preact.Component {
       if (!XHRS[url]) {
         XHRS[url] = {xhr, promise}
       }
-      return new Promise((resolve, reject) => {
-        promise
-          .then(r => {
-            results[k] = parse ? parse(r) : defaultParse(r)
-            resolve()
-          })
-          .catch(err => reject(err))
-      })
+      return promise
+        .then(r => {
+          results[k] = parse ? parse(r) : defaultParse(r)
+          return results[k]
+        })
     })
 
     Promise
