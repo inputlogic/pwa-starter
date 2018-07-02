@@ -1,18 +1,14 @@
-import WithRequests from '/hoc/WithRequests'
+import Resource from '/hoc/Resource'
 
 const url = 'https://jsonplaceholder.typicode.com/users/'
 
 export default ({id}) =>
-  <WithRequests requests={{user: {url: `${url}${id}`}}}>
-    {({user = [], isLoading}) =>
+  <Resource url={`${url}${id}`}>
+    {({name, email}) =>
       <div>
-        {isLoading
-          ? <h3>Loading...</h3>
-          : <div>
-            <h1>{user.name}</h1>
-            <p>{user.email}</p>
-          </div>}
+        <h1>{name}</h1>
+        <p>{email}</p>
         <p><a href='/users'>&larr; Back to all Users</a></p>
       </div>
     }
-  </WithRequests>
+  </Resource>
