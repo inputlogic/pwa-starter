@@ -6,7 +6,11 @@ export default () =>
   <WithState mapper={({newImage}) => ({newImage})}>
     {({newImage}) =>
       newImage
-        ? null
+        ? <div className='actions layout-center'>
+          <button>x</button>
+          <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+          <button>✓</button>
+        </div>
         : <div className='actions layout-center'>
           <div class='file-input'>
             <input type='file' id='input-photo' accept='image/*' onChange={onPhotoInputChange} />
@@ -17,29 +21,17 @@ export default () =>
   </WithState>
 
 function onPhotoInputChange (ev) {
-  const cameraCanvas = document.getElementById('camera-canvas')
-  if (!cameraCanvas) {
-    console.error('Could not find cameraCanvas!')
+  if (!ev.target.files || !ev.target.files.length) {
+    console.error('Missing files!', ev)
     return
   }
 
-  console.log('Min width and height', cameraCanvas.width, cameraCanvas.height)
-
-  const options = {
-    maxWidth: cameraCanvas.width,
-    maxHeight: cameraCanvas.height,
-    contain: true,
-    orientation: true,
-    canvas: true,
-    pixelRatio: window.devicePixelRatio
-  }
-
-  loadImage(ev.target.files[0], newImage => {
-    if (newImage.type === 'error') {
-      console.error('Error loading image', newImage)
+  loadImage(ev.target.files[0], (err, newImage) => {
+    if (err) {
+      console.error('Error loading image', err, newImage)
     } else {
-      console.log('Generated canvas width and height', newImage, newImage.width, newImage.height)
+      console.log('loadImage', ev.target.files[0])
       setState({newImage})
     }
-  }, options)
+  })
 }
