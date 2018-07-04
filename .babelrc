@@ -6,6 +6,7 @@
     "react"
   ],
   "plugins": [
+    "external-helpers",
     "transform-es2015-spread",
     "transform-object-rest-spread",
     ["module-resolver/lib/index.js", {

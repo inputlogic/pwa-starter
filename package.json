@@ -22,13 +22,15 @@
     "preact": "8.2.9"
   },
   "devDependencies": {
+    "@ampproject/rollup-plugin-closure-compiler": "^0.3.1",
     "ava": "0.22.0",
     "babel-core": "6.26.0",
+    "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-jsx-import": "github:staydecent/babel-plugin-jsx-import",
     "babel-plugin-module-resolver": "3.1.1",
-    "babel-plugin-transform-es2015-spread": "6.22.0",
-    "babel-plugin-transform-object-rest-spread": "6.26.0",
-    "babel-preset-env": "1.6.1",
+    "babel-plugin-transform-es2015-spread": "^6.22.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
     "babel-preset-react": "6.24",
     "npm-run-all": "4.1.2",
     "rollup": "0.52.0",
