@@ -11,6 +11,7 @@
     "transform-object-rest-spread",
     ["module-resolver/lib/index.js", {
       "alias": {
+        "react": "preact",
         "": "./src"
       }
     }],

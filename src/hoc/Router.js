@@ -1,5 +1,6 @@
 import WithState from '/hoc/WithState'
-import {setState} from '/store'
+import equal from '/util/equal'
+import {setState, getState} from '/store'
 
 const segmentize = (url) => {
   return url.replace(/(^\/+|\/+$)/g, '').split('/')
@@ -64,16 +65,24 @@ export default ({routes}) =>
       for (let route in routes) {
         const routeArgs = exec(currentPath, routes[route].path)
         if (routeArgs) {
-          setState({
-            route: {
-              name: route,
-              path: routes[route].path,
-              args: routeArgs
-            }
-          })
+          const newRoute = {
+            name: route,
+            path: routes[route].path,
+            args: routeArgs
+          }
+          if (!equal(newRoute, getState().route)) {
+            setState({
+              route: {
+                name: route,
+                path: routes[route].path,
+                args: routeArgs
+              }
+            })
+          }
           const Page = routes[route].Page
           return <Page {...routeArgs} />
         }
       }
+    }
     }}
   </WithState>
