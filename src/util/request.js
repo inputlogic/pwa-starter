@@ -1,5 +1,4 @@
 export default function request ({url, method = 'GET', data = null, headers}) {
-  console.log('request', url)
   const xhr = new window.XMLHttpRequest()
   const promise = new Promise((resolve, reject) => {
     xhr.open(method, url, true)

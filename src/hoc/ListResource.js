@@ -1,4 +1,4 @@
-import WithRequests from '/hoc/WithRequests'
+import WithRequest from '/hoc/WithRequest'
 
 const OK_TYPES = ['function', 'object']
 
@@ -10,13 +10,13 @@ export default ({list = true, url, children}) => {
   }
   const func = type === 'function' ? Child : props => <Child {...props} />
   return (
-    <WithRequests requests={{results: {url}}}>
-      {({results = [], isLoading}) =>
+    <WithRequest request={{url}}>
+      {({result, isLoading}) =>
         isLoading
           ? <p>Loading...</p>
           : <div>
-            {list ? results.map(func) : func({...results})}
+            {list ? result.map(func) : func({...result})}
           </div>}
-    </WithRequests>
+    </WithRequest>
   )
 }
