@@ -4,13 +4,16 @@ import workerize from '/util/workerize'
 
 const defaultParse = r => r.result || r
 
+const OK_TIME = 30000
 const CACHE = {}
 const cache = (url, result) => {
   CACHE[url] = {result, timestamp: Date.now()}
 }
 const validCache = url => {
-  const diff = Date.now() - CACHE[url].timestamp
-  return diff < 5000 // less than 5 seconds old
+  const ts = CACHE[url] && CACHE[url].timestamp
+  if (!ts) return false
+  const diff = Date.now() - ts
+  return diff < OK_TIME
 }
 
 export default class WithRequest extends Preact.Component {
@@ -40,7 +43,7 @@ export default class WithRequest extends Preact.Component {
 
     const {url, parse} = this.props.request
     if (validCache(url)) {
-      console.log('SHIT!', Date.now() - CACHE[url].timestamp)
+      this.setState({result: CACHE[url].result, isLoading: false})
     } else {
       this._workerRequest(url, parse)
     }
@@ -58,6 +61,7 @@ export default class WithRequest extends Preact.Component {
   }
 
   componentDidUpdate () {
+    if (!this._existing) return
     if (this.props.request.url !== this._existing.responseURL) {
       this._performRequest()
     }
