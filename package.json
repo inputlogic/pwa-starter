@@ -19,7 +19,8 @@
   "author": "Adrian Unger",
   "license": "MIT",
   "dependencies": {
-    "preact": "8.2.9"
+    "preact": "8.2.9",
+    "querystringify": "^2.0.0"
   },
   "devDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "^0.3.1",

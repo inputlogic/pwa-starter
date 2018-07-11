@@ -6,7 +6,7 @@ const segmentize = (url) => {
   return url.replace(/(^\/+|\/+$)/g, '').split('/')
 }
 
-const exec = (url, route) => {
+export const exec = (url, route) => {
   let reg = /(?:\?([^#]*))?(#.*)?$/
   let c = url.match(reg)
   let matches = {}

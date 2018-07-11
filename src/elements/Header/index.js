@@ -1,4 +1,5 @@
 import WithState from '/hoc/WithState'
+import urlFor from '/util/urlFor'
 import {clickState} from '/store'
 
 export default () =>
@@ -7,7 +8,8 @@ export default () =>
       <header class='layout-center'>
         <h1>Daily {clicks}</h1>
         <button onClick={clickState({clicks: clicks + 1})}>+</button>
-        <button onClick={clickState(state => ({wins: state.wins + 1}))}>wins</button>
+        <a href={urlFor('home')}>Main App</a>&nbsp;
+        <a href={urlFor('users')}>Account App</a>&nbsp;
       </header>
     }
   </WithState>
