@@ -1,4 +1,4 @@
 import ListResource from './ListResource'
 
-export default ({url, ...props}) =>
-  <ListResource key={`resource-${url}`} list={false} url={url} {...props} />
+export default ({endpoint, ...props}) =>
+  <ListResource key={`resource-${endpoint}`} list={false} endpoint={endpoint} {...props} />

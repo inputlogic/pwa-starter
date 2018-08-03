@@ -4,7 +4,7 @@ const url = 'https://jsonplaceholder.typicode.com/users/'
 
 export default ({id}) =>
   <div key='user'>
-    <Resource url={`${url}${id}`}>
+    <Resource endpoint={`${url}${id}`}>
       {({name, email}) =>
         <div>
           <h1>{name}</h1>

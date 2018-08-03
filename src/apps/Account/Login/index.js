@@ -1,4 +1,4 @@
-import Form from '/hoc/Form'
+import Form from '/elements/Form'
 
 const TextInput = ({...props}) =>
   <input type='text' {...props} />

@@ -1,9 +1,9 @@
 import ListResource from '/hoc/ListResource'
 
-const url = 'https://jsonplaceholder.typicode.com/users'
+const endpoint = 'https://jsonplaceholder.typicode.com/users'
 
 export default () =>
-  <ListResource url={url}>
+  <ListResource endpoint={endpoint}>
     {({id, name, email}) =>
       <div>
         <h2><a href={`/users/${id}`}>{name}</a></h2>

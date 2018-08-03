@@ -1,60 +1,73 @@
-import Preact from 'preact'
-import equal from '/util/equal'
-import workerize from '/util/workerize'
+import React from 'react'
 
-const defaultParse = r => r.result || r
+import equal from '/util/equal'
+import makeRequest from '/util/makeRequest'
+import {getState} from '/store'
 
 const OK_TIME = 30000
 const CACHE = {}
-const cache = (url, result) => {
-  CACHE[url] = {result, timestamp: Date.now()}
+const cache = (endpoint, result) => {
+  console.log('cache', {endpoint, result})
+  CACHE[endpoint] = {result, timestamp: Date.now()}
+  console.log(endpoint, result)
 }
-const validCache = url => {
-  const ts = CACHE[url] && CACHE[url].timestamp
+const validCache = endpoint => {
+  const ts = CACHE[endpoint] && CACHE[endpoint].timestamp
   if (!ts) return false
   const diff = Date.now() - ts
   return diff < OK_TIME
 }
 
-export default class WithRequest extends Preact.Component {
+export const clearCache = endpoint => {
+  CACHE[endpoint] = null
+  console.log('clearCache', endpoint, CACHE)
+}
+
+export default class WithRequest extends React.Component {
   constructor (props) {
     super(props)
     this.state = {isLoading: true, result: null, error: null}
     this._existing = null
   }
 
-  _workerRequest (url, parse) {
-    const {worker, promise} = workerize('request', {url})
+  _performRequest (endpoint, parse) {
+    const token = getState().token
+    const headers = {}
+    if (token) {
+      headers.Authorization = `Token ${token}`
+    }
+    console.log('_performRequest', {endpoint, parse, headers})
+    const {xhr, promise} = makeRequest({endpoint, headers})
 
-    this._existing = worker
-    this._existing.responseURL = url
+    this._existing = xhr
+    this._existing._endpoint = endpoint
 
     promise
-      .then(({response}) => parse ? parse(response) : defaultParse(response))
-      .then(result => cache(url, result) || this.setState({result, isLoading: false}))
-      .catch(error => this.setState({error}))
+      .then(result => cache(endpoint, result) || this.setState({result, isLoading: false}))
+      .catch(error => console.log('_performRequest', {error}) || this.setState({error, isLoading: false}))
   }
 
-  _performRequest () {
-    if (this._existing) {
-      this._existing.terminate()
+  _loadResult () {
+    if (this._existing && !this.state.error) {
+      this._existing.abort()
       this._existing = null
     }
 
-    const {url, parse} = this.props.request
-    if (validCache(url)) {
-      this.setState({result: CACHE[url].result, isLoading: false})
+    const {endpoint, parse} = this.props.request
+    console.log('_loadResult', {endpoint, parse})
+    if (validCache(endpoint)) {
+      this.setState({result: CACHE[endpoint].result, isLoading: false})
     } else {
-      this._workerRequest(url, parse)
+      this._performRequest(endpoint, parse)
     }
   }
 
   componentDidMount () {
-    this._performRequest()
+    this._loadResult()
   }
 
   shouldComponentUpdate (nextProps, nextState) {
-    if (nextProps.request.url !== this.props.request.url) {
+    if (nextProps.request.endpoint !== this.props.request.endpoint) {
       return true
     }
     return !equal(nextState, this.state)
@@ -62,16 +75,18 @@ export default class WithRequest extends Preact.Component {
 
   componentDidUpdate () {
     if (!this._existing) return
-    if (this.props.request.url !== this._existing.responseURL) {
-      this._performRequest()
+    if (this.props.request.endpoint !== this._existing._endpoint) {
+      console.log('_existing', this._existing._endpoint)
+      this._loadResult()
     }
   }
 
-  render ({children}, state) {
+  render () {
+    const children = this.children || this.props.children
     const child = children[0]
     if (!child || typeof child !== 'function') {
       throw new Error('WithRequest requires a function as its only child')
     }
-    return child(state)
+    return child(this.state)
   }
 }
