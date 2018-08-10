@@ -10,6 +10,9 @@ import Account from '/apps/Account'
 
 import routes from '/routes'
 
+import '/styles/variables.less'
+import '/styles/base.less'
+
 export const MainApp = () =>
   <div className='main-app-container' >
     <Header />
