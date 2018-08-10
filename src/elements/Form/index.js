@@ -54,7 +54,7 @@ const isFormField = child =>
  * optional `method` prop.
  *
  *  action: The URL to send the form data to.
- *  method: The HTTP method to use, defaults to GET.
+ *  method: The HTTP method to use, defaults to POST.
  */
 export default class Form extends React.Component {
   constructor (props) {
@@ -137,7 +137,7 @@ export default class Form extends React.Component {
     } else {
       const {xhr, promise} = makeRequest({
         endpoint: this.props.action,
-        method: this.props.method,
+        method: this.props.method || 'post',
         data: this.state.values
       })
       console.log('makeRequest', this.state.values)
