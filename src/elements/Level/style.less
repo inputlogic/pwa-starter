@@ -1,0 +1,15 @@
+.level {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: @gutter;
+  padding-bottom: @gutter;
+
+  & > * {
+    margin-right: .75rem;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}

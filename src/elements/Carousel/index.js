@@ -1,6 +1,10 @@
 import W from 'wasmuth'
 import Preact from 'preact'
 
+import Level from '/elements/Level'
+
+import './style.less'
+
 export default class Carousel extends Preact.Component {
   constructor (props) {
     super(props)
@@ -99,7 +103,7 @@ export default class Carousel extends Preact.Component {
               </nav>}
           </div>
           {withDots &&
-            <div className='level carousel-dots'>
+            <Level className='carousel-dots'>
               {W.map(i =>
                 <button
                   onClick={this.setActive(i)}
@@ -108,7 +112,7 @@ export default class Carousel extends Preact.Component {
                   {i}
                 </button>,
               W.range(0, children.length))}
-            </div>}
+            </Level>}
         </div>
       </div>
     )

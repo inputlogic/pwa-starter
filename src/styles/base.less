@@ -14,9 +14,71 @@ body {
   width: 100%;
   height: 100%;
   background-color: @body-color;
+  font-family: Verdana, Arial, sans-serif;
+  font-size: 17px;
+  line-height: 1.428571429;
+  color: #1a1a1a;
 
   &.modal-open,
   &.mobile-menu-open {
     overflow: hidden;
   }
+}
+
+.main-app-container {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+
+/* Typography */
+
+a {
+  color: #1a1a1a;
+}
+
+h1 {
+  color: #1a1a1a;
+  font-weight: 400;
+  font-size: 35px;
+  line-height: 1.2;
+  margin-top: 0;
+}
+
+pre {
+  font-size: 14px;
+}
+
+/* Header */
+
+header {
+  padding: 1em 0;
+  background-color: lemonchiffon;
+}
+
+header.alt {
+  padding: .5em 0;
+  background-color: #eee;
+}
+
+/* Layout */
+
+#main {
+  margin: 0 auto;
+  height: 100%;
+}
+
+.layout-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.layout-fill {
+  display: flex;
+  flex-direction: column;
+}
+
+.layout-fill > div {
+  flex: 1;
 }
