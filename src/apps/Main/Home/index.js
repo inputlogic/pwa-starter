@@ -2,10 +2,13 @@ import W from 'wasmuth'
 
 import Carousel from '/elements/Carousel'
 import Dropdown from '/elements/Dropdown'
+import LoadingIndicator from '/elements/LoadingIndicator'
 
 export default () =>
-  <div>
+  <div style={{padding: '1em'}}>
     <h1>Home</h1>
+
+    <LoadingIndicator />
 
     <Dropdown uid='home-example'>
       <p>Option</p>
