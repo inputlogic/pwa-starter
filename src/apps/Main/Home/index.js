@@ -4,6 +4,8 @@ import Carousel from '/elements/Carousel'
 import Dropdown from '/elements/Dropdown'
 import LoadingIndicator from '/elements/LoadingIndicator'
 
+import {showNotification} from '/elements/Notification'
+
 import {setState} from '/store'
 
 export default () =>
@@ -14,7 +16,7 @@ export default () =>
 
     <Dropdown uid='home-example'>
       <p><button onClick={ev => setState({modal: 'ExampleModal'})}>Open Example Modal</button></p>
-      <p>Pirate</p>
+      <p><button onClick={ev => showNotification({message: 'PIRATES!'})}>Pirates!</button></p>
       <p>Classy Penguin</p>
     </Dropdown>
 
