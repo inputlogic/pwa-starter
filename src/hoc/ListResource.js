@@ -1,61 +1,13 @@
 import W from 'wasmuth'
-import Preact from 'preact'
 
 import WithRequest from '/hoc/WithRequest'
 import WithState from '/hoc/WithState'
 
-import paginationRange from '/util/paginationRange'
+import Pagination from '/elements/Pagination'
+
 import qs from '/util/qs'
-import updateQuery from '/util/updateQuery'
 
 const OK_TYPES = ['function', 'object']
-
-const pageBuilder = page => updateQuery({page})
-
-class Pagination extends Preact.Component {
-  render ({activePage, pageSize, request}) {
-    const {count, next, previous} = request
-    if (!count || count < pageSize) {
-      return
-    }
-
-    const numPages = Math.ceil(count / pageSize)
-    const pages = paginationRange(activePage, numPages)
-
-    return (
-      <nav class='pagination'>
-        {previous
-          ? <a href={pageBuilder(activePage - 1)} >
-            <span className='arrow back' /> Back
-          </a>
-          : <span className='disabled' >
-            <span className='arrow back' /> Back
-          </span>
-        }
-        <ul>
-          {W.map(
-            (page, index) => page
-              ? <li key={`page-${page}`}>
-                <a href={pageBuilder(page)} className={activePage === page ? 'active' : ''} >
-                  {page}
-                </a>
-              </li>
-              : <li key={`break-${index}`}>&hellip;</li>,
-            pages
-          )}
-        </ul>
-        {next
-          ? <a href={pageBuilder(activePage + 1)} >
-            Next <span className='arrow next' />
-          </a>
-          : <span className='disabled' >
-            Next <span className='arrow next' />
-          </span>
-        }
-      </nav>
-    )
-  }
-}
 
 export default class ListResource extends WithState {
   render ({
@@ -85,7 +37,7 @@ export default class ListResource extends WithState {
         {({result, isLoading}) =>
           isLoading
             ? <p>Loading...</p>
-            : <div>
+            : <div key={request.endpoint}>
               {list ? W.map(func, W.pathOr(result, 'results', result)) : func({...result})}
               {pagination && limit != null
                 ? <Pagination activePage={activePage} request={result} pageSize={limit} />
