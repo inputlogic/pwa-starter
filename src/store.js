@@ -1,7 +1,7 @@
 import {DEBUG} from '/consts'
 
 const state = {
-  currentPath: window.location.pathname,
+  currentPath: window.location.pathname + window.location.search,
   clicks: 1,
   wins: 1,
   parent: {

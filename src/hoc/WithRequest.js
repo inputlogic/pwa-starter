@@ -77,12 +77,13 @@ export default class WithRequest extends React.Component {
   componentDidUpdate (prevProps, prevState, snapshot) {
     if (!this._existing) return
     if ((this.props.request || {}).endpoint !== this._existing._endpoint) {
+      this.setState({isLoading: true})
       this._loadResult(this.props)
     }
   }
 
   render () {
-    const child = this.props.children || this.children[0]
+    const child = this.props.children ? this.props.children[0] : this.child
     if (!child || typeof child !== 'function') {
       throw new Error('WithRequest requires a function as its only child')
     }
