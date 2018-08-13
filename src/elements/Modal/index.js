@@ -1,24 +1,12 @@
+import W from 'wasmuth'
 import Preact from 'preact'
+import Portal from 'preact-portal'
+
+import WithState from '/hoc/WithState'
+
 import {setState} from '/store'
 
-// // Watch for an open modal, if so add a class to body to prevent
-// // scrolling behind the modal.
-// if (typeof document !== 'undefined') {
-//   watchPath(['modal'], (modal, oldmodal) => {
-//     if (modal && modal !== oldmodal) {
-//       document.body.classList.add('modal-open')
-//     } else {
-//       document.body.classList.remove('modal-open')
-//     }
-//   })
-// }
-
-// // Watch for URL change, if so close all modals.
-// watchPath(['route'], (route, oldRoute = {}) => {
-//   if (route.name && oldRoute.name && route.name !== oldRoute.name) {
-//     dispatch(set('modal', null))
-//   }
-// })
+import './style.less'
 
 const isOverlay = (el) =>
   (el.classList && el.classList.contains('modal-container'))
@@ -61,4 +49,36 @@ export default class Modal extends Preact.Component {
       </Portal>
     )
   }
+}
+
+export class Modals extends WithState {
+  componentDidUpdate (_, prevState) {
+    super.componentDidUpdate()
+    const {modal} = this.state._mappedState
+    const prevModal = W.path('_mappedState.modal', prevState)
+    if (!modal) {
+      if (prevModal != null) {
+        document.body.classList.remove('modal-open')
+      }
+      return
+    } else if (modal !== prevModal) {
+      document.body.classList.add('modal-open')
+    }
+
+    const route = W.path('_mappedState.route.name', this.state)
+    const prevRoute = W.path('_mappedState.route.name', prevState)
+    if (route !== prevRoute) {
+      setState({modal: null})
+    }
+  }
+
+  render ({children}, {_mappedState}) {
+    const {modal} = _mappedState
+    const child = W.find(c => W.pathEq('nodeName.name', modal, c), children)
+    return child
+  }
+}
+
+Modals.defaultProps = {
+  mapper: ({modal, route}) => ({modal, route})
 }

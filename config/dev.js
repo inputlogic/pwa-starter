@@ -37,7 +37,8 @@ export default {
     cjs({
       exclude: 'node_modules/process-es6/**',
       include: [
-        'node_modules/preact/**'
+        'node_modules/preact/**',
+        'node_modules/preact-portal/**'
       ]
     }),
     globals(),

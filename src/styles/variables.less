@@ -20,3 +20,18 @@
 @dotAfterColor: @dotColor;
 
 @dotSpacing: @dotWidth + @dotWidth / 2;
+
+// Responsive
+@desktop-max-width: 1200px;
+@desktop-min-width: 1025px;
+@tablet-max-width: 1024px;
+@tablet-min-width: 768px;
+@phone-max-width: 767px;
+@phone-min-width: 320px;
+@desktop: ~"screen and (min-width: @{desktop-min-width})";
+@tablet-desktop: ~"screen and (min-width: @{tablet-min-width})";
+@tablet: ~"screen and (min-width: @{tablet-min-width}) and (max-width: @{tablet-max-width})";
+@phone-tablet: ~"screen and (max-width: @{tablet-max-width})";
+@phone: ~"screen and (max-width: @{phone-max-width})";
+@phone-small: ~"screen and (max-width: @{phone-min-width})";
+@phone-to-desktop-max: ~"screen and (max-width: @{desktop-max-width})";

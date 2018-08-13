@@ -4,6 +4,8 @@ import Carousel from '/elements/Carousel'
 import Dropdown from '/elements/Dropdown'
 import LoadingIndicator from '/elements/LoadingIndicator'
 
+import {setState} from '/store'
+
 export default () =>
   <div style={{padding: '1em'}}>
     <h1>Home</h1>
@@ -11,7 +13,7 @@ export default () =>
     <LoadingIndicator />
 
     <Dropdown uid='home-example'>
-      <p>Option</p>
+      <p><button onClick={ev => setState({modal: 'ExampleModal'})}>Open Example Modal</button></p>
       <p>Pirate</p>
       <p>Classy Penguin</p>
     </Dropdown>

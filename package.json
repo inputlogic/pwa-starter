@@ -20,6 +20,7 @@
   "license": "MIT",
   "dependencies": {
     "preact": "8.3.0",
+    "preact-portal": "^1.1.3",
     "wasmuth": "2.0.6"
   },
   "devDependencies": {
@@ -46,6 +47,6 @@
     "rollup-watch": "4.3.1",
     "sane": "3.0.0",
     "snazzy": "7.1.1",
-    "standard": "11.0.1"
+    "standard": "10.0.2"
   }
 }
