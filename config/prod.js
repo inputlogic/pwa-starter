@@ -1,6 +1,6 @@
 // Rollup plugins.
 import replace from 'rollup-plugin-replace'
-import uglify from 'rollup-plugin-uglify'
+import {uglify} from 'rollup-plugin-uglify'
 import compiler from '@ampproject/rollup-plugin-closure-compiler'
 
 // Import the development configuration.
