@@ -1,0 +1,122 @@
+/* From: https://github.com/nzbin/three-dots */
+
+/*
+MIT License
+
+Copyright (c) 2018 Zongbin
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+.dot(@width: @dotWidth, @height: @dotHeight, @radius: @dotRadius, @bgColor: @dotBgColor, @color: @dotColor) {
+  background-color: @bgColor;
+  border-radius: @radius;
+  color: @color;
+  height: @height;
+  width: @width;
+}
+
+
+/**
+* ==============================================
+* Dot Flashing
+* ==============================================
+*/
+
+.dot-flashing {
+  .dot;
+  animation: dotFlashing 1s .5s infinite linear alternate;
+  position: relative;
+  &::before,
+  &::after {
+    .dot;
+    content: "";
+    display: inline-block;
+    position: absolute;
+    top: 0;
+  }
+  &::before {
+    animation: dotFlashing 1s infinite alternate;
+    left: -@dotSpacing;
+  }
+  &::after {
+    animation: dotFlashing 1s 1s infinite alternate;
+    left: @dotSpacing;
+  }
+}
+
+@keyframes dotFlashing {
+  0%   { background-color: @dotColor; }
+  100% { background-color: lighten(@dotColor, 20%); }
+}
+
+/**
+ * ==============================================
+ * Dot Pulse
+ * ==============================================
+ */
+
+@leftPos: -9999px;
+@x1: -@leftPos - @dotSpacing;
+@x2: -@leftPos;
+@x3: -@leftPos + @dotSpacing;
+
+.dot-pulse {
+  .dot;
+  animation: dotPulse 1.5s infinite linear;
+  box-shadow:
+    @x1 0 0 0 @dotColor,
+    @x2 0 0 0 @dotColor,
+    @x3 0 0 0 @dotColor;
+  left: @leftPos;
+  position: relative;
+}
+
+@keyframes dotPulse {
+  0% {
+    box-shadow:
+      @x1 0 0 -5px @dotColor,
+      @x2 0 0 0 @dotColor,
+      @x3 0 0 2px @dotColor;
+  }
+  25% {
+    box-shadow:
+      @x1 0 0 0 @dotColor,
+      @x2 0 0 2px @dotColor,
+      @x3 0 0 0 @dotColor;
+  }
+  50% {
+    box-shadow:
+      @x1 0 0 2px @dotColor,
+      @x2 0 0 0 @dotColor,
+      @x3 0 0 -5px @dotColor;
+  }
+  75% {
+    box-shadow:
+      @x1 0 0 0 @dotColor,
+      @x2 0 0 -5px @dotColor,
+      @x3 0 0 0 @dotColor;
+  }
+  100% {
+    box-shadow:
+      @x1 0 0 -5px @dotColor,
+      @x2 0 0 0 @dotColor,
+      @x3 0 0 2px @dotColor;
+  }
+}

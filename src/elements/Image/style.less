@@ -1,0 +1,13 @@
+.image {
+  height: 10em;
+  width: 10em;
+  background-position: center;
+  background-size: cover;
+  background-color: gray;
+  transition: 200ms filter ease-out;
+
+  &.blur {
+    transition: 0s filter ease-out;
+    filter: blur(20px);
+  }
+}

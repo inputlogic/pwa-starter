@@ -1,0 +1,41 @@
+@gutter: 20px;
+@drop-shadow: drop-shadow(0 4px 10px rgba(20,22,44,0.08));
+
+@white: #fff;
+@black: #1a1a1a;
+@light-grey: #ccc;
+
+@body-color: #fafcff;
+@border-color: #eee;
+
+@primary-color: #9880ff;
+
+@warning: #FFCC00;
+@error: #FF2F00;
+
+// For Loading Indicator
+@dotWidth: 10px;
+@dotHeight: 10px;
+@dotRadius: @dotWidth / 2;
+
+@dotColor: @primary-color;
+@dotBgColor: @dotColor;
+@dotBeforeColor: @dotColor;
+@dotAfterColor: @dotColor;
+
+@dotSpacing: @dotWidth + @dotWidth / 2;
+
+// Responsive
+@desktop-max-width: 1200px;
+@desktop-min-width: 1025px;
+@tablet-max-width: 1024px;
+@tablet-min-width: 768px;
+@phone-max-width: 767px;
+@phone-min-width: 320px;
+@desktop: ~"screen and (min-width: @{desktop-min-width})";
+@tablet-desktop: ~"screen and (min-width: @{tablet-min-width})";
+@tablet: ~"screen and (min-width: @{tablet-min-width}) and (max-width: @{tablet-max-width})";
+@phone-tablet: ~"screen and (max-width: @{tablet-max-width})";
+@phone: ~"screen and (max-width: @{phone-max-width})";
+@phone-small: ~"screen and (max-width: @{phone-min-width})";
+@phone-to-desktop-max: ~"screen and (max-width: @{desktop-max-width})";

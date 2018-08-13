@@ -1,0 +1,209 @@
+@keyframes slideDown {
+  0% {
+    transform: translate3d(0, -100%, 0);
+  }
+
+  10%, 100% {
+    transform: translate3d(0, 0%, 0);
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translate3d(0, 0%, 0);
+  }
+
+  10%, 100% {
+    transform: translate3d(0, -100%, 0);
+  }
+}
+
+@keyframes slideDownHide {
+  0% {
+    transform: translate3d(0, -100%, 0);
+  }
+  10%,
+  90% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, -100%, 0);
+  }
+}
+
+.notification-bar {
+  width: 100%;
+  margin-bottom: .5em;
+  padding: 1em @gutter/1.5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  z-index: 10000;
+  left: 0;
+  right: 0;
+  animation-duration: 3s;
+  animation-fill-mode: both;
+  animation-timing-function: ease-in-out;
+
+  &.undefined {
+    display: none;
+  }
+
+  @media @phone-tablet {
+    font-size: 85%;
+  }
+
+  .text {
+    line-height: 1.1;
+    font-size: 1em;
+    color: @white;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+
+    @media @phone {
+      font-weight: normal;
+    }
+
+    &::before {
+      content: '';
+      display: inline-block;
+      width: 2.25em;
+      height: 2.25em;
+      margin-right: 1.75em;
+      background: no-repeat center center / 100% 100%;
+      flex-shrink: 0;
+    }
+  }
+
+  &.close {
+    animation-name: slideUp;
+  }
+
+  &.open {
+    animation-name: slideDown;
+  }
+
+  &.open-then-hide {
+    animation-name: slideDownHide;
+    animation-duration: 2s;
+  }
+
+  .close-icon {
+    width: 2em;
+    height: 2em;
+    background: url(../images/icons/icon-remove.svg) no-repeat center center / 100% 100%;
+    cursor: pointer;
+    position: absolute;
+    right: 5%;
+  }
+
+  &.success {
+    background-color: @primary-color;
+    .text::before {
+      background-image: url(../images/icons/icon-success.svg);
+    }
+  }
+
+  &.warning {
+    background-color: @warning;
+    .text::before {
+      background-image: url(../images/icons/icon-warning.svg);
+    }
+  }
+
+  &.error {
+    background-color: @error;
+    .text::before {
+      background-image: url(../images/icons/icon-error2.svg);
+    }
+  }
+
+  &.with-actions {
+    background-color: @primary-color;
+    padding-top: 2em;
+    padding-bottom: 2em;
+
+    .container {
+      margin-right: auto;
+      margin-left: auto;
+      max-width: 930px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      @media @phone-tablet {
+        flex-flow: column;
+        max-width: 450px;
+        align-items: flex-start;
+      }
+    }
+
+    .message {
+      color: @white;
+      width: 57%;
+
+      @media @phone-tablet {
+        margin-bottom: 2em;
+        width: 100%;
+      }
+
+      h2 {
+        color: currentColor;
+        font-size: 1em;
+        font-weight: 700;
+        line-height: 1.5;
+
+        &.icon {
+          background: no-repeat left center / 1.5em 1.5em;
+          padding-left: 2em;
+
+          &.hand {
+            background-image: url(../images/hand.png);
+          }
+        }
+      }
+
+      p {
+        margin-bottom: 0;
+      }
+    }
+
+    .actions {
+      width: 33%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      @media @phone-tablet {
+        width: 100%;
+        justify-content: flex-start;
+      }
+
+      .btn {
+        background-color: @white;
+        color: @primary-color;
+        font-weight: 500;
+
+        &:hover {
+          background-color: #efefef;
+        }
+
+        @media @phone-tablet {
+          margin-right: 1.5em;
+        }
+      }
+
+      .btn-text {
+        background-color: transparent;
+        color: @white;
+
+        &:hover {
+          background-color: transparent;
+          text-decoration: none;
+        }
+      }
+    }
+  }
+}

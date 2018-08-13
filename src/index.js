@@ -1,6 +1,7 @@
 import Preact from 'preact'
 
 import Header from '/elements/Header'
+import Notification from '/elements/Notification'
 import NotFound from '/elements/NotFound'
 
 import Apps from '/hoc/Apps'
@@ -10,9 +11,13 @@ import Account from '/apps/Account'
 
 import routes from '/routes'
 
+import '/styles/variables.less'
+import '/styles/base.less'
+
 export const MainApp = () =>
   <div className='main-app-container' >
     <Header />
+    <Notification />
 
     <Apps routes={routes} mapper={({currentPath}) => ({currentPath})}>
       <Main />
