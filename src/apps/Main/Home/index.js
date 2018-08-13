@@ -3,6 +3,7 @@ import W from 'wasmuth'
 import Carousel from '/elements/Carousel'
 import Dropdown from '/elements/Dropdown'
 import LoadingIndicator from '/elements/LoadingIndicator'
+import Tooltip from '/elements/Tooltip'
 
 import {showNotification} from '/elements/Notification'
 
@@ -10,7 +11,7 @@ import {setState} from '/store'
 
 export default () =>
   <div style={{padding: '1em'}}>
-    <h1>Home</h1>
+    <h1><Tooltip text='This is home!'>Home</Tooltip></h1>
 
     <LoadingIndicator />
 
