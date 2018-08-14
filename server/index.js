@@ -21,13 +21,13 @@ const ssr = (req, res, next) => {
           <base href="/">
           <meta charset="utf-8">
           <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-          <link rel="stylesheet" href="./bundle.css?nosafaricache=123123" />
+          <link rel="stylesheet" href="./bundle.css" />
           ${head}
         </head>
         <body>
           <div class='main-app-container'>${html}</div>
           <script>window.__initial_store__ = ${JSON.stringify(state)};</script>
-          <script src="./bundle.js?nosafaricache=123123"></script>
+          <script src="./bundle.js"></script>
         </body>
       </html>`)
     })
