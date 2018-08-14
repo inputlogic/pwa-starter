@@ -5,14 +5,10 @@ if (typeof window !== 'undefined') {
 }
 
 const state = {
-  currentPath: window.location.pathname + window.location.search,
-  clicks: 1,
-  wins: 1,
-  parent: {
-    nested: {
-      child: 1
-    }
-  }
+  currentPath: typeof window !== 'undefined'
+    ? window.location.pathname + window.location.search
+    : '/',
+  pendingRequests: 0
 }
 const components = []
 

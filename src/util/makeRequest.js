@@ -6,10 +6,13 @@ import {clearCache} from '/hoc/WithRequest'
 
 const API_URL = 'http://10.0.2.2:8000'
 
+const XMLHttpRequest = typeof window !== 'undefined'
+  ? window.XMLHttpRequest
+  : require('xmlhttprequest').XMLHttpRequest
+
 const safelyParse = (json, key) => {
   try {
     const parsed = JSON.parse(json)
-    console.log('safelyParse', parsed)
     return key != null ? parsed[key] : parsed
   } catch (_) {
     return json
@@ -28,7 +31,7 @@ const makeErr = (code, msg) => {
   const e = new Error(msg)
   e.code = code
   if (code === 401) {
-    window.localStorage.removeItem('token')
+    typeof window !== 'undefined' && window.localStorage.removeItem('token')
   }
   console.log('makeErr', {code, msg})
   return e
@@ -41,9 +44,7 @@ function makeRequest ({endpoint, url, method = 'get', data, headers, invalidate}
       : endpoint
   }
 
-  console.log('makeRequest', {url})
-
-  const xhr = new window.XMLHttpRequest()
+  const xhr = new XMLHttpRequest()
   const promise = new Promise((resolve, reject) => {
     xhr.open(method.toUpperCase(), url)
 
@@ -51,8 +52,8 @@ function makeRequest ({endpoint, url, method = 'get', data, headers, invalidate}
       if (xhr.readyState !== 4) return
       invalidate && clearCache(invalidate)
       xhr.status >= 400
-        ? reject(makeErr(xhr.status, safelyParse(xhr.response, 'detail')))
-        : resolve(safelyParse(xhr.response))
+        ? reject(makeErr(xhr.status, safelyParse(xhr.responseText, 'detail')))
+        : resolve(safelyParse(xhr.responseText))
     }
     xhr.onerror = () => reject(xhr)
     xhr.setRequestHeader('Content-Type', 'application/json')
