@@ -6,6 +6,7 @@
   "scripts": {
     "preinstall": "if test \"$NODE_ENV\" = \"production\"; then rm -rf public; mkdir public; fi",
     "postinstall": "if test \"$NODE_ENV\" = \"production\"; then npm run build; npm run build-server; fi",
+    "heroku-postbuild": "npm run build",
     "start": "if test \"$NODE_ENV\" = \"production\"; then npm run browse; else npm run dev; fi",
     "prebuild": "npm run std --silent",
     "build": "rollup -c config/prod.js",
