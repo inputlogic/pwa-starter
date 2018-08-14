@@ -88,8 +88,8 @@ export default class WithRequest extends React.Component {
     }
   }
 
-  render () {
-    const child = this.props.children ? this.props.children[0] : this.child
+  render ({children}) {
+    const child = children[0]
     if (!child || typeof child !== 'function') {
       throw new Error('WithRequest requires a function as its only child')
     }

@@ -1,5 +1,9 @@
 import {DEBUG} from '/consts'
 
+if (typeof window !== 'undefined') {
+  console.log(window.__initial_store__)
+}
+
 const state = {
   currentPath: window.location.pathname + window.location.search,
   clicks: 1,
