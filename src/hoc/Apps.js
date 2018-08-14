@@ -13,10 +13,14 @@ export default class Apps extends WithState {
       W.find(([name, routes]) => W.find(routeMatches, routes)),
       arr => arr && arr.length && arr[0]
     )(routes)
-    const App = W.pipe(
-      W.find(W.pathEq('nodeName.name', appName)),
-      child => Preact.cloneElement(child, {routes: routes[appName]})
-    )(children)
-    return App
+    if (appName) {
+      const App = W.pipe(
+        W.find(W.pathEq('nodeName.name', appName)),
+        child => Preact.cloneElement(child, {routes: routes[appName]})
+      )(children)
+      return App
+    } else {
+      return null
+    }
   }
 }

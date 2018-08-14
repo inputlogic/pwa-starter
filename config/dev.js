@@ -38,7 +38,6 @@ export default {
       exclude: 'node_modules/process-es6/**',
       include: [
         'node_modules/preact/**',
-        'node_modules/preact-helmet/**',
         'node_modules/preact-portal/**'
       ]
     }),

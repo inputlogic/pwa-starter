@@ -1,11 +1,11 @@
 import Preact from 'preact'
-import Helmet from 'preact-helmet'
 
 import Header from '/elements/Header'
 import Notification from '/elements/Notification'
 import NotFound from '/elements/NotFound'
 
 import Apps from '/hoc/Apps'
+import Helmet from '/hoc/Helmet'
 
 import Main from '/apps/Main'
 import Account from '/apps/Account'

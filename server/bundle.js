@@ -4,11 +4,17 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var Preact = _interopDefault(require('preact'));
 var W = _interopDefault(require('wasmuth'));
-var Helmet = _interopDefault(require('preact-helmet'));
 var Portal = _interopDefault(require('preact-portal'));
 var render = _interopDefault(require('preact-render-to-string'));
 
 var DEBUG = typeof window !== 'undefined' ? window.location.hostname.indexOf('local') > -1 : process.env.NODE_ENV;
+
+var WEB_URL = function () {
+  if (typeof window === 'undefined') {
+    return 'https://cool-app.com';
+  }
+  return window.location.href.replace(window.location.pathname, '');
+}();
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
@@ -1300,6 +1306,95 @@ var Users = (function () {
   );
 });
 
+var allProps = {};
+
+var rewind = function rewind() {
+  return allProps;
+};
+
+var Wrapper = function Wrapper(_ref) {
+  var children = _ref.children;
+  return typeof window !== 'undefined' ? Preact.h(
+    Portal,
+    { into: 'head' },
+    children
+  ) : Preact.h(
+    'div',
+    null,
+    children
+  );
+};
+
+var Helmet = function (_Preact$Component) {
+  inherits(Helmet, _Preact$Component);
+
+  function Helmet(props) {
+    classCallCheck(this, Helmet);
+
+    var _this = possibleConstructorReturn(this, (Helmet.__proto__ || Object.getPrototypeOf(Helmet)).call(this, props));
+
+    _this._sync(props);
+    return _this;
+  }
+
+  createClass(Helmet, [{
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      this._sync(this.props);
+    }
+  }, {
+    key: '_sync',
+    value: function _sync(props) {
+      allProps = _extends({}, allProps, props);
+      setState({ helmet: {
+          title: this._getTitle(props)
+        } });
+    }
+  }, {
+    key: '_getTitle',
+    value: function _getTitle(_ref2) {
+      var title = _ref2.title,
+          _ref2$titleTemplate = _ref2.titleTemplate,
+          titleTemplate = _ref2$titleTemplate === undefined ? '%s' : _ref2$titleTemplate,
+          defaultTitle = _ref2.defaultTitle;
+
+      return titleTemplate.replace('%s', title || defaultTitle || '');
+    }
+  }, {
+    key: '_getMeta',
+    value: function _getMeta(_ref3) {
+      var _ref3$meta = _ref3.meta,
+          meta = _ref3$meta === undefined ? [] : _ref3$meta;
+
+      return meta.map(function (_ref4) {
+        var name = _ref4.name,
+            property = _ref4.property,
+            content = _ref4.content;
+        return Preact.h('meta', {
+          name: name,
+          property: property,
+          content: content
+        });
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render$$1() {
+      return Preact.h(
+        Wrapper,
+        null,
+        Preact.h(
+          'title',
+          null,
+          this._getTitle(this.props)
+        ),
+        this._getMeta(this.props)
+      );
+    }
+  }]);
+  return Helmet;
+}(Preact.Component);
+
 var Resource = (function (_ref) {
   var endpoint = _ref.endpoint,
       props = objectWithoutProperties(_ref, ['endpoint']);
@@ -1323,7 +1418,8 @@ var User = (function (_ref) {
           'div',
           null,
           Preact.h(Helmet, {
-            title: name
+            title: name,
+            meta: [{ name: 'description', content: 'Helmet description' }, { property: 'og:type', content: 'article' }, { property: 'og:title', content: name }, { property: 'og:description', content: 'Helmet description' }, { property: 'og:image', content: 'https://www.gooseinsurance.com/images/blog-image-1.jpg' }, { property: 'og:url', content: '' + WEB_URL + urlFor('user', { args: { id: id } }) }]
           }),
           Preact.h(
             'h1',
@@ -1792,10 +1888,14 @@ var Apps = function (_WithState) {
       }), function (arr) {
         return arr && arr.length && arr[0];
       })(routes);
-      var App = W.pipe(W.find(W.pathEq('nodeName.name', appName)), function (child) {
-        return Preact.cloneElement(child, { routes: routes[appName] });
-      })(children);
-      return App;
+      if (appName) {
+        var App = W.pipe(W.find(W.pathEq('nodeName.name', appName)), function (child) {
+          return Preact.cloneElement(child, { routes: routes[appName] });
+        })(children);
+        return App;
+      } else {
+        return null;
+      }
     }
   }]);
   return Apps;
@@ -2004,9 +2104,8 @@ var renderReact = function renderReact(url) {
     setState({ currentPath: url });
     render(Preact.h(MainApp, null)); // Render, to register pendingRequests
 
-    var helmet = Helmet.rewind();
-    var head = '\n    ' + helmet.title.toString() + '\n    ' + helmet.meta.toString() + '\n    ' + helmet.link.toString() + '\n  ';
     console.log('pendingRequests', getState().pendingRequests);
+
     var maxTime = 6000;
     var delay = 1;
     var count = 0;
@@ -2016,7 +2115,9 @@ var renderReact = function renderReact(url) {
         clearInterval(id);
         var state = JSON.stringify(getState());
         // Rerender html again, now that pendingRequests are done
-        resolve({ html: render(Preact.h(MainApp, null)), head: head, state: state });
+        var html = render(Preact.h(MainApp, null));
+        var head = render(Preact.h(Helmet, rewind())).slice(5, -6);
+        resolve({ html: html, head: head, state: state });
       }
       count++;
     }, delay);
