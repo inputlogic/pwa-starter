@@ -1789,12 +1789,8 @@ var Apps = function (_WithState) {
             routes = _ref4[1];
 
         return W.find(routeMatches, routes);
-      }), function (_ref5) {
-        var _ref6 = slicedToArray(_ref5, 2),
-            name = _ref6[0],
-            _ = _ref6[1];
-
-        return name;
+      }), function (arr) {
+        return arr && arr.length && arr[0];
       })(routes);
       var App = W.pipe(W.find(W.pathEq('nodeName.name', appName)), function (child) {
         return Preact.cloneElement(child, { routes: routes[appName] });
@@ -2034,16 +2030,18 @@ var compress = require('compression')();
 var port = process.env.PORT || 5000;
 
 var assets = sirv('public', {
+  maxAge: 31536000, // 1Y
   immutable: false
 });
 
 var ssr = function ssr(req, res, next) {
+  console.log('ssr', req.url);
   renderReact(req.url).then(function (_ref) {
     var html = _ref.html,
         head = _ref.head,
         state = _ref.state;
 
-    res.end('<!doctype html>\n      <html lang="en">\n        <head>\n          <base href="/">\n          <meta charset="utf-8">\n          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">\n          <link rel="stylesheet" href="./bundle.css?nosafaricache=123123" />\n          ' + head + '\n        </head>\n        <body>\n          <div class=\'main-app-container\'>' + html + '</div>\n          <script>window.__initial_store__ = ' + JSON.stringify(state) + ';</script>\n          <script src="./bundle.js?nosafaricache=123123"></script>\n        </body>\n      </html>');
+    res.end('<!doctype html>\n      <html lang="en">\n        <head>\n          <base href="/">\n          <meta charset="utf-8">\n          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">\n          <link rel="stylesheet" href="./bundle.css" />\n          ' + head + '\n        </head>\n        <body>\n          <div class=\'main-app-container\'>' + html + '</div>\n          <script>window.__initial_store__ = ' + JSON.stringify(state) + ';</script>\n          <script src="./bundle.js"></script>\n        </body>\n      </html>');
   });
 };
 
