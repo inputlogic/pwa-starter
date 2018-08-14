@@ -1,4 +1,5 @@
 import Preact from 'preact'
+import Helmet from 'preact-helmet'
 
 import Header from '/elements/Header'
 import Notification from '/elements/Notification'
@@ -16,6 +17,12 @@ import '/styles/base.less'
 
 export const MainApp = () =>
   <div className='main-app-container' >
+    <Helmet
+      title='Welcome'
+      titleTemplate='PWA Starter | %s'
+      defaultTitle='Welcome'
+    />
+
     <Header />
     <Notification />
 

@@ -4,9 +4,9 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 
 var Preact = _interopDefault(require('preact'));
 var W = _interopDefault(require('wasmuth'));
+var Helmet = _interopDefault(require('preact-helmet'));
 var Portal = _interopDefault(require('preact-portal'));
 var render = _interopDefault(require('preact-render-to-string'));
-var Helmet = _interopDefault(require('preact-helmet'));
 
 var DEBUG = typeof window !== 'undefined' ? window.location.hostname.indexOf('local') > -1 : process.env.NODE_ENV;
 
@@ -1011,7 +1011,6 @@ var WithRequest = function (_React$Component) {
       if (!child || typeof child !== 'function') {
         throw new Error('WithRequest requires a function as its only child');
       }
-      console.log('WithRequest', 'render');
       return child(this.state);
     }
   }]);
@@ -1323,6 +1322,9 @@ var User = (function (_ref) {
         return Preact.h(
           'div',
           null,
+          Preact.h(Helmet, {
+            title: name
+          }),
           Preact.h(
             'h1',
             null,
@@ -1977,6 +1979,11 @@ var MainApp = function MainApp() {
   return Preact.h(
     'div',
     { className: 'main-app-container' },
+    Preact.h(Helmet, {
+      title: 'Welcome',
+      titleTemplate: 'PWA Starter | %s',
+      defaultTitle: 'Welcome'
+    }),
     Preact.h(Header, null),
     Preact.h(Notification, null),
     Preact.h(
@@ -1996,15 +2003,10 @@ if (typeof window !== 'undefined') {
   Preact.render(Preact.h(MainApp, null), document.body, document.body.children[0]);
 }
 
-// const requestsFinished = requests => {
-//   const remaining = W.reject(req => req.result != null, Object.values(requests))
-//   return remaining.length === 0
-// }
-
 var renderReact = function renderReact(url) {
   return new Promise(function (resolve, reject) {
     setState({ currentPath: url });
-    render(Preact.h(MainApp, null));
+    render(Preact.h(MainApp, null)); // Render, to register pendingRequests
 
     var helmet = Helmet.rewind();
     var head = '\n    ' + helmet.title.toString() + '\n    ' + helmet.meta.toString() + '\n    ' + helmet.link.toString() + '\n  ';
@@ -2017,6 +2019,7 @@ var renderReact = function renderReact(url) {
       if (!pending || count * delay >= maxTime) {
         clearInterval(id);
         var state = JSON.stringify(getState());
+        // Rerender html again, now that pendingRequests are done
         resolve({ html: render(Preact.h(MainApp, null)), head: head, state: state });
       }
       count++;
