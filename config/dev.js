@@ -14,7 +14,7 @@ export default {
   output: {
     file: 'public/bundle.js',
     format: 'iife',
-    name: 'Daily'
+    name: 'PWA'
   },
   plugins: [
     css({
