@@ -7,10 +7,37 @@ let allProps = {}
 
 export const rewind = () => allProps
 
-const Wrapper = ({children}) =>
-  typeof window !== 'undefined'
-    ? <Portal into='head'>{children}</Portal>
-    : <div>{children}</div>
+const getCount = (nodeName, nodeList) => {
+  let count = 0
+  for (var x = 0; x < nodeList.length; x++) {
+    if (nodeList[x].nodeName === nodeName) {
+      count++
+    }
+  }
+  return count
+}
+
+const Wrapper = ({children}) => {
+  if (typeof window !== 'undefined') {
+    const nodeList = document.querySelectorAll('[data-helmet]')
+    for (let x = nodeList.length - 1; x >= 0; x--) {
+      // const k = nodeList[x].getAttribute('property') || nodeList[x].getAttribute('name')
+      // const counterpart = W.find(
+      //   c => (c.attributes.property || c.attributes.name) === k,
+      //   children
+      // )
+      if (nodeList[x].nodeName === 'TITLE') {
+        const count = getCount('TITLE', nodeList)
+        if (count) {
+          nodeList[x].remove()
+        }
+      }
+    }
+    return <Portal into='head'>{children}</Portal>
+  } else {
+    return <div>{children}</div>
+  }
+}
 
 export default class Helmet extends Preact.Component {
   constructor (props) {
@@ -29,7 +56,8 @@ export default class Helmet extends Preact.Component {
     }})
   }
 
-  _getTitle ({title, titleTemplate = '%s', defaultTitle}) {
+  _getTitle (props) {
+    const {title, titleTemplate = '%s', defaultTitle} = {...allProps, ...props}
     return titleTemplate.replace('%s', title || defaultTitle || '')
   }
 
@@ -39,6 +67,7 @@ export default class Helmet extends Preact.Component {
         name={name}
         property={property}
         content={content}
+        data-helmet
       />
     )
   }
@@ -46,7 +75,7 @@ export default class Helmet extends Preact.Component {
   render () {
     return (
       <Wrapper>
-        <title>{this._getTitle(this.props)}</title>
+        <title data-helmet>{this._getTitle(this.props)}</title>
         {this._getMeta(this.props)}
       </Wrapper>
     )

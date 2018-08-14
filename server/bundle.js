@@ -1314,15 +1314,24 @@ var rewind = function rewind() {
 
 var Wrapper = function Wrapper(_ref) {
   var children = _ref.children;
-  return typeof window !== 'undefined' ? Preact.h(
-    Portal,
-    { into: 'head' },
-    children
-  ) : Preact.h(
-    'div',
-    null,
-    children
-  );
+
+  if (typeof window !== 'undefined') {
+    var found = document.querySelectorAll('[data-helmet]');
+    for (var x = found.length - 1; x >= 0; x--) {
+      found[x].remove && found[x].remove();
+    }
+    return Preact.h(
+      Portal,
+      { into: 'head' },
+      children
+    );
+  } else {
+    return Preact.h(
+      'div',
+      null,
+      children
+    );
+  }
 };
 
 var Helmet = function (_Preact$Component) {
@@ -1373,7 +1382,8 @@ var Helmet = function (_Preact$Component) {
         return Preact.h('meta', {
           name: name,
           property: property,
-          content: content
+          content: content,
+          'data-helmet': true
         });
       });
     }
@@ -1385,7 +1395,7 @@ var Helmet = function (_Preact$Component) {
         null,
         Preact.h(
           'title',
-          null,
+          { 'data-helmet': true },
           this._getTitle(this.props)
         ),
         this._getMeta(this.props)
@@ -1727,7 +1737,7 @@ var Header = (function () {
         Preact.h(
           'h1',
           null,
-          'Daily ',
+          'PWA ',
           clicks
         ),
         Preact.h(
