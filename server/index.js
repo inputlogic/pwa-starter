@@ -7,10 +7,12 @@ const compress = require('compression')()
 const port = process.env.PORT || 5000
 
 const assets = sirv('public', {
+  maxAge: 31536000, // 1Y
   immutable: false
 })
 
 const ssr = (req, res, next) => {
+  console.log('ssr', req.url)
   renderReact(req.url)
     .then(({html, head, state}) => {
       res.end(`<!doctype html>
