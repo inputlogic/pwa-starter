@@ -268,22 +268,6 @@ for your entire app.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>
-<span class="hljs-keyword">import</span> Header <span class="hljs-keyword">from</span> <span class="hljs-string">'/elements/Header'</span>
-<span class="hljs-keyword">import</span> Notification <span class="hljs-keyword">from</span> <span class="hljs-string">'/elements/Notification'</span>
-<span class="hljs-keyword">import</span> NotFound <span class="hljs-keyword">from</span> <span class="hljs-string">'/elements/NotFound'</span>
-
-<span class="hljs-keyword">import</span> Apps <span class="hljs-keyword">from</span> <span class="hljs-string">'/hoc/Apps'</span>
-<span class="hljs-keyword">import</span> Helmet <span class="hljs-keyword">from</span> <span class="hljs-string">'/hoc/Helmet'</span>
-
-<span class="hljs-keyword">import</span> Main <span class="hljs-keyword">from</span> <span class="hljs-string">'/apps/Main'</span>
-<span class="hljs-keyword">import</span> Account <span class="hljs-keyword">from</span> <span class="hljs-string">'/apps/Account'</span>
-
-<span class="hljs-keyword">import</span> routes <span class="hljs-keyword">from</span> <span class="hljs-string">'/routes'</span>
-
-<span class="hljs-keyword">import</span> <span class="hljs-string">'/styles/variables.less'</span>
-<span class="hljs-keyword">import</span> <span class="hljs-string">'/styles/base.less'</span></pre></div></div>
-            
         </li>
         
         
@@ -293,7 +277,126 @@ for your entire app.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
-              <p>Helmet is fun for SEO PORPOISES</p>
+              <p>Here, we import Components we want to render on <em>all</em> routes. For example,
+we include a global Header, Notification bar, and a <em>Not Found</em> component
+which renders when no route is matched.
+(If your app does not need a global Header, you can of course remove it.)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> Header <span class="hljs-keyword">from</span> <span class="hljs-string">'/elements/Header'</span>
+<span class="hljs-keyword">import</span> Notification <span class="hljs-keyword">from</span> <span class="hljs-string">'/elements/Notification'</span>
+<span class="hljs-keyword">import</span> NotFound <span class="hljs-keyword">from</span> <span class="hljs-string">'/elements/NotFound'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>Apps is a Higher Order Component for breaking out your routes into
+logical groupings. For ex., Account, Main, Admin, Marketing etc.
+See <a href="/docs/Apps.html">Apps</a> for more details.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> Apps <span class="hljs-keyword">from</span> <span class="hljs-string">'/hoc/Apps'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>Helmet is minimal alternative to react-helmet. It will render title,
+og and meta tags on the server, as well as update the document title
+when navigating on the client.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> Helmet <span class="hljs-keyword">from</span> <span class="hljs-string">'/hoc/Helmet'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>These are the <em>Apps</em> we will nest under the <code>&lt;App/ &gt;</code> Component.
+Usually, these will render a <code>&lt;Router /&gt;</code> and any shared elements for
+that group of routes.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> Main <span class="hljs-keyword">from</span> <span class="hljs-string">'/apps/Main'</span>
+<span class="hljs-keyword">import</span> Account <span class="hljs-keyword">from</span> <span class="hljs-string">'/apps/Account'</span>
+
+<span class="hljs-keyword">import</span> routes <span class="hljs-keyword">from</span> <span class="hljs-string">'/routes'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <h3 id="styling">Styling</h3>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <p>We use LESS for styling. And ideally, each element Component will
+import a <code>style.less</code> file in the same directory. This allows us to
+organize styles based on Component organization, without drastically
+changing the way we write CSS.</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p>In this case, we are loading the global styles.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> <span class="hljs-string">'/styles/variables.less'</span>
+<span class="hljs-keyword">import</span> <span class="hljs-string">'/styles/base.less'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <p>And, finally, our MainApp!</p>
 
             </div>
             
@@ -314,9 +417,23 @@ for your entire app.</p>
     <span class="hljs-tag">&lt;/<span class="hljs-name">Apps</span>&gt;</span>
 
     <span class="hljs-tag">&lt;<span class="hljs-name">NotFound</span> /&gt;</span>
-  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>Only render if we are in the browser, server-side rendering will be
+handled by <code>server/index.js</code></p>
 
-<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> !== <span class="hljs-string">'undefined'</span>) {
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> !== <span class="hljs-string">'undefined'</span>) {
   Preact.render(
     <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">MainApp</span> /&gt;</span>,
     document.body, document.body.children[0]

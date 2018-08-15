@@ -50,24 +50,41 @@ import Preact from 'preact'
 // Here, we import Components we want to render on *all* routes. For example,
 // we include a global Header, Notification bar, and a *Not Found* component
 // which renders when no route is matched.
-
-// If your app does not need a global Header, you can of course remove it.
+// (If your app does not need a global Header, you can of course remove it.)
 import Header from '/elements/Header'
 import Notification from '/elements/Notification'
 import NotFound from '/elements/NotFound'
 
+// Apps is a Higher Order Component for breaking out your routes into
+// logical groupings. For ex., Account, Main, Admin, Marketing etc.
+// See [Apps](/docs/Apps.html) for more details.
 import Apps from '/hoc/Apps'
+
+// Helmet is minimal alternative to react-helmet. It will render title,
+// og and meta tags on the server, as well as update the document title
+// when navigating on the client.
 import Helmet from '/hoc/Helmet'
 
+// These are the *Apps* we will nest under the `<App/ >` Component.
+// Usually, these will render a `<Router />` and any shared elements for
+// that group of routes.
 import Main from '/apps/Main'
 import Account from '/apps/Account'
 
 import routes from '/routes'
 
+// ### Styling
+
+// We use LESS for styling. And ideally, each element Component will
+// import a `style.less` file in the same directory. This allows us to
+// organize styles based on Component organization, without drastically
+// changing the way we write CSS.
+
+// In this case, we are loading the global styles.
 import '/styles/variables.less'
 import '/styles/base.less'
 
-// Helmet is fun for SEO PORPOISES
+// And, finally, our MainApp!
 export const MainApp = () =>
   <div className='main-app-container' >
     <Helmet
@@ -87,6 +104,8 @@ export const MainApp = () =>
     <NotFound />
   </div>
 
+// Only render if we are in the browser, server-side rendering will be
+// handled by `server/index.js`
 if (typeof window !== 'undefined') {
   Preact.render(
     <MainApp />,
