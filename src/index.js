@@ -47,6 +47,11 @@ import Preact from 'preact'
 // `src/index.js` contains your top-most Component and is the entry point
 // for your entire app.
 
+// Here, we import Components we want to render on *all* routes. For example,
+// we include a global Header, Notification bar, and a *Not Found* component
+// which renders when no route is matched.
+
+// If your app does not need a global Header, you can of course remove it.
 import Header from '/elements/Header'
 import Notification from '/elements/Notification'
 import NotFound from '/elements/NotFound'
