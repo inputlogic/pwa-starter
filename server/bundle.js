@@ -184,14 +184,10 @@ var toConsumableArray = function (arr) {
   }
 };
 
-if (typeof window !== 'undefined') {
-  console.log(window.__initial_store__);
-}
-
-var state = {
+var state = _extends({
   currentPath: typeof window !== 'undefined' ? window.location.pathname + window.location.search : '/',
   pendingRequests: 0
-};
+}, typeof window !== 'undefined' ? JSON.parse(window.__initial_store__ || '') : {});
 var components = [];
 
 var subscribe = function subscribe(component) {
@@ -399,6 +395,230 @@ var qs = {
   stringify: stringify,
   parse: parse
 };
+
+var segmentize = function segmentize(url) {
+  return url.replace(/(^\/+|\/+$)/g, '').split('/');
+};
+
+var exec = function exec(url, route) {
+  var reg = /(?:\?([^#]*))?(#.*)?$/;
+  var c = url.match(reg);
+  var matches = {};
+  var ret = void 0;
+  if (c && c[1]) {
+    var p = c[1].split('&');
+    for (var i = 0; i < p.length; i++) {
+      var r = p[i].split('=');
+      matches[decodeURIComponent(r[0])] = decodeURIComponent(r.slice(1).join('='));
+    }
+  }
+  url = segmentize(url.replace(reg, ''));
+  route = segmentize(route || '');
+  var max = Math.max(url.length, route.length);
+  for (var _i = 0; _i < max; _i++) {
+    if (route[_i] && route[_i].charAt(0) === ':') {
+      var param = route[_i].replace(/(^:|[+*?]+$)/g, '');
+      var flags = (route[_i].match(/[+*?]+$/) || {})[0] || '';
+      var plus = ~flags.indexOf('+');
+      var star = ~flags.indexOf('*');
+      var val = url[_i] || '';
+      if (!val && !star && (flags.indexOf('?') < 0 || plus)) {
+        ret = false;
+        break;
+      }
+      matches[param] = decodeURIComponent(val);
+      if (plus || star) {
+        matches[param] = url.slice(_i).map(decodeURIComponent).join('/');
+        break;
+      }
+    } else if (route[_i] !== url[_i]) {
+      ret = false;
+      break;
+    }
+  }
+  if (ret === false) return false;
+  return matches;
+};
+
+if (typeof window !== 'undefined') {
+  document.addEventListener('click', function (ev) {
+    if (ev.target.nodeName === 'A') {
+      if (ev.metaKey) return;
+      ev.preventDefault();
+      ev.stopImmediatePropagation();
+      window.scrollTo(0, 0);
+      var url = ev.target.getAttribute('href');
+      window.history['pushState'](null, null, url);
+      setState({ currentPath: url });
+    }
+  });
+}
+
+var Router = (function (_ref) {
+  var routes = _ref.routes;
+  return Preact.h(
+    WithState,
+    { mapper: function mapper(_ref2) {
+        var currentPath = _ref2.currentPath;
+        return { currentPath: currentPath };
+      } },
+    function (_ref3) {
+      var currentPath = _ref3.currentPath;
+
+      for (var route in routes) {
+        var routeArgs = exec(currentPath, routes[route].path);
+        if (routeArgs) {
+          var newRoute = {
+            name: route,
+            path: routes[route].path,
+            args: routeArgs
+          };
+          if (!equal(newRoute, getState().route)) {
+            setState({
+              route: {
+                name: route,
+                path: routes[route].path,
+                args: routeArgs
+              }
+            });
+          }
+          var Page = routes[route].Page;
+          return Preact.h(Page, routeArgs);
+        }
+      }
+    },
+    '}'
+  );
+});
+
+var isOverlay = function isOverlay(el) {
+  return el.classList && el.classList.contains('modal-container');
+};
+
+var Modal = function (_Preact$Component) {
+  inherits(Modal, _Preact$Component);
+
+  function Modal(props) {
+    classCallCheck(this, Modal);
+
+    var _this = possibleConstructorReturn(this, (Modal.__proto__ || Object.getPrototypeOf(Modal)).call(this, props));
+
+    _this.onContainerClick = _this.onContainerClick.bind(_this);
+    _this.closeModal = _this.closeModal.bind(_this);
+    return _this;
+  }
+
+  createClass(Modal, [{
+    key: 'onContainerClick',
+    value: function onContainerClick(ev) {
+      if (isOverlay(ev.target)) {
+        this.props.onClose ? this.props.onClose() : setState({ modal: null });
+      }
+    }
+  }, {
+    key: 'closeModal',
+    value: function closeModal() {
+      this.props.onClose ? this.props.onClose() : setState({ modal: null });
+    }
+  }, {
+    key: 'render',
+    value: function render$$1(_ref) {
+      var _ref$className = _ref.className,
+          className = _ref$className === undefined ? '' : _ref$className,
+          children = _ref.children;
+
+      return Preact.h(
+        Portal,
+        { into: 'body' },
+        Preact.h(
+          'div',
+          {
+            'class': 'modal-container ' + className,
+            onClick: this.onContainerClick
+          },
+          Preact.h(
+            'div',
+            { 'class': 'modal-content' },
+            Preact.h(
+              'div',
+              { className: 'close', onClick: this.closeModal },
+              'close'
+            ),
+            children
+          )
+        )
+      );
+    }
+  }]);
+  return Modal;
+}(Preact.Component);
+
+
+var Modals = function (_WithState) {
+  inherits(Modals, _WithState);
+
+  function Modals() {
+    classCallCheck(this, Modals);
+    return possibleConstructorReturn(this, (Modals.__proto__ || Object.getPrototypeOf(Modals)).apply(this, arguments));
+  }
+
+  createClass(Modals, [{
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(_, prevState) {
+      get(Modals.prototype.__proto__ || Object.getPrototypeOf(Modals.prototype), 'componentDidUpdate', this).call(this);
+      var modal = this.state._mappedState.modal;
+
+      var prevModal = W.path('_mappedState.modal', prevState);
+      if (!modal) {
+        if (prevModal != null) {
+          document.body.classList.remove('modal-open');
+        }
+        return;
+      } else if (modal !== prevModal) {
+        document.body.classList.add('modal-open');
+      }
+
+      var route = W.path('_mappedState.route.name', this.state);
+      var prevRoute = W.path('_mappedState.route.name', prevState);
+      if (route !== prevRoute) {
+        setState({ modal: null });
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render$$1(_ref2, _ref3) {
+      var children = _ref2.children;
+      var _mappedState = _ref3._mappedState;
+      var modal = _mappedState.modal;
+
+      var child = W.find(function (c) {
+        return W.pathEq('nodeName.name', modal, c);
+      }, children);
+      return child;
+    }
+  }]);
+  return Modals;
+}(WithState);
+
+Modals.defaultProps = {
+  mapper: function mapper(_ref4) {
+    var modal = _ref4.modal,
+        route = _ref4.route;
+    return { modal: modal, route: route };
+  }
+};
+
+function ExampleModal() {
+  return Preact.h(
+    Modal,
+    null,
+    Preact.h(
+      'h1',
+      null,
+      'Example Modal'
+    )
+  );
+}
 
 var Level = function Level(_ref) {
   var children = _ref.children,
@@ -1289,6 +1509,19 @@ var routes = {
   }
 };
 
+var Main = (function () {
+  return Preact.h(
+    'div',
+    null,
+    Preact.h(Router, { routes: routes }),
+    Preact.h(
+      Modals,
+      null,
+      Preact.h(ExampleModal, null)
+    )
+  );
+});
+
 var endpoint$1 = 'https://jsonplaceholder.typicode.com/users';
 
 var Users = (function () {
@@ -1682,7 +1915,7 @@ var Login = (function () {
   );
 });
 
-var accountRoutes = {
+var routes$1 = {
   users: {
     path: '/users',
     Page: Users
@@ -1697,13 +1930,41 @@ var accountRoutes = {
   }
 };
 
-// Define all routes here so `urlFor` works
-var allRoutes = {
-  Main: routes,
-  Account: accountRoutes
+var AccountHeader = function AccountHeader() {
+  return Preact.h(
+    'header',
+    { className: 'alt' },
+    Preact.h(
+      'a',
+      { href: urlFor('users') },
+      'Users'
+    ),
+    '\xA0',
+    Preact.h(
+      'a',
+      { href: urlFor('login') },
+      'Login'
+    )
+  );
 };
 
-var routes$1 = Object.values(allRoutes).reduce(function (acc, el) {
+var Account = (function () {
+  return Preact.h(
+    'div',
+    { id: 'account-layout' },
+    Preact.h(AccountHeader, null),
+    Preact.h(Router, { routes: routes$1 })
+  );
+});
+
+// Here we define our routes as key => values pairs. This allows us to
+// keep the Component reference next to it's routes. It would not work
+// as a key on a plain object, and `Map` seemed like overkill.
+var routes$2 = [[Main, routes], [Account, routes$1]];
+
+var allRoutes = routes$2.map(function (p) {
+  return p[1];
+}).reduce(function (acc, el) {
   return _extends({}, acc, el);
 }, {});
 
@@ -1730,9 +1991,10 @@ var urlFor = function urlFor(name) {
       _ref$queries = _ref.queries,
       queries = _ref$queries === undefined ? {} : _ref$queries;
 
-  var rule = routes$1[name];
+  var rule = allRoutes[name];
   if (!rule) {
     console.warn('No route found for name: ' + name);
+    return;
   }
   var replaced = Object.keys(args).reduce(function (acc, k) {
     return acc.replace(':' + k, args[k]);
@@ -1793,101 +2055,6 @@ var NotFound = (function (props) {
   return !getState().route ? Base() : null;
 });
 
-var segmentize = function segmentize(url) {
-  return url.replace(/(^\/+|\/+$)/g, '').split('/');
-};
-
-var exec = function exec(url, route) {
-  var reg = /(?:\?([^#]*))?(#.*)?$/;
-  var c = url.match(reg);
-  var matches = {};
-  var ret = void 0;
-  if (c && c[1]) {
-    var p = c[1].split('&');
-    for (var i = 0; i < p.length; i++) {
-      var r = p[i].split('=');
-      matches[decodeURIComponent(r[0])] = decodeURIComponent(r.slice(1).join('='));
-    }
-  }
-  url = segmentize(url.replace(reg, ''));
-  route = segmentize(route || '');
-  var max = Math.max(url.length, route.length);
-  for (var _i = 0; _i < max; _i++) {
-    if (route[_i] && route[_i].charAt(0) === ':') {
-      var param = route[_i].replace(/(^:|[+*?]+$)/g, '');
-      var flags = (route[_i].match(/[+*?]+$/) || {})[0] || '';
-      var plus = ~flags.indexOf('+');
-      var star = ~flags.indexOf('*');
-      var val = url[_i] || '';
-      if (!val && !star && (flags.indexOf('?') < 0 || plus)) {
-        ret = false;
-        break;
-      }
-      matches[param] = decodeURIComponent(val);
-      if (plus || star) {
-        matches[param] = url.slice(_i).map(decodeURIComponent).join('/');
-        break;
-      }
-    } else if (route[_i] !== url[_i]) {
-      ret = false;
-      break;
-    }
-  }
-  if (ret === false) return false;
-  return matches;
-};
-
-if (typeof window !== 'undefined') {
-  document.addEventListener('click', function (ev) {
-    if (ev.target.nodeName === 'A') {
-      if (ev.metaKey) return;
-      ev.preventDefault();
-      ev.stopImmediatePropagation();
-      window.scrollTo(0, 0);
-      var url = ev.target.getAttribute('href');
-      window.history['pushState'](null, null, url);
-      setState({ currentPath: url });
-    }
-  });
-}
-
-var Router = (function (_ref) {
-  var routes = _ref.routes;
-  return Preact.h(
-    WithState,
-    { mapper: function mapper(_ref2) {
-        var currentPath = _ref2.currentPath;
-        return { currentPath: currentPath };
-      } },
-    function (_ref3) {
-      var currentPath = _ref3.currentPath;
-
-      for (var route in routes) {
-        var routeArgs = exec(currentPath, routes[route].path);
-        if (routeArgs) {
-          var newRoute = {
-            name: route,
-            path: routes[route].path,
-            args: routeArgs
-          };
-          if (!equal(newRoute, getState().route)) {
-            setState({
-              route: {
-                name: route,
-                path: routes[route].path,
-                args: routeArgs
-              }
-            });
-          }
-          var Page = routes[route].Page;
-          return Preact.h(Page, routeArgs);
-        }
-      }
-    },
-    '}'
-  );
-});
-
 var Apps = function (_WithState) {
   inherits(Apps, _WithState);
 
@@ -1899,208 +2066,59 @@ var Apps = function (_WithState) {
   createClass(Apps, [{
     key: 'render',
     value: function render$$1(_ref, _ref2) {
-      var children = _ref.children,
-          routes = _ref.routes;
+      var children = _ref.children;
       var _mappedState = _ref2._mappedState;
       var currentPath = _mappedState.currentPath;
 
       var routeMatches = function routeMatches(r) {
         return exec(currentPath, r.path);
       };
-      var appName = W.pipe(W.map(function (name, routes) {
-        return Object.values(routes);
-      }), W.toPairs, W.find(function (_ref3) {
-        var _ref4 = slicedToArray(_ref3, 2),
-            name = _ref4[0],
-            routes = _ref4[1];
 
-        return W.find(routeMatches, routes);
-      }), function (arr) {
-        return arr && arr.length && arr[0];
-      })(routes);
-      if (appName) {
-        var App = W.pipe(W.find(W.pathEq('nodeName.name', appName)), function (child) {
-          return Preact.cloneElement(child, { routes: routes[appName] });
-        })(children);
-        return App;
-      } else {
-        return null;
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = routes$2[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var _ref3 = _step.value;
+
+          var _ref4 = slicedToArray(_ref3, 2);
+
+          var App = _ref4[0];
+          var appRoutes = _ref4[1];
+
+          if (W.find(routeMatches, Object.values(appRoutes))) {
+            return Preact.h(App, null);
+          }
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
       }
+
+      return null;
     }
   }]);
   return Apps;
 }(WithState);
 
-var isOverlay = function isOverlay(el) {
-  return el.classList && el.classList.contains('modal-container');
-};
 
-var Modal = function (_Preact$Component) {
-  inherits(Modal, _Preact$Component);
+Apps.defaultProps = { mapper: function mapper(_ref5) {
+    var currentPath = _ref5.currentPath;
+    return { currentPath: currentPath };
+  } };
 
-  function Modal(props) {
-    classCallCheck(this, Modal);
-
-    var _this = possibleConstructorReturn(this, (Modal.__proto__ || Object.getPrototypeOf(Modal)).call(this, props));
-
-    _this.onContainerClick = _this.onContainerClick.bind(_this);
-    _this.closeModal = _this.closeModal.bind(_this);
-    return _this;
-  }
-
-  createClass(Modal, [{
-    key: 'onContainerClick',
-    value: function onContainerClick(ev) {
-      if (isOverlay(ev.target)) {
-        this.props.onClose ? this.props.onClose() : setState({ modal: null });
-      }
-    }
-  }, {
-    key: 'closeModal',
-    value: function closeModal() {
-      this.props.onClose ? this.props.onClose() : setState({ modal: null });
-    }
-  }, {
-    key: 'render',
-    value: function render$$1(_ref) {
-      var _ref$className = _ref.className,
-          className = _ref$className === undefined ? '' : _ref$className,
-          children = _ref.children;
-
-      return Preact.h(
-        Portal,
-        { into: 'body' },
-        Preact.h(
-          'div',
-          {
-            'class': 'modal-container ' + className,
-            onClick: this.onContainerClick
-          },
-          Preact.h(
-            'div',
-            { 'class': 'modal-content' },
-            Preact.h(
-              'div',
-              { className: 'close', onClick: this.closeModal },
-              'close'
-            ),
-            children
-          )
-        )
-      );
-    }
-  }]);
-  return Modal;
-}(Preact.Component);
-
-
-var Modals = function (_WithState) {
-  inherits(Modals, _WithState);
-
-  function Modals() {
-    classCallCheck(this, Modals);
-    return possibleConstructorReturn(this, (Modals.__proto__ || Object.getPrototypeOf(Modals)).apply(this, arguments));
-  }
-
-  createClass(Modals, [{
-    key: 'componentDidUpdate',
-    value: function componentDidUpdate(_, prevState) {
-      get(Modals.prototype.__proto__ || Object.getPrototypeOf(Modals.prototype), 'componentDidUpdate', this).call(this);
-      var modal = this.state._mappedState.modal;
-
-      var prevModal = W.path('_mappedState.modal', prevState);
-      if (!modal) {
-        if (prevModal != null) {
-          document.body.classList.remove('modal-open');
-        }
-        return;
-      } else if (modal !== prevModal) {
-        document.body.classList.add('modal-open');
-      }
-
-      var route = W.path('_mappedState.route.name', this.state);
-      var prevRoute = W.path('_mappedState.route.name', prevState);
-      if (route !== prevRoute) {
-        setState({ modal: null });
-      }
-    }
-  }, {
-    key: 'render',
-    value: function render$$1(_ref2, _ref3) {
-      var children = _ref2.children;
-      var _mappedState = _ref3._mappedState;
-      var modal = _mappedState.modal;
-
-      var child = W.find(function (c) {
-        return W.pathEq('nodeName.name', modal, c);
-      }, children);
-      return child;
-    }
-  }]);
-  return Modals;
-}(WithState);
-
-Modals.defaultProps = {
-  mapper: function mapper(_ref4) {
-    var modal = _ref4.modal,
-        route = _ref4.route;
-    return { modal: modal, route: route };
-  }
-};
-
-function ExampleModal() {
-  return Preact.h(
-    Modal,
-    null,
-    Preact.h(
-      'h1',
-      null,
-      'Example Modal'
-    )
-  );
-}
-
-var Main = (function () {
-  return Preact.h(
-    'div',
-    null,
-    Preact.h(Router, { routes: routes }),
-    Preact.h(
-      Modals,
-      null,
-      Preact.h(ExampleModal, null)
-    )
-  );
-});
-
-var AccountHeader = function AccountHeader() {
-  return Preact.h(
-    'header',
-    { className: 'alt' },
-    Preact.h(
-      'a',
-      { href: urlFor('users') },
-      'Users'
-    ),
-    '\xA0',
-    Preact.h(
-      'a',
-      { href: urlFor('login') },
-      'Login'
-    )
-  );
-};
-
-var Account = (function (_ref) {
-  var routes = _ref.routes;
-  return Preact.h(
-    'div',
-    { id: 'account-layout' },
-    Preact.h(AccountHeader, null),
-    Preact.h(Router, { routes: routes })
-  );
-});
-
+// And, finally, our MainApp!
 var MainApp = function MainApp() {
   return Preact.h(
     'div',
@@ -2112,19 +2130,13 @@ var MainApp = function MainApp() {
     }),
     Preact.h(Header, null),
     Preact.h(Notification, null),
-    Preact.h(
-      Apps,
-      { routes: allRoutes, mapper: function mapper(_ref) {
-          var currentPath = _ref.currentPath;
-          return { currentPath: currentPath };
-        } },
-      Preact.h(Main, null),
-      Preact.h(Account, null)
-    ),
+    Preact.h(Apps, null),
     Preact.h(NotFound, null)
   );
 };
 
+// Only render if we are in the browser, server-side rendering will be
+// handled by `server/index.js`
 if (typeof window !== 'undefined') {
   Preact.render(Preact.h(MainApp, null), document.body, document.body.children[0]);
 }

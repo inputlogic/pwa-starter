@@ -1,26 +1,46 @@
+// This nifty little Component let's us group routes together into "Apps".
+// Which is helpful if, say, one grouping of routes shares a particular
+// header or navigation Component, and another grouping shares a different
+// set of components.
+
+// Breaking apart routes also helps keep things tidy with larger projects.
+
 import W from 'wasmuth'
-import Preact from 'preact'
+
+// **Apps** extends `WithState` in order to stay updated with the `currentPath`
+// value. Any time the `currentPath` changes, `Apps` will determine which
+// "app" Component to render.
 import WithState from '/hoc/WithState'
+
+// We borrow route matching logic from our `Router`
 import {exec} from '/hoc/Router'
 
+// And, we'll need our `App => Object` route pairs.
+import routes from '/routes'
+
 export default class Apps extends WithState {
-  render ({children, routes}, {_mappedState}) {
-    const {currentPath} = _mappedState
+  render () {
+    // `_mappedState` is the namespace `WithState` uses to store what
+    // `this.props.mapper` returns. In this case, we want our `currentPath`
+    // reference.
+    const {currentPath} = this.state._mappedState
+
+    // When called on a route (an object with a `path` property), will
+    // return true if it matches currentPath.
     const routeMatches = r => exec(currentPath, r.path)
-    const appName = W.pipe(
-      W.map((name, routes) => Object.values(routes)),
-      W.toPairs,
-      W.find(([name, routes]) => W.find(routeMatches, routes)),
-      arr => arr && arr.length && arr[0]
-    )(routes)
-    if (appName) {
-      const App = W.pipe(
-        W.find(W.pathEq('nodeName.name', appName)),
-        child => Preact.cloneElement(child, {routes: routes[appName]})
-      )(children)
-      return App
-    } else {
-      return null
+
+    // We iterate our `App => Object` route pairs. And when a match
+    // is found, we render that App
+    for (let [App, appRoutes] of routes) {
+      if (W.find(routeMatches, Object.values(appRoutes))) {
+        return <App />
+      }
     }
+
+    return null
   }
 }
+
+// Set the `mapper` prop which `WithState` will use to return a part of
+// our global state from `/store`.
+Apps.defaultProps = {mapper: ({currentPath}) => ({currentPath})}

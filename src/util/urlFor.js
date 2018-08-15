@@ -1,28 +1,33 @@
 import qs from '/util/qs'
-import allRoutes from '/routes'
+import routePairs from '/routes'
 
-const routes = Object.values(allRoutes).reduce((acc, el) => ({...acc, ...el}), {})
+// Transform our `Component => Object` pairs to a single Object.
+// The `urlFor` function below will reference it to return a URL string
+// for a given name.
 
-/**
- * Get the path string for the route with name `name`
- * Best understood with an example:
- *
- * ```
- * const routes = {
- *  myRoute: '/some/:fancy/:route'
- * }
- *
- * urlFor('myRoute', {
- *   args: {fancy: 12, route: 'r2d2'},
- *   queries: {search: 'hi'}
- * })
- * > '/some/12/r2d2?search=hi'
- * ```
- */
+const allRoutes = routePairs
+  .map(p => p[1])
+  .reduce((acc, el) => ({...acc, ...el}), {})
+
+// Get the path string for the route with name `name`
+// Best understood with an example:
+
+// ```
+// const routes = {
+//   myRoute: '/some/:fancy/:route'
+// }
+// urlFor('myRoute', {
+//   args: {fancy: 12, route: 'r2d2'},
+//   queries: {search: 'hi'}
+// })
+// > '/some/12/r2d2?search=hi'
+// ```
+
 export const urlFor = (name, {args = {}, queries = {}} = {}) => {
-  const rule = routes[name]
+  const rule = allRoutes[name]
   if (!rule) {
     console.warn('No route found for name: ' + name)
+    return
   }
   const replaced = Object
     .keys(args)
