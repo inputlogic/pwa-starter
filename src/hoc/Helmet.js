@@ -1,39 +1,23 @@
+import W from 'wasmuth'
 import Preact from 'preact'
-import Portal from 'preact-portal'
 
-import {setState} from '/store'
+let refs = []
 
-let allProps = {}
-
-export const rewind = () => allProps
-
-const getCount = (nodeName, nodeList) => {
-  let count = 0
-  for (var x = 0; x < nodeList.length; x++) {
-    if (nodeList[x].nodeName === nodeName) {
-      count++
-    }
-  }
-  return count
+export const rewind = () => {
+  const res = W.reduce((acc, el) => W.merge(acc, el.props), {}, refs)
+  return res
 }
 
 const Wrapper = ({children}) => {
   if (typeof window !== 'undefined') {
-    const nodeList = document.querySelectorAll('[data-helmet]')
-    for (let x = nodeList.length - 1; x >= 0; x--) {
-      // const k = nodeList[x].getAttribute('property') || nodeList[x].getAttribute('name')
-      // const counterpart = W.find(
-      //   c => (c.attributes.property || c.attributes.name) === k,
-      //   children
-      // )
-      if (nodeList[x].nodeName === 'TITLE') {
-        const count = getCount('TITLE', nodeList)
-        if (count) {
-          nodeList[x].remove()
-        }
+    const titleChild = W.find(({nodeName}) => nodeName === 'title', children)
+    if (titleChild) {
+      const title = titleChild.children[0]
+      if (title !== document.title) {
+        document.title = title
       }
     }
-    return <Portal into='head'>{children}</Portal>
+    return null
   } else {
     return <div>{children}</div>
   }
@@ -42,22 +26,17 @@ const Wrapper = ({children}) => {
 export default class Helmet extends Preact.Component {
   constructor (props) {
     super(props)
-    this._sync(props)
+    refs.push(this)
   }
 
-  componentDidUpdate () {
-    this._sync(this.props)
-  }
-
-  _sync (props) {
-    allProps = {...allProps, ...props}
-    setState({helmet: {
-      title: this._getTitle(props)
-    }})
+  componentWillUnmount () {
+    const newRefs = W.reject(c => c === this, refs)
+    refs = newRefs
+    document.title = this._getTitle({})
   }
 
   _getTitle (props) {
-    const {title, titleTemplate = '%s', defaultTitle} = {...allProps, ...props}
+    const {title, titleTemplate = '%s', defaultTitle} = {...rewind(), ...props}
     return titleTemplate.replace('%s', title || defaultTitle || '')
   }
 
@@ -75,7 +54,7 @@ export default class Helmet extends Preact.Component {
   render () {
     return (
       <Wrapper>
-        <title data-helmet>{this._getTitle(this.props)}</title>
+        <title data-helmet='true'>{this._getTitle(this.props)}</title>
         {this._getMeta(this.props)}
       </Wrapper>
     )

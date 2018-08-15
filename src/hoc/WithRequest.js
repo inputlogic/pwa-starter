@@ -8,7 +8,6 @@ const CACHE = {}
 
 export const clearCache = endpoint => {
   CACHE[endpoint] = null
-  console.log('clearCache', endpoint, CACHE)
 }
 
 const cache = (endpoint, result) => {

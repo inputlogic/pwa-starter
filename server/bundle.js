@@ -893,7 +893,6 @@ var CACHE = {};
 
 var clearCache = function clearCache(endpoint) {
   CACHE[endpoint] = null;
-  console.log('clearCache', endpoint, CACHE);
 };
 
 var cache = function cache(endpoint, result) {
@@ -1306,25 +1305,30 @@ var Users = (function () {
   );
 });
 
-var allProps = {};
+var refs = [];
 
 var rewind = function rewind() {
-  return allProps;
+  var res = W.reduce(function (acc, el) {
+    return W.merge(acc, el.props);
+  }, {}, refs);
+  return res;
 };
 
 var Wrapper = function Wrapper(_ref) {
   var children = _ref.children;
 
   if (typeof window !== 'undefined') {
-    var found = document.querySelectorAll('[data-helmet]');
-    for (var x = found.length - 1; x >= 0; x--) {
-      found[x].remove && found[x].remove();
+    var titleChild = W.find(function (_ref2) {
+      var nodeName = _ref2.nodeName;
+      return nodeName === 'title';
+    }, children);
+    if (titleChild) {
+      var title = titleChild.children[0];
+      if (title !== document.title) {
+        document.title = title;
+      }
     }
-    return Preact.h(
-      Portal,
-      { into: 'head' },
-      children
-    );
+    return null;
   } else {
     return Preact.h(
       'div',
@@ -1342,30 +1346,29 @@ var Helmet = function (_Preact$Component) {
 
     var _this = possibleConstructorReturn(this, (Helmet.__proto__ || Object.getPrototypeOf(Helmet)).call(this, props));
 
-    _this._sync(props);
+    refs.push(_this);
     return _this;
   }
 
   createClass(Helmet, [{
-    key: 'componentDidUpdate',
-    value: function componentDidUpdate() {
-      this._sync(this.props);
-    }
-  }, {
-    key: '_sync',
-    value: function _sync(props) {
-      allProps = _extends({}, allProps, props);
-      setState({ helmet: {
-          title: this._getTitle(props)
-        } });
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      var _this2 = this;
+
+      var newRefs = W.reject(function (c) {
+        return c === _this2;
+      }, refs);
+      refs = newRefs;
+      document.title = this._getTitle({});
     }
   }, {
     key: '_getTitle',
-    value: function _getTitle(_ref2) {
-      var title = _ref2.title,
-          _ref2$titleTemplate = _ref2.titleTemplate,
-          titleTemplate = _ref2$titleTemplate === undefined ? '%s' : _ref2$titleTemplate,
-          defaultTitle = _ref2.defaultTitle;
+    value: function _getTitle(props) {
+      var _rewind$props = _extends({}, rewind(), props),
+          title = _rewind$props.title,
+          _rewind$props$titleTe = _rewind$props.titleTemplate,
+          titleTemplate = _rewind$props$titleTe === undefined ? '%s' : _rewind$props$titleTe,
+          defaultTitle = _rewind$props.defaultTitle;
 
       return titleTemplate.replace('%s', title || defaultTitle || '');
     }
@@ -1395,7 +1398,7 @@ var Helmet = function (_Preact$Component) {
         null,
         Preact.h(
           'title',
-          { 'data-helmet': true },
+          { 'data-helmet': 'true' },
           this._getTitle(this.props)
         ),
         this._getMeta(this.props)
