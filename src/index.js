@@ -65,14 +65,6 @@ import Apps from '/hoc/Apps'
 // when navigating on the client.
 import Helmet from '/hoc/Helmet'
 
-// These are the *Apps* we will nest under the `<App/ >` Component.
-// Usually, these will render a `<Router />` and any shared elements for
-// that group of routes.
-import Main from '/apps/Main'
-import Account from '/apps/Account'
-
-import routes from '/routes'
-
 // ### Styling
 
 // We use LESS for styling. And ideally, each element Component will
@@ -96,10 +88,7 @@ export const MainApp = () =>
     <Header />
     <Notification />
 
-    <Apps routes={routes} mapper={({currentPath}) => ({currentPath})}>
-      <Main />
-      <Account />
-    </Apps>
+    <Apps />
 
     <NotFound />
   </div>

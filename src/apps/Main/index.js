@@ -1,7 +1,20 @@
 import Router from '/hoc/Router'
 import {Modals} from '/elements/Modal'
 import ExampleModal from '/modals/ExampleModal'
-import routes from './routes'
+
+import Home from './Home'
+import Videos from './Videos'
+
+export const routes = {
+  home: {
+    path: '/',
+    Page: Home
+  },
+  videos: {
+    path: '/videos',
+    Page: Videos
+  }
+}
 
 export default () =>
   <div>
