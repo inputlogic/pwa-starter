@@ -889,22 +889,26 @@ function makeRequest(_ref) {
 }
 
 var OK_TIME = 30000;
-var CACHE = {};
+
+var getCache = function getCache() {
+  return getState().CACHE || {};
+};
 
 var clearCache = function clearCache(endpoint) {
-  CACHE[endpoint] = null;
+  return setState({ CACHE: W.dissoc(endpoint, getCache()) });
 };
 
 var cache = function cache(endpoint, result) {
-  CACHE[endpoint] = { result: result, timestamp: Date.now() };
+  return setState({ CACHE: W.assoc(endpoint, { result: result, timestamp: Date.now() }, getCache()) });
 };
 
 var validCache = function validCache(endpoint) {
+  var CACHE = getCache();
   var ts = CACHE[endpoint] && CACHE[endpoint].timestamp;
   if (!ts) return false;
   var diff = Date.now() - ts;
   if (diff < OK_TIME) {
-    return true;
+    return CACHE[endpoint];
   }
   clearCache(endpoint);
   return false;
@@ -917,6 +921,8 @@ var reducePending = function reducePending() {
   }
 };
 
+var _existing = {};
+
 var WithRequest = function (_React$Component) {
   inherits(WithRequest, _React$Component);
 
@@ -926,17 +932,40 @@ var WithRequest = function (_React$Component) {
     var _this = possibleConstructorReturn(this, (WithRequest.__proto__ || Object.getPrototypeOf(WithRequest)).call(this, props));
 
     _this.state = _extends({}, _this.state || {}, { isLoading: true, result: null, error: null });
-    _this._existing = null;
     setState({ pendingRequests: getState().pendingRequests + 1 });
     _this._loadResult(_this.props);
     return _this;
   }
 
   createClass(WithRequest, [{
+    key: '_loadResult',
+    value: function _loadResult(props) {
+      if (!props.request || !props.request.endpoint) {
+        return;
+      }
+
+      var _props$request = props.request,
+          endpoint = _props$request.endpoint,
+          parse = _props$request.parse;
+
+
+      if (_existing[endpoint] && !this.state.error) {
+        this._handlePromise(endpoint, _existing[endpoint]);
+        console.log('!! _existing', endpoint);
+        return;
+      }
+
+      var cached = validCache(endpoint);
+      if (cached) {
+        this.setState({ result: cached.result, isLoading: false });
+        reducePending();
+      } else {
+        this._performRequest(endpoint, parse);
+      }
+    }
+  }, {
     key: '_performRequest',
     value: function _performRequest(endpoint, parse) {
-      var _this2 = this;
-
       var token = getState().token;
       var headers = {};
       if (token) {
@@ -944,11 +973,17 @@ var WithRequest = function (_React$Component) {
       }
 
       var _makeRequest = makeRequest({ endpoint: endpoint, headers: headers }),
-          xhr = _makeRequest.xhr,
           promise = _makeRequest.promise;
 
-      this._existing = xhr;
-      this._existing._endpoint = endpoint;
+      _existing[endpoint] = promise;
+      _existing[endpoint]._endpoint = endpoint;
+
+      this._handlePromise(endpoint, promise);
+    }
+  }, {
+    key: '_handlePromise',
+    value: function _handlePromise(endpoint, promise) {
+      var _this2 = this;
 
       promise.then(function (result) {
         cache(endpoint, result);
@@ -959,28 +994,6 @@ var WithRequest = function (_React$Component) {
         _this2.setState({ error: error, isLoading: false });
         reducePending();
       });
-    }
-  }, {
-    key: '_loadResult',
-    value: function _loadResult(props) {
-      if (!props.request || !props.request.endpoint) {
-        return;
-      }
-      if (this._existing && !this.state.error) {
-        this._existing.abort();
-        this._existing = null;
-      }
-
-      var _props$request = props.request,
-          endpoint = _props$request.endpoint,
-          parse = _props$request.parse;
-
-      if (validCache(endpoint)) {
-        this.setState({ result: CACHE[endpoint].result, isLoading: false });
-        reducePending();
-      } else {
-        this._performRequest(endpoint, parse);
-      }
     }
   }, {
     key: 'shouldComponentUpdate',
@@ -1001,8 +1014,9 @@ var WithRequest = function (_React$Component) {
         this._loadResult(this.props);
         return;
       }
-      if (!this._existing) return;
-      if ((this.props.request || {}).endpoint !== this._existing._endpoint) {
+      var endpoint = (this.props.request || {}).endpoint;
+      if (!_existing[endpoint]) return;
+      if (endpoint !== _existing[endpoint]._endpoint) {
         this.setState({ isLoading: true });
         this._loadResult(this.props);
       }
