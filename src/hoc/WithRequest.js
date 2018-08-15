@@ -13,7 +13,7 @@ export const clearCache = endpoint =>
 
 const cache = (endpoint, result) =>
   setState({CACHE: W.assoc(
-    endpoint,
+    [endpoint],
     {result, timestamp: Date.now()},
     getCache()
   )})
@@ -75,6 +75,9 @@ export default class WithRequest extends React.Component {
     if (token) {
       headers.Authorization = `Token ${token}`
     }
+
+    console.log('_performRequest', endpoint)
+
     const {promise} = makeRequest({endpoint, headers})
 
     _existing[endpoint] = promise

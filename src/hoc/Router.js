@@ -49,6 +49,7 @@ export const exec = (url, route) => {
 if (typeof window !== 'undefined') {
   document.addEventListener('click', ev => {
     if (ev.target.nodeName === 'A') {
+      if (ev.metaKey) return
       ev.preventDefault()
       ev.stopImmediatePropagation()
       window.scrollTo(0, 0)

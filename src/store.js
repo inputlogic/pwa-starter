@@ -1,14 +1,13 @@
 import {DEBUG} from '/consts'
 
-if (typeof window !== 'undefined') {
-  console.log(window.__initial_store__)
-}
-
 const state = {
   currentPath: typeof window !== 'undefined'
     ? window.location.pathname + window.location.search
     : '/',
-  pendingRequests: 0
+  pendingRequests: 0,
+  ...(typeof window !== 'undefined'
+      ? JSON.parse(window.__initial_store__ || '')
+      : {})
 }
 const components = []
 

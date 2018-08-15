@@ -899,7 +899,7 @@ var clearCache = function clearCache(endpoint) {
 };
 
 var cache = function cache(endpoint, result) {
-  return setState({ CACHE: W.assoc(endpoint, { result: result, timestamp: Date.now() }, getCache()) });
+  return setState({ CACHE: W.assoc([endpoint], { result: result, timestamp: Date.now() }, getCache()) });
 };
 
 var validCache = function validCache(endpoint) {
@@ -951,7 +951,7 @@ var WithRequest = function (_React$Component) {
 
       if (_existing[endpoint] && !this.state.error) {
         this._handlePromise(endpoint, _existing[endpoint]);
-        console.log('!! _existing', endpoint);
+        console.log('_existing', endpoint);
         return;
       }
 
@@ -971,6 +971,8 @@ var WithRequest = function (_React$Component) {
       if (token) {
         headers.Authorization = 'Token ' + token;
       }
+
+      console.log('_performRequest', endpoint);
 
       var _makeRequest = makeRequest({ endpoint: endpoint, headers: headers }),
           promise = _makeRequest.promise;
@@ -1838,6 +1840,7 @@ var exec = function exec(url, route) {
 if (typeof window !== 'undefined') {
   document.addEventListener('click', function (ev) {
     if (ev.target.nodeName === 'A') {
+      if (ev.metaKey) return;
       ev.preventDefault();
       ev.stopImmediatePropagation();
       window.scrollTo(0, 0);
