@@ -24,7 +24,9 @@ export default class ListResource extends WithState {
     }
     const func = type === 'function' ? Child : props => <Child {...props} />
 
-    const args = qs.parse(window.location.search)
+    // @TODO: Needs to access search params on SSR
+    const search = typeof window !== 'undefined' ? window.location.search : ''
+    const args = qs.parse(search)
     const activePage = args.page ? parseInt(args.page, 10) : 1
 
     const request = {

@@ -1,7 +1,7 @@
 import React from 'react'
 import makeRequest from '/util/makeRequest'
 
-const isReactNative = window.navigator.product === 'ReactNative'
+const isReactNative = typeof window !== 'undefined' && window.navigator.product === 'ReactNative'
 
 // children can be an array or object in React,
 // but always array in Preact.

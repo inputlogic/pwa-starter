@@ -15,7 +15,6 @@ export default class Notification extends Preact.Component {
   }
 
   componentDidUpdate () {
-    console.log('componentDidUpdate', this.state)
     if (this.state.message) {
       this.timeout && clearTimeout(this.timeout)
       this.timeout = setTimeout(
@@ -32,7 +31,6 @@ export default class Notification extends Preact.Component {
   render (_, {open, message, type}) {
     if (!ref) ref = this
     if (!message) return null
-    console.log('!!!!', {message})
     return (
       <div className={`notification-bar ${type} ${open ? 'open' : 'close'}`}>
         <span className='text'>
