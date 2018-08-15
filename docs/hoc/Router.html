@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Router.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="../docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="../elements/Form.html">
+                  elements/Form.js
+                </a>
+              
+                
+                <a class="source" href="../elements/Header.html">
+                  elements/Header.js
+                </a>
+              
+                
+                <a class="source" href="../elements/NotFound.html">
+                  elements/NotFound.js
+                </a>
+              
+                
+                <a class="source" href="Apps.html">
+                  hoc/Apps.js
+                </a>
+              
+                
+                <a class="source" href="Helmet.html">
+                  hoc/Helmet.js
+                </a>
+              
+                
+                <a class="source" href="ListResource.html">
+                  hoc/ListResource.js
+                </a>
+              
+                
+                <a class="source" href="Resource.html">
+                  hoc/Resource.js
+                </a>
+              
+                
+                <a class="source" href="Router.html">
+                  hoc/Router.js
+                </a>
+              
+                
+                <a class="source" href="WithRequest.html">
+                  hoc/WithRequest.js
+                </a>
+              
+                
+                <a class="source" href="WithState.html">
+                  hoc/WithState.js
+                </a>
+              
+                
+                <a class="source" href="../modals/ExampleModal.html">
+                  modals/ExampleModal.js
+                </a>
+              
+                
+                <a class="source" href="../util/equal.html">
+                  util/equal.js
+                </a>
+              
+                
+                <a class="source" href="../util/loadImage.html">
+                  util/loadImage.js
+                </a>
+              
+                
+                <a class="source" href="../util/makeRequest.html">
+                  util/makeRequest.js
+                </a>
+              
+                
+                <a class="source" href="../util/paginationRange.html">
+                  util/paginationRange.js
+                </a>
+              
+                
+                <a class="source" href="../util/qs.html">
+                  util/qs.js
+                </a>
+              
+                
+                <a class="source" href="../util/updateQuery.html">
+                  util/updateQuery.js
+                </a>
+              
+                
+                <a class="source" href="../util/urlFor.html">
+                  util/urlFor.js
+                </a>
+              
+                
+                <a class="source" href="../util/workerize.html">
+                  util/workerize.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>Router.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> WithState <span class="hljs-keyword">from</span> <span class="hljs-string">'/hoc/WithState'</span>
+<span class="hljs-keyword">import</span> equal <span class="hljs-keyword">from</span> <span class="hljs-string">'/util/equal'</span>
+<span class="hljs-keyword">import</span> {setState, getState} <span class="hljs-keyword">from</span> <span class="hljs-string">'/store'</span>
+
+<span class="hljs-keyword">const</span> segmentize = <span class="hljs-function">(<span class="hljs-params">url</span>) =&gt;</span> {
+  <span class="hljs-keyword">return</span> url.replace(<span class="hljs-regexp">/(^\/+|\/+$)/g</span>, <span class="hljs-string">''</span>).split(<span class="hljs-string">'/'</span>)
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> exec = <span class="hljs-function">(<span class="hljs-params">url, route</span>) =&gt;</span> {
+  <span class="hljs-keyword">let</span> reg = <span class="hljs-regexp">/(?:\?([^#]*))?(#.*)?$/</span>
+  <span class="hljs-keyword">let</span> c = url.match(reg)
+  <span class="hljs-keyword">let</span> matches = {}
+  <span class="hljs-keyword">let</span> ret
+  <span class="hljs-keyword">if</span> (c &amp;&amp; c[<span class="hljs-number">1</span>]) {
+    <span class="hljs-keyword">let</span> p = c[<span class="hljs-number">1</span>].split(<span class="hljs-string">'&amp;'</span>)
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; p.length; i++) {
+      <span class="hljs-keyword">let</span> r = p[i].split(<span class="hljs-string">'='</span>)
+      matches[<span class="hljs-built_in">decodeURIComponent</span>(r[<span class="hljs-number">0</span>])] = <span class="hljs-built_in">decodeURIComponent</span>(r.slice(<span class="hljs-number">1</span>).join(<span class="hljs-string">'='</span>))
+    }
+  }
+  url = segmentize(url.replace(reg, <span class="hljs-string">''</span>))
+  route = segmentize(route || <span class="hljs-string">''</span>)
+  <span class="hljs-keyword">let</span> max = <span class="hljs-built_in">Math</span>.max(url.length, route.length)
+  <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> i = <span class="hljs-number">0</span>; i &lt; max; i++) {
+    <span class="hljs-keyword">if</span> (route[i] &amp;&amp; route[i].charAt(<span class="hljs-number">0</span>) === <span class="hljs-string">':'</span>) {
+      <span class="hljs-keyword">let</span> param = route[i].replace(<span class="hljs-regexp">/(^:|[+*?]+$)/g</span>, <span class="hljs-string">''</span>)
+      <span class="hljs-keyword">let</span> flags = (route[i].match(<span class="hljs-regexp">/[+*?]+$/</span>) || {})[<span class="hljs-number">0</span>] || <span class="hljs-string">''</span>
+      <span class="hljs-keyword">let</span> plus = ~flags.indexOf(<span class="hljs-string">'+'</span>)
+      <span class="hljs-keyword">let</span> star = ~flags.indexOf(<span class="hljs-string">'*'</span>)
+      <span class="hljs-keyword">let</span> val = url[i] || <span class="hljs-string">''</span>
+      <span class="hljs-keyword">if</span> (!val &amp;&amp; !star &amp;&amp; (flags.indexOf(<span class="hljs-string">'?'</span>) &lt; <span class="hljs-number">0</span> || plus)) {
+        ret = <span class="hljs-literal">false</span>
+        <span class="hljs-keyword">break</span>
+      }
+      matches[param] = <span class="hljs-built_in">decodeURIComponent</span>(val)
+      <span class="hljs-keyword">if</span> (plus || star) {
+        matches[param] = url.slice(i).map(<span class="hljs-built_in">decodeURIComponent</span>).join(<span class="hljs-string">'/'</span>)
+        <span class="hljs-keyword">break</span>
+      }
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (route[i] !== url[i]) {
+      ret = <span class="hljs-literal">false</span>
+      <span class="hljs-keyword">break</span>
+    }
+  }
+  <span class="hljs-keyword">if</span> (ret === <span class="hljs-literal">false</span>) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
+  <span class="hljs-keyword">return</span> matches
+}
+
+<span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> !== <span class="hljs-string">'undefined'</span>) {
+  <span class="hljs-built_in">document</span>.addEventListener(<span class="hljs-string">'click'</span>, ev =&gt; {
+    <span class="hljs-keyword">if</span> (ev.target.nodeName === <span class="hljs-string">'A'</span>) {
+      <span class="hljs-keyword">if</span> (ev.metaKey) <span class="hljs-keyword">return</span>
+      ev.preventDefault()
+      ev.stopImmediatePropagation()
+      <span class="hljs-built_in">window</span>.scrollTo(<span class="hljs-number">0</span>, <span class="hljs-number">0</span>)
+      <span class="hljs-keyword">const</span> url = ev.target.getAttribute(<span class="hljs-string">'href'</span>)
+      <span class="hljs-built_in">window</span>.history[<span class="hljs-string">'pushState'</span>](<span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>, url)
+      setState({<span class="hljs-attr">currentPath</span>: url})
+    }
+  })
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> ({routes}) =&gt;
+  <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">WithState</span> <span class="hljs-attr">mapper</span>=<span class="hljs-string">{({currentPath})</span> =&gt;</span> ({currentPath})}&gt;
+    {({currentPath}) =&gt; {
+      for (let route in routes) {
+        const routeArgs = exec(currentPath, routes[route].path)
+        if (routeArgs) {
+          const newRoute = {
+            name: route,
+            path: routes[route].path,
+            args: routeArgs
+          }
+          if (!equal(newRoute, getState().route)) {
+            setState({
+              route: {
+                name: route,
+                path: routes[route].path,
+                args: routeArgs
+              }
+            })
+          }
+          const Page = routes[route].Page
+          return <span class="hljs-tag">&lt;<span class="hljs-name">Page</span> {<span class="hljs-attr">...routeArgs</span>} /&gt;</span>
+        }
+      }
+    }
+    }}
+  <span class="hljs-tag">&lt;/<span class="hljs-name">WithState</span>&gt;</span>
+
+</span></pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Apps.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="../docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="../elements/Form.html">
+                  elements/Form.js
+                </a>
+              
+                
+                <a class="source" href="../elements/Header.html">
+                  elements/Header.js
+                </a>
+              
+                
+                <a class="source" href="../elements/NotFound.html">
+                  elements/NotFound.js
+                </a>
+              
+                
+                <a class="source" href="Apps.html">
+                  hoc/Apps.js
+                </a>
+              
+                
+                <a class="source" href="Helmet.html">
+                  hoc/Helmet.js
+                </a>
+              
+                
+                <a class="source" href="ListResource.html">
+                  hoc/ListResource.js
+                </a>
+              
+                
+                <a class="source" href="Resource.html">
+                  hoc/Resource.js
+                </a>
+              
+                
+                <a class="source" href="Router.html">
+                  hoc/Router.js
+                </a>
+              
+                
+                <a class="source" href="WithRequest.html">
+                  hoc/WithRequest.js
+                </a>
+              
+                
+                <a class="source" href="WithState.html">
+                  hoc/WithState.js
+                </a>
+              
+                
+                <a class="source" href="../modals/ExampleModal.html">
+                  modals/ExampleModal.js
+                </a>
+              
+                
+                <a class="source" href="../util/equal.html">
+                  util/equal.js
+                </a>
+              
+                
+                <a class="source" href="../util/loadImage.html">
+                  util/loadImage.js
+                </a>
+              
+                
+                <a class="source" href="../util/makeRequest.html">
+                  util/makeRequest.js
+                </a>
+              
+                
+                <a class="source" href="../util/paginationRange.html">
+                  util/paginationRange.js
+                </a>
+              
+                
+                <a class="source" href="../util/qs.html">
+                  util/qs.js
+                </a>
+              
+                
+                <a class="source" href="../util/updateQuery.html">
+                  util/updateQuery.js
+                </a>
+              
+                
+                <a class="source" href="../util/urlFor.html">
+                  util/urlFor.js
+                </a>
+              
+                
+                <a class="source" href="../util/workerize.html">
+                  util/workerize.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>Apps.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <p>This nifty little Component let’s us group routes together into “Apps”.
+Which is helpful if, say, one grouping of routes shares a particular
+header or navigation Component, and another grouping shares a different
+set of components.</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>Breaking apart routes also helps keep things tidy with larger projects.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+<span class="hljs-keyword">import</span> W <span class="hljs-keyword">from</span> <span class="hljs-string">'wasmuth'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p><strong>Apps</strong> extends <code>WithState</code> in order to stay updated with the <code>currentPath</code>
+value. Any time the <code>currentPath</code> changes, <code>Apps</code> will determine which
+“app” Component to render.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> WithState <span class="hljs-keyword">from</span> <span class="hljs-string">'/hoc/WithState'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>We borrow route matching logic from our <code>Router</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> {exec} <span class="hljs-keyword">from</span> <span class="hljs-string">'/hoc/Router'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>And, we’ll need our <code>App =&gt; Object</code> route pairs.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> routes <span class="hljs-keyword">from</span> <span class="hljs-string">'/routes'</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Apps</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">WithState</span> </span>{
+  render () {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p><code>_mappedState</code> is the namespace <code>WithState</code> uses to store what
+<code>this.props.mapper</code> returns. In this case, we want our <code>currentPath</code>
+reference.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">const</span> {currentPath} = <span class="hljs-keyword">this</span>.state._mappedState</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>When called on a route (an object with a <code>path</code> property), will
+return true if it matches currentPath.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">const</span> routeMatches = <span class="hljs-function"><span class="hljs-params">r</span> =&gt;</span> exec(currentPath, r.path)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>We iterate our <code>App =&gt; Object</code> route pairs. And when a match
+is found, we render that App</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> [App, appRoutes] <span class="hljs-keyword">of</span> routes) {
+      <span class="hljs-keyword">if</span> (W.find(routeMatches, <span class="hljs-built_in">Object</span>.values(appRoutes))) {
+        <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">App</span> /&gt;</span>
+      }
+    }
+
+    return null
+  }
+}
+
+</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>Set the <code>mapper</code> prop which <code>WithState</code> will use to return a part of
+our global state from <code>/store</code>.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Apps.defaultProps = {<span class="hljs-attr">mapper</span>: <span class="hljs-function">(<span class="hljs-params">{currentPath}</span>) =&gt;</span> ({currentPath})}</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

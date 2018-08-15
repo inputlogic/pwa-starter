@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>store.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="consts.html">
+                  consts.js
+                </a>
+              
+                
+                <a class="source" href="index.html">
+                  index.js
+                </a>
+              
+                
+                <a class="source" href="routes.html">
+                  routes.js
+                </a>
+              
+                
+                <a class="source" href="store.html">
+                  store.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>store.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> {DEBUG} <span class="hljs-keyword">from</span> <span class="hljs-string">'/consts'</span>
+
+<span class="hljs-keyword">const</span> state = {
+  <span class="hljs-attr">currentPath</span>: <span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> !== <span class="hljs-string">'undefined'</span>
+    ? <span class="hljs-built_in">window</span>.location.pathname + <span class="hljs-built_in">window</span>.location.search
+    : <span class="hljs-string">'/'</span>,
+  <span class="hljs-attr">pendingRequests</span>: <span class="hljs-number">0</span>,
+  ...(<span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> !== <span class="hljs-string">'undefined'</span>
+      ? <span class="hljs-built_in">JSON</span>.parse(<span class="hljs-built_in">window</span>.__initial_store__ || <span class="hljs-string">''</span>)
+      : {})
+}
+<span class="hljs-keyword">const</span> components = []
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> subscribe = <span class="hljs-function"><span class="hljs-params">component</span> =&gt;</span> {
+  components.push(component)
+  <span class="hljs-keyword">return</span> getState()
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> unsubscribe = <span class="hljs-function"><span class="hljs-params">component</span> =&gt;</span> {
+  <span class="hljs-keyword">const</span> idx = components.findIndex(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> c === component)
+  idx &gt; <span class="hljs-number">-1</span> &amp;&amp; components.splice(idx, <span class="hljs-number">1</span>)
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> getState = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">Object</span>.freeze({...state})
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> setState = <span class="hljs-function"><span class="hljs-params">updatedState</span> =&gt;</span> {
+  <span class="hljs-built_in">Object</span>.assign(state, updatedState)
+  DEBUG &amp;&amp; <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'setState'</span>, updatedState, state)
+  components.forEach(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> c.setState(state))
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> clickState = <span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> ev =&gt; {
+  ev.preventDefault()
+  setState(
+    <span class="hljs-keyword">typeof</span> state === <span class="hljs-string">'function'</span>
+      ? state(getState(), ev)
+      : state
+  )
+}</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

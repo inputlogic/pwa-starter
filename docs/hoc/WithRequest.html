@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>WithRequest.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="../docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="../elements/Form.html">
+                  elements/Form.js
+                </a>
+              
+                
+                <a class="source" href="../elements/Header.html">
+                  elements/Header.js
+                </a>
+              
+                
+                <a class="source" href="../elements/NotFound.html">
+                  elements/NotFound.js
+                </a>
+              
+                
+                <a class="source" href="Apps.html">
+                  hoc/Apps.js
+                </a>
+              
+                
+                <a class="source" href="Helmet.html">
+                  hoc/Helmet.js
+                </a>
+              
+                
+                <a class="source" href="ListResource.html">
+                  hoc/ListResource.js
+                </a>
+              
+                
+                <a class="source" href="Resource.html">
+                  hoc/Resource.js
+                </a>
+              
+                
+                <a class="source" href="Router.html">
+                  hoc/Router.js
+                </a>
+              
+                
+                <a class="source" href="WithRequest.html">
+                  hoc/WithRequest.js
+                </a>
+              
+                
+                <a class="source" href="WithState.html">
+                  hoc/WithState.js
+                </a>
+              
+                
+                <a class="source" href="../modals/ExampleModal.html">
+                  modals/ExampleModal.js
+                </a>
+              
+                
+                <a class="source" href="../util/equal.html">
+                  util/equal.js
+                </a>
+              
+                
+                <a class="source" href="../util/loadImage.html">
+                  util/loadImage.js
+                </a>
+              
+                
+                <a class="source" href="../util/makeRequest.html">
+                  util/makeRequest.js
+                </a>
+              
+                
+                <a class="source" href="../util/paginationRange.html">
+                  util/paginationRange.js
+                </a>
+              
+                
+                <a class="source" href="../util/qs.html">
+                  util/qs.js
+                </a>
+              
+                
+                <a class="source" href="../util/updateQuery.html">
+                  util/updateQuery.js
+                </a>
+              
+                
+                <a class="source" href="../util/urlFor.html">
+                  util/urlFor.js
+                </a>
+              
+                
+                <a class="source" href="../util/workerize.html">
+                  util/workerize.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>WithRequest.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> W <span class="hljs-keyword">from</span> <span class="hljs-string">'wasmuth'</span>
+<span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>
+<span class="hljs-keyword">import</span> equal <span class="hljs-keyword">from</span> <span class="hljs-string">'/util/equal'</span>
+<span class="hljs-keyword">import</span> makeRequest <span class="hljs-keyword">from</span> <span class="hljs-string">'/util/makeRequest'</span>
+<span class="hljs-keyword">import</span> {getState, setState} <span class="hljs-keyword">from</span> <span class="hljs-string">'/store'</span>
+
+<span class="hljs-keyword">const</span> OK_TIME = <span class="hljs-number">30000</span>
+
+<span class="hljs-keyword">const</span> getCache = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> getState().CACHE || {}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> clearCache = <span class="hljs-function"><span class="hljs-params">endpoint</span> =&gt;</span>
+  setState({<span class="hljs-attr">CACHE</span>: W.dissoc(endpoint, getCache())})
+
+<span class="hljs-keyword">const</span> cache = <span class="hljs-function">(<span class="hljs-params">endpoint, result</span>) =&gt;</span>
+  setState({<span class="hljs-attr">CACHE</span>: W.assoc(
+    [endpoint],
+    {result, <span class="hljs-attr">timestamp</span>: <span class="hljs-built_in">Date</span>.now()},
+    getCache()
+  )})
+
+<span class="hljs-keyword">const</span> validCache = <span class="hljs-function"><span class="hljs-params">endpoint</span> =&gt;</span> {
+  <span class="hljs-keyword">const</span> CACHE = getCache()
+  <span class="hljs-keyword">const</span> ts = CACHE[endpoint] &amp;&amp; CACHE[endpoint].timestamp
+  <span class="hljs-keyword">if</span> (!ts) <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
+  <span class="hljs-keyword">const</span> diff = <span class="hljs-built_in">Date</span>.now() - ts
+  <span class="hljs-keyword">if</span> (diff &lt; OK_TIME) {
+    <span class="hljs-keyword">return</span> CACHE[endpoint]
+  }
+  clearCache(endpoint)
+  <span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>
+}
+
+<span class="hljs-keyword">const</span> reducePending = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+  <span class="hljs-keyword">const</span> curr = getState().pendingRequests
+  <span class="hljs-keyword">if</span> (curr &gt; <span class="hljs-number">0</span>) {
+    setState({<span class="hljs-attr">pendingRequests</span>: curr - <span class="hljs-number">1</span>})
+  }
+}
+
+<span class="hljs-keyword">const</span> _existing = {}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">WithRequest</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+  <span class="hljs-keyword">constructor</span> (props) {
+    <span class="hljs-keyword">super</span>(props)
+    <span class="hljs-keyword">this</span>.state = {...(<span class="hljs-keyword">this</span>.state || {}), <span class="hljs-attr">isLoading</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">result</span>: <span class="hljs-literal">null</span>, <span class="hljs-attr">error</span>: <span class="hljs-literal">null</span>}
+    setState({<span class="hljs-attr">pendingRequests</span>: getState().pendingRequests + <span class="hljs-number">1</span>})
+    <span class="hljs-keyword">this</span>._loadResult(<span class="hljs-keyword">this</span>.props)
+  }
+
+  _loadResult (props) {
+    <span class="hljs-keyword">if</span> (!props.request || !props.request.endpoint) {
+      <span class="hljs-keyword">return</span>
+    }
+
+    <span class="hljs-keyword">const</span> {endpoint, parse} = props.request
+
+    <span class="hljs-keyword">if</span> (_existing[endpoint] &amp;&amp; !<span class="hljs-keyword">this</span>.state.error) {
+      <span class="hljs-keyword">this</span>._handlePromise(endpoint, _existing[endpoint])
+      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'_existing'</span>, endpoint)
+      <span class="hljs-keyword">return</span>
+    }
+
+    <span class="hljs-keyword">const</span> cached = validCache(endpoint)
+    <span class="hljs-keyword">if</span> (cached) {
+      <span class="hljs-keyword">this</span>.setState({<span class="hljs-attr">result</span>: cached.result, <span class="hljs-attr">isLoading</span>: <span class="hljs-literal">false</span>})
+      reducePending()
+    } <span class="hljs-keyword">else</span> {
+      <span class="hljs-keyword">this</span>._performRequest(endpoint, parse)
+    }
+  }
+
+  _performRequest (endpoint, parse) {
+    <span class="hljs-keyword">const</span> token = getState().token
+    <span class="hljs-keyword">const</span> headers = {}
+    <span class="hljs-keyword">if</span> (token) {
+      headers.Authorization = <span class="hljs-string">`Token <span class="hljs-subst">${token}</span>`</span>
+    }
+
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'_performRequest'</span>, endpoint)
+
+    <span class="hljs-keyword">const</span> {promise} = makeRequest({endpoint, headers})
+
+    _existing[endpoint] = promise
+    _existing[endpoint]._endpoint = endpoint
+
+    <span class="hljs-keyword">this</span>._handlePromise(endpoint, promise)
+  }
+
+  _handlePromise (endpoint, promise) {
+    promise
+      .then(<span class="hljs-function"><span class="hljs-params">result</span> =&gt;</span> {
+        cache(endpoint, result)
+        <span class="hljs-keyword">this</span>.setState({result, <span class="hljs-attr">isLoading</span>: <span class="hljs-literal">false</span>})
+        reducePending()
+      })
+      .catch(<span class="hljs-function"><span class="hljs-params">error</span> =&gt;</span> {
+        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'_performRequest'</span>, {error})
+        <span class="hljs-keyword">this</span>.setState({error, <span class="hljs-attr">isLoading</span>: <span class="hljs-literal">false</span>})
+        reducePending()
+      })
+  }
+
+  shouldComponentUpdate (nextProps, nextState) {
+    <span class="hljs-keyword">const</span> nextEndpoint = (nextProps.request || {}).endpoint
+    <span class="hljs-keyword">const</span> currEndpoint = (<span class="hljs-keyword">this</span>.props.request || {}).endpoint
+    <span class="hljs-keyword">if</span> (currEndpoint !== nextEndpoint) {
+      <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>
+    }
+    <span class="hljs-keyword">return</span> !equal(nextState, <span class="hljs-keyword">this</span>.state)
+  }
+
+  componentDidUpdate (prevProps, prevState, snapshot) {
+    <span class="hljs-keyword">const</span> endpointChanged = <span class="hljs-keyword">this</span>.props.request !== prevProps.request
+    <span class="hljs-keyword">if</span> (endpointChanged) {
+      <span class="hljs-keyword">this</span>.setState({<span class="hljs-attr">isLoading</span>: <span class="hljs-literal">true</span>, <span class="hljs-attr">result</span>: <span class="hljs-literal">null</span>})
+      <span class="hljs-keyword">this</span>._loadResult(<span class="hljs-keyword">this</span>.props)
+      <span class="hljs-keyword">return</span>
+    }
+    <span class="hljs-keyword">const</span> endpoint = (<span class="hljs-keyword">this</span>.props.request || {}).endpoint
+    <span class="hljs-keyword">if</span> (!_existing[endpoint]) <span class="hljs-keyword">return</span>
+    <span class="hljs-keyword">if</span> (endpoint !== _existing[endpoint]._endpoint) {
+      <span class="hljs-keyword">this</span>.setState({<span class="hljs-attr">isLoading</span>: <span class="hljs-literal">true</span>})
+      <span class="hljs-keyword">this</span>._loadResult(<span class="hljs-keyword">this</span>.props)
+    }
+  }
+
+  render ({children}) {
+    <span class="hljs-keyword">const</span> child = children[<span class="hljs-number">0</span>]
+    <span class="hljs-keyword">if</span> (!child || <span class="hljs-keyword">typeof</span> child !== <span class="hljs-string">'function'</span>) {
+      <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Error</span>(<span class="hljs-string">'WithRequest requires a function as its only child'</span>)
+    }
+    <span class="hljs-keyword">return</span> child(<span class="hljs-keyword">this</span>.state)
+  }
+}</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

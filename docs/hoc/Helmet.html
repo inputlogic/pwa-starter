@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Helmet.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="../docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page_wrapper">
+            <div id="jump_page">
+              
+                
+                <a class="source" href="../elements/Form.html">
+                  elements/Form.js
+                </a>
+              
+                
+                <a class="source" href="../elements/Header.html">
+                  elements/Header.js
+                </a>
+              
+                
+                <a class="source" href="../elements/NotFound.html">
+                  elements/NotFound.js
+                </a>
+              
+                
+                <a class="source" href="Apps.html">
+                  hoc/Apps.js
+                </a>
+              
+                
+                <a class="source" href="Helmet.html">
+                  hoc/Helmet.js
+                </a>
+              
+                
+                <a class="source" href="ListResource.html">
+                  hoc/ListResource.js
+                </a>
+              
+                
+                <a class="source" href="Resource.html">
+                  hoc/Resource.js
+                </a>
+              
+                
+                <a class="source" href="Router.html">
+                  hoc/Router.js
+                </a>
+              
+                
+                <a class="source" href="WithRequest.html">
+                  hoc/WithRequest.js
+                </a>
+              
+                
+                <a class="source" href="WithState.html">
+                  hoc/WithState.js
+                </a>
+              
+                
+                <a class="source" href="../modals/ExampleModal.html">
+                  modals/ExampleModal.js
+                </a>
+              
+                
+                <a class="source" href="../util/equal.html">
+                  util/equal.js
+                </a>
+              
+                
+                <a class="source" href="../util/loadImage.html">
+                  util/loadImage.js
+                </a>
+              
+                
+                <a class="source" href="../util/makeRequest.html">
+                  util/makeRequest.js
+                </a>
+              
+                
+                <a class="source" href="../util/paginationRange.html">
+                  util/paginationRange.js
+                </a>
+              
+                
+                <a class="source" href="../util/qs.html">
+                  util/qs.js
+                </a>
+              
+                
+                <a class="source" href="../util/updateQuery.html">
+                  util/updateQuery.js
+                </a>
+              
+                
+                <a class="source" href="../util/urlFor.html">
+                  util/urlFor.js
+                </a>
+              
+                
+                <a class="source" href="../util/workerize.html">
+                  util/workerize.js
+                </a>
+              
+            </div>
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>Helmet.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> W <span class="hljs-keyword">from</span> <span class="hljs-string">'wasmuth'</span>
+<span class="hljs-keyword">import</span> Preact <span class="hljs-keyword">from</span> <span class="hljs-string">'preact'</span>
+
+<span class="hljs-keyword">let</span> refs = []
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> rewind = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+  <span class="hljs-keyword">const</span> res = W.reduce(<span class="hljs-function">(<span class="hljs-params">acc, el</span>) =&gt;</span> W.merge(acc, el.props), {}, refs)
+  <span class="hljs-keyword">return</span> res
+}
+
+<span class="hljs-keyword">const</span> Wrapper = <span class="hljs-function">(<span class="hljs-params">{children}</span>) =&gt;</span> {
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> !== <span class="hljs-string">'undefined'</span>) {
+    <span class="hljs-keyword">const</span> titleChild = W.find(<span class="hljs-function">(<span class="hljs-params">{nodeName}</span>) =&gt;</span> nodeName === <span class="hljs-string">'title'</span>, children)
+    <span class="hljs-keyword">if</span> (titleChild) {
+      <span class="hljs-keyword">const</span> title = titleChild.children[<span class="hljs-number">0</span>]
+      <span class="hljs-keyword">if</span> (title !== <span class="hljs-built_in">document</span>.title) {
+        <span class="hljs-built_in">document</span>.title = title
+      }
+    }
+    <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>{children}<span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+  }
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Helmet</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Preact</span>.<span class="hljs-title">Component</span> </span>{
+  <span class="hljs-keyword">constructor</span> (props) {
+    <span class="hljs-keyword">super</span>(props)
+    refs.push(<span class="hljs-keyword">this</span>)
+  }
+
+  componentWillUnmount () {
+    <span class="hljs-keyword">const</span> newRefs = W.reject(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> c === <span class="hljs-keyword">this</span>, refs)
+    refs = newRefs
+    <span class="hljs-built_in">document</span>.title = <span class="hljs-keyword">this</span>._getTitle({})
+  }
+
+  _getTitle (props) {
+    <span class="hljs-keyword">const</span> {title, titleTemplate = <span class="hljs-string">'%s'</span>, defaultTitle} = {...rewind(), ...props}
+    <span class="hljs-keyword">return</span> titleTemplate.replace(<span class="hljs-string">'%s'</span>, title || defaultTitle || <span class="hljs-string">''</span>)
+  }
+
+  _getMeta ({meta = []}) {
+    <span class="hljs-keyword">return</span> meta.map(<span class="hljs-function">(<span class="hljs-params">{name, property, content}</span>) =&gt;</span>
+      &lt;meta
+        name={name}
+        property={property}
+        content={content}
+        data-helmet
+      /&gt;
+    )
+  }
+
+  render () {
+    <span class="hljs-keyword">return</span> (
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Wrapper</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">title</span> <span class="hljs-attr">data-helmet</span>=<span class="hljs-string">'true'</span>&gt;</span>{this._getTitle(this.props)}<span class="hljs-tag">&lt;/<span class="hljs-name">title</span>&gt;</span>
+        {this._getMeta(this.props)}
+      <span class="hljs-tag">&lt;/<span class="hljs-name">Wrapper</span>&gt;</span></span>
+    )
+  }
+}</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>
