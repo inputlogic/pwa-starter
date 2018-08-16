@@ -1,19 +1,12 @@
+import Apps from '/hoc/Apps'
 import Router from '/hoc/Router'
 import urlFor from '/util/urlFor'
 
-import Users from './Users'
-import User from './User'
 import Login from './Login'
 
+import {routes as userRoutes} from './UserApp'
+
 export const routes = {
-  users: {
-    path: '/users',
-    Page: Users
-  },
-  user: {
-    path: '/users/:id',
-    Page: User
-  },
   login: {
     path: '/login',
     Page: Login
@@ -30,4 +23,5 @@ export default () =>
   <div id='account-layout'>
     <AccountHeader />
     <Router routes={routes} />
+    <Apps routes={userRoutes} />
   </div>

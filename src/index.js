@@ -23,6 +23,8 @@ import Apps from '/hoc/Apps'
 // title when navigating on the client.
 import Helmet from '/hoc/Helmet'
 
+import routes from '/routes'
+
 // ### Styling
 
 // We use LESS for styling. And ideally, each element Component will
@@ -47,7 +49,7 @@ export const MainApp = () =>
     <Header />
     <Notification />
 
-    <Apps />
+    <Apps routes={routes} />
 
     <NotFound />
   </div>
