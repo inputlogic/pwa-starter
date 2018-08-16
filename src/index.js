@@ -84,18 +84,18 @@ if (typeof window !== 'undefined') {
 // Elements are reusable Components that render some JSX. These are generic
 // and are common to use throughout all apps.
 
-// - [Carousel.js](/hoc/Carousel)
-// - [Dropdown.js](/hoc/Dropdown)
-// - [Image.js](/hoc/Image)
-// - [Level.js](/hoc/Level)
-// - [LoadingIndicator.js](/hoc/LoadingIndicator)
-// - [Modal.js](/hoc/Modal)
-// - [Notification.js](/hoc/Notification)
-// - [Pagination.js](/hoc/Pagination)
-// - [Tooltip.js](/hoc/Tooltip)
-// - [Form.js](/hoc/Form)
-// - [Header.js](/hoc/Header)
-// - [NotFound.js](/hoc/NotFound)
+// - [Carousel.js](/hoc/Carousel/index.html)
+// - [Dropdown.js](/hoc/Dropdown/index.html)
+// - [Image.js](/hoc/Image/index.html)
+// - [Level.js](/hoc/Level/index.html)
+// - [LoadingIndicator.js](/hoc/LoadingIndicator/index.html)
+// - [Modal.js](/hoc/Modal/index.html)
+// - [Notification.js](/hoc/Notification/index.html)
+// - [Pagination.js](/hoc/Pagination/index.html)
+// - [Tooltip.js](/hoc/Tooltip/index.html)
+// - [Form.js](/hoc/Form/index.html)
+// - [Header.js](/hoc/Header/index.html)
+// - [NotFound.js](/hoc/NotFound/index.html)
 
 // **hoc/**
 
