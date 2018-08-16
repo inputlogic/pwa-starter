@@ -19,7 +19,8 @@
     "prestd": "cp -r src/assets/* public/",
     "std": "standard --verbose | snazzy",
     "test": "npm run build:dev",
-    "docs": "cd src/ && docco **.js --output ../docs"
+    "docs": "cd src/ && docco *.js **/*.js --output ../docs --layout linear",
+    "docs-deploy": "surge --d pwa-starter.surge.sh -p docs/"
   },
   "keywords": [],
   "author": "Adrian Unger",

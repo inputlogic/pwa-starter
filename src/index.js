@@ -41,8 +41,8 @@ import Preact from 'preact'
 
 // `withRequest({...})(Child)`
 
-// Entry Point and Root Files
-// --------------------------
+// Entry Point of Your App
+// -----------------------
 
 // `src/index.js` contains your top-most Component and is the entry point
 // for your entire app.
@@ -57,12 +57,12 @@ import NotFound from '/elements/NotFound'
 
 // Apps is a Higher Order Component for breaking out your routes into
 // logical groupings. For ex., Account, Main, Admin, Marketing etc.
-// See [Apps](/docs/Apps.html) for more details.
+// See [Apps](hoc/Apps.html) for more details.
 import Apps from '/hoc/Apps'
 
-// Helmet is minimal alternative to react-helmet. It will render title,
-// og and meta tags on the server, as well as update the document title
-// when navigating on the client.
+// Helmet is minimal alternative to [react-helmet](https://github.com/nfl/react-helmet).
+// It will render title, og and meta tags on the server, as well as update the document
+// title when navigating on the client.
 import Helmet from '/hoc/Helmet'
 
 // ### Styling
@@ -76,7 +76,8 @@ import Helmet from '/hoc/Helmet'
 import '/styles/variables.less'
 import '/styles/base.less'
 
-// And, finally, our MainApp!
+// And, finally, our MainApp! This is the top-level Component to render
+// into the DOM, and kick-start our app!
 export const MainApp = () =>
   <div className='main-app-container' >
     <Helmet
