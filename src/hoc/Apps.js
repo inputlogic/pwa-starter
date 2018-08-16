@@ -7,12 +7,12 @@
 
 import W from 'wasmuth'
 
-// **Apps** extends [WithState](hoc/WithState.js) in order to stay updated
+// **Apps** extends [WithState](hoc/WithState.html) in order to stay updated
 // with the `currentPath` value. Any time the `currentPath` changes, `Apps`
 // will determine which "app" Component to render.
 import WithState from '/hoc/WithState'
 
-// We borrow route matching logic from our `Router`. [Router](hoc/Router.js)
+// We borrow route matching logic from our `Router`. [Router](hoc/Router.html)
 // also hijacks clicks on `<a />` tags to keep `currentPath` updated in our
 // global state.
 import {exec} from '/hoc/Router'

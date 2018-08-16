@@ -205,16 +205,18 @@ set of components.</p>
         
       
         
-        <p><strong>Apps</strong> extends <code>WithState</code> in order to stay updated with the <code>currentPath</code>
-value. Any time the <code>currentPath</code> changes, <code>Apps</code> will determine which
-“app” Component to render.</p>
+        <p><strong>Apps</strong> extends <a href="hoc/WithState.html">WithState</a> in order to stay updated
+with the <code>currentPath</code> value. Any time the <code>currentPath</code> changes, <code>Apps</code>
+will determine which “app” Component to render.</p>
 
         
           <div class='highlight'><pre><span class="hljs-keyword">import</span> WithState <span class="hljs-keyword">from</span> <span class="hljs-string">'/hoc/WithState'</span></pre></div>
         
       
         
-        <p>We borrow route matching logic from our <code>Router</code></p>
+        <p>We borrow route matching logic from our <code>Router</code>. <a href="hoc/Router.html">Router</a>
+also hijacks clicks on <code>&lt;a /&gt;</code> tags to keep <code>currentPath</code> updated in our
+global state.</p>
 
         
           <div class='highlight'><pre><span class="hljs-keyword">import</span> {exec} <span class="hljs-keyword">from</span> <span class="hljs-string">'/hoc/Router'</span></pre></div>
@@ -240,7 +242,7 @@ reference.</p>
         
       
         
-        <p>When called on a route (an object with a <code>path</code> property), will
+        <p>When called on a route (an Object with a <code>path</code> property), it will
 return true if it matches currentPath.</p>
 
         
@@ -267,7 +269,7 @@ is found, we render that App</p>
       
         
         <p>Set the <code>mapper</code> prop which <code>WithState</code> will use to return a part of
-our global state from <code>/store</code>.</p>
+our global state from our <a href="store.html">store</a>.</p>
 
         
           <div class='highlight'><pre>Apps.defaultProps = {<span class="hljs-attr">mapper</span>: <span class="hljs-function">(<span class="hljs-params">{currentPath}</span>) =&gt;</span> ({currentPath})}</pre></div>

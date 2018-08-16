@@ -20,7 +20,7 @@
     "std": "standard --verbose | snazzy",
     "test": "npm run build:dev",
     "docs": "cd src/ && docco *.js **/*.js --output ../docs --layout linear",
-    "docs-deploy": "surge --d pwa-starter.surge.sh -p docs/"
+    "postdocs": "surge --d pwa-starter.surge.sh -p docs/"
   },
   "keywords": [],
   "author": "Adrian Unger",
