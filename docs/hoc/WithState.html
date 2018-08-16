@@ -193,8 +193,63 @@
         
           <div class='highlight'><pre><span class="hljs-keyword">import</span> Preact <span class="hljs-keyword">from</span> <span class="hljs-string">'preact'</span>
 <span class="hljs-keyword">import</span> equal <span class="hljs-keyword">from</span> <span class="hljs-string">'/util/equal'</span>
-<span class="hljs-keyword">import</span> {getState, subscribe, unsubscribe} <span class="hljs-keyword">from</span> <span class="hljs-string">'/store'</span>
+<span class="hljs-keyword">import</span> {getState, subscribe, unsubscribe} <span class="hljs-keyword">from</span> <span class="hljs-string">'/store'</span></pre></div>
+        
+      
+        
+        <p><strong>WithState</strong> let’s you create Component’s that rerender when a specified
+part of the global state changes.</p>
 
+        
+      
+        
+        <p>You could do this manually, as described in <a href="/store.html">store.js</a>, but
+this abstracts away the performance logic of <code>shouldComponentUpdate</code>.</p>
+
+        
+      
+        
+        <p>That said, this is still not the most-performant implementation, and any
+Component that experiences performance issues may need more work done
+within <code>shouldComponentUpdate</code> to be accetable.</p>
+
+        
+      
+        
+        <p><code>WithState</code> can be used as a HoC, or extended as a Class.</p>
+
+        
+      
+        
+        <p>To use as a HoC:</p>
+
+        
+      
+        
+        <pre><code>&lt;WithState mapper={({clicks}) =&gt; ({clicks})}&gt;
+ {({clicks}) =&gt;
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>You have clicked {clicks || 0} times.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span>
+  }
+&lt;<span class="hljs-regexp">/WithState&gt;</span></code></pre>
+        
+      
+        
+        <p>And to extend into your own class:</p>
+
+        
+      
+        
+        <pre><code><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ClicksCount</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">WithState</span> </span>{
+  render () {
+    <span class="hljs-keyword">const</span> {clicks} = <span class="hljs-keyword">this</span>.state._mappedState
+    <span class="hljs-keyword">return</span> (
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>You have clicked {clicks || 0} times.<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span></span>
+    )
+  }
+}
+ClicksCount.defaultProps = {<span class="hljs-attr">mapper</span>: <span class="hljs-function">(<span class="hljs-params">{clicks}</span>) =&gt;</span> ({clicks})}</code></pre>
+        
+          <div class='highlight'><pre>
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">WithState</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Preact</span>.<span class="hljs-title">Component</span> </span>{
   <span class="hljs-keyword">constructor</span> (props) {
     <span class="hljs-keyword">super</span>(props)

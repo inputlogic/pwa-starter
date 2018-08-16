@@ -23,8 +23,8 @@ import routes from '/routes'
 export default class Apps extends WithState {
   render () {
     // `_mappedState` is the namespace `WithState` uses to store what
-    // `this.props.mapper` returns. In this case, we want our `currentPath`
-    // reference.
+    // `this.props.mapper` returns from the global state. In this case,
+    // we want our `currentPath` reference.
     const {currentPath} = this.state._mappedState
 
     // When called on a route (an Object with a `path` property), it will
@@ -32,7 +32,7 @@ export default class Apps extends WithState {
     const routeMatches = r => exec(currentPath, r.path)
 
     // We iterate our `App => Object` route pairs. And when a match
-    // is found, we render that App
+    // is found, we render that App:
     for (let [App, appRoutes] of routes) {
       if (W.find(routeMatches, Object.values(appRoutes))) {
         return <App />

@@ -191,38 +191,142 @@
         
         
         
-          <div class='highlight'><pre><span class="hljs-keyword">import</span> {DEBUG} <span class="hljs-keyword">from</span> <span class="hljs-string">'/consts'</span>
+          <div class='highlight'><pre><span class="hljs-keyword">import</span> {DEBUG} <span class="hljs-keyword">from</span> <span class="hljs-string">'/consts'</span></pre></div>
+        
+      
+        
+        <p>PWA-Starter uses a very basic <em>store</em> for global state.
+Any time you need to share state outside of a single Component,
+you can use this <code>/store.js</code>.</p>
 
-<span class="hljs-keyword">const</span> state = {
-  <span class="hljs-attr">currentPath</span>: <span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> !== <span class="hljs-string">'undefined'</span>
+        
+      
+        
+        <p>We don’t use Redux. We found actions and reducers introduced complexity
+and boilerplate, that was not necessary, even for large projects.</p>
+
+        
+      
+        
+        <p>First we define our inital state object.</p>
+
+        
+          <div class='highlight'><pre>
+<span class="hljs-keyword">const</span> state = {</pre></div>
+        
+      
+        
+        <p>In the browser, we initialize the currentPath prop</p>
+
+        
+          <div class='highlight'><pre>  currentPath: <span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> !== <span class="hljs-string">'undefined'</span>
     ? <span class="hljs-built_in">window</span>.location.pathname + <span class="hljs-built_in">window</span>.location.search
-    : <span class="hljs-string">'/'</span>,
-  <span class="hljs-attr">pendingRequests</span>: <span class="hljs-number">0</span>,
-  ...(<span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> !== <span class="hljs-string">'undefined'</span>
+    : <span class="hljs-string">'/'</span>,</pre></div>
+        
+      
+        
+        <p>This is used by the <a href="/hoc/WithRequest.html">WithRequest</a> HoC.</p>
+
+        
+          <div class='highlight'><pre>  pendingRequests: <span class="hljs-number">0</span>,</pre></div>
+        
+      
+        
+        <p>Server-side rendering will have already computed some
+values for global state, and should be initialized on the client.
+This avoids redoing initial logic that was just computed on the server.</p>
+
+        
+          <div class='highlight'><pre>  ...(<span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> !== <span class="hljs-string">'undefined'</span>
       ? <span class="hljs-built_in">JSON</span>.parse(<span class="hljs-built_in">window</span>.__initial_store__ || <span class="hljs-string">''</span>)
       : {})
-}
-<span class="hljs-keyword">const</span> components = []
+}</pre></div>
+        
+      
+        
+        <p>This is a private reference to Component instances that will be updated
+after every <code>setState</code>.</p>
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> subscribe = <span class="hljs-function"><span class="hljs-params">component</span> =&gt;</span> {
+        
+          <div class='highlight'><pre>
+<span class="hljs-keyword">const</span> components = []</pre></div>
+        
+      
+        
+        <p>Instead of passing in functions to call when state is changed, we pass in
+Component instances. The easiest way to do so is in a Component’s contructor:</p>
+
+        
+      
+        
+        <p><code>this.state = subscribe(this)</code></p>
+
+        
+      
+        
+        <p>this adds the Component instance to the array of components to update on state
+changes, and returns the current state to set as the Component state. This makes
+for very fast prototyping, and when needed, you can implement <code>shouldComponentUpdate</code>
+logic on your Component to improve performance.</p>
+
+        
+          <div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> subscribe = <span class="hljs-function"><span class="hljs-params">component</span> =&gt;</span> {
   components.push(component)
   <span class="hljs-keyword">return</span> getState()
-}
+}</pre></div>
+        
+      
+        
+        <p>If you subscribe a Component instance, you need to remove it when the Component
+is being destoyed:</p>
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> unsubscribe = <span class="hljs-function"><span class="hljs-params">component</span> =&gt;</span> {
+        
+      
+        
+        <pre><code>componentWillUnmount () {
+  unsubscribe(<span class="hljs-keyword">this</span>)
+}</code></pre>
+        
+          <div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> unsubscribe = <span class="hljs-function"><span class="hljs-params">component</span> =&gt;</span> {
   <span class="hljs-keyword">const</span> idx = components.findIndex(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> c === component)
   idx &gt; <span class="hljs-number">-1</span> &amp;&amp; components.splice(idx, <span class="hljs-number">1</span>)
-}
+}</pre></div>
+        
+      
+        
+        <p>Return the current state. <code>Object.freeze</code> is used, to return an immutable copy
+of the state object. Well, almost. It’s only a shallow immutable copy.
+You should avoid mutations on nested objects and arrays, as they will sync back
+to the global state. For now, I figure PRs can catch this misuse. But, if it
+proves a problem, then a deep <code>Object.freeze</code> could be implemented.</p>
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> getState = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">Object</span>.freeze({...state})
+        
+          <div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> getState = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">Object</span>.freeze({...state})</pre></div>
+        
+      
+        
+        <p>Just like React <code>setState</code>. If <code>DEBUG</code> is true, will log to console. And, of
+course will iterate the subscribed components and call <code>component.setState</code>
+on each of them.</p>
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> setState = <span class="hljs-function"><span class="hljs-params">updatedState</span> =&gt;</span> {
+        
+          <div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> setState = <span class="hljs-function"><span class="hljs-params">updatedState</span> =&gt;</span> {
   <span class="hljs-built_in">Object</span>.assign(state, updatedState)
   DEBUG &amp;&amp; <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'setState'</span>, updatedState, state)
   components.forEach(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> c.setState(state))
-}
+}</pre></div>
+        
+      
+        
+        <p>And lastly, a helper to change state on click events. Often used on <code>&lt;button /&gt;</code>‘s.</p>
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> clickState = <span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> ev =&gt; {
+        
+      
+        
+        <p><code>&lt;button onClick={clickState(state =&gt; ({clicks: state.clicks + 1}))}&gt;Click Me&lt;/button&gt;</code></p>
+
+        
+          <div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> clickState = <span class="hljs-function"><span class="hljs-params">state</span> =&gt;</span> ev =&gt; {
   ev.preventDefault()
   setState(
     <span class="hljs-keyword">typeof</span> state === <span class="hljs-string">'function'</span>

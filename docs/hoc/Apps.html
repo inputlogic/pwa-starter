@@ -234,8 +234,8 @@ global state.</p>
       
         
         <p><code>_mappedState</code> is the namespace <code>WithState</code> uses to store what
-<code>this.props.mapper</code> returns. In this case, we want our <code>currentPath</code>
-reference.</p>
+<code>this.props.mapper</code> returns from the global state. In this case,
+we want our <code>currentPath</code> reference.</p>
 
         
           <div class='highlight'><pre>    <span class="hljs-keyword">const</span> {currentPath} = <span class="hljs-keyword">this</span>.state._mappedState</pre></div>
@@ -251,7 +251,7 @@ return true if it matches currentPath.</p>
       
         
         <p>We iterate our <code>App =&gt; Object</code> route pairs. And when a match
-is found, we render that App</p>
+is found, we render that App:</p>
 
         
           <div class='highlight'><pre>    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">let</span> [App, appRoutes] <span class="hljs-keyword">of</span> routes) {
