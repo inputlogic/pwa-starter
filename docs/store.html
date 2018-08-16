@@ -216,7 +216,8 @@ and boilerplate, that was not necessary, even for large projects.</p>
         
       
         
-        <p>In the browser, we initialize the currentPath prop</p>
+        <p>In the browser, we initialize the currentPath prop, which is used
+by our <a href="/hoc/Router.html">Router</a></p>
 
         
           <div class='highlight'><pre>  currentPath: <span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> !== <span class="hljs-string">'undefined'</span>
@@ -225,7 +226,7 @@ and boilerplate, that was not necessary, even for large projects.</p>
         
       
         
-        <p>This is used by the <a href="/hoc/WithRequest.html">WithRequest</a> HoC.</p>
+        <p><code>pendingRequests</code> is used by the <a href="/hoc/WithRequest.html">WithRequest</a> HoC.</p>
 
         
           <div class='highlight'><pre>  pendingRequests: <span class="hljs-number">0</span>,</pre></div>
@@ -287,6 +288,11 @@ is being destoyed:</p>
   unsubscribe(<span class="hljs-keyword">this</span>)
 }</code></pre>
         
+      
+        
+        <p><code>unsubscribe</code> simply removes the component from the local components array.</p>
+
+        
           <div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> unsubscribe = <span class="hljs-function"><span class="hljs-params">component</span> =&gt;</span> {
   <span class="hljs-keyword">const</span> idx = components.findIndex(<span class="hljs-function"><span class="hljs-params">c</span> =&gt;</span> c === component)
   idx &gt; <span class="hljs-number">-1</span> &amp;&amp; components.splice(idx, <span class="hljs-number">1</span>)
@@ -294,11 +300,12 @@ is being destoyed:</p>
         
       
         
-        <p>Return the current state. <code>Object.freeze</code> is used, to return an immutable copy
-of the state object. Well, almost. It’s only a shallow immutable copy.
-You should avoid mutations on nested objects and arrays, as they will sync back
-to the global state. For now, I figure PRs can catch this misuse. But, if it
-proves a problem, then a deep <code>Object.freeze</code> could be implemented.</p>
+        <p><code>getState</code> returns the current state. <code>Object.freeze</code> is used, to return
+an immutable copy of the state object. Well, almost. It’s only a shallow
+immutable copy. You should avoid mutations on nested objects and arrays,
+as they will sync back to the global state. For now, I figure PRs can
+catch this misuse. But, if it proves a problem, then a deep <code>Object.freeze</code>
+could be implemented.</p>
 
         
           <div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> getState = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-built_in">Object</span>.freeze({...state})</pre></div>
@@ -306,7 +313,7 @@ proves a problem, then a deep <code>Object.freeze</code> could be implemented.</
       
         
         <p>Just like React <code>setState</code>. If <code>DEBUG</code> is true, will log to console. And, of
-course will iterate the subscribed components and call <code>component.setState</code>
+course, it will iterate the subscribed components and call <code>component.setState</code>
 on each of them.</p>
 
         

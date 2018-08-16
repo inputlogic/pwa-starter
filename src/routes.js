@@ -14,4 +14,7 @@ export const routes = [
   [Account, accountRoutes]
 ]
 
+// `mainRoutes` and `accountRoutes` and any other routes you want to add
+// will look something like this: `{routeName: {path: '/path', Page: Component}}`
+
 export default routes

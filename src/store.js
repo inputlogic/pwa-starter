@@ -10,11 +10,12 @@ import {DEBUG} from '/consts'
 // First we define our inital state object.
 
 const state = {
-  // In the browser, we initialize the currentPath prop
+  // In the browser, we initialize the currentPath prop, which is used
+  // by our [Router](/hoc/Router.html)
   currentPath: typeof window !== 'undefined'
     ? window.location.pathname + window.location.search
     : '/',
-  // This is used by the [WithRequest](/hoc/WithRequest.html) HoC.
+  // `pendingRequests` is used by the [WithRequest](/hoc/WithRequest.html) HoC.
   pendingRequests: 0,
   // Server-side rendering will have already computed some
   // values for global state, and should be initialized on the client.
@@ -51,20 +52,23 @@ export const subscribe = component => {
 //   unsubscribe(this)
 // }
 // ```
+
+// `unsubscribe` simply removes the component from the local components array.
 export const unsubscribe = component => {
   const idx = components.findIndex(c => c === component)
   idx > -1 && components.splice(idx, 1)
 }
 
-// Return the current state. `Object.freeze` is used, to return an immutable copy
-// of the state object. Well, almost. It's only a shallow immutable copy.
-// You should avoid mutations on nested objects and arrays, as they will sync back
-// to the global state. For now, I figure PRs can catch this misuse. But, if it
-// proves a problem, then a deep `Object.freeze` could be implemented.
+// `getState` returns the current state. `Object.freeze` is used, to return
+// an immutable copy of the state object. Well, almost. It's only a shallow
+// immutable copy. You should avoid mutations on nested objects and arrays,
+// as they will sync back to the global state. For now, I figure PRs can
+// catch this misuse. But, if it proves a problem, then a deep `Object.freeze`
+// could be implemented.
 export const getState = () => Object.freeze({...state})
 
 // Just like React `setState`. If `DEBUG` is true, will log to console. And, of
-// course will iterate the subscribed components and call `component.setState`
+// course, it will iterate the subscribed components and call `component.setState`
 // on each of them.
 export const setState = updatedState => {
   Object.assign(state, updatedState)

@@ -195,91 +195,6 @@
         
       
         
-        <p>PWA-Starter is a project skeleton for building Single Page Apps and/or
-Progressive Web Apps.</p>
-
-        
-      
-        
-        <p>The key technology to be familiar with is React. This skeleton embraces
-component based architecture, and tries to introduce very few libraries
-where an API needs to be learned or memorized. To facilitate this, we
-embrace Higher Order Components (HoC) and renderProps. You should be familiar
-with both terms, along with General React and JSX knowledge.
-(@TODO: Link to resources)</p>
-
-        
-      
-        
-        <h2 id="focus">Focus</h2>
-
-        
-      
-        
-        
-        
-      
-        
-        <ul>
-<li>Small bundle size</li>
-<li>Efficient networking</li>
-<li>Speedy development</li>
-<li><em>Simplicity</em></li>
-</ul>
-
-        
-      
-        
-        <h2 id="simplicity">Simplicity</h2>
-
-        
-      
-        
-        
-        
-      
-        
-        <p>Simplicity is <strong>always</strong> encouraged. Generally, this means Components
-that do one thing. A real world example of this: A former iteration of
-this starter had a <code>WithRequests</code> utility function that let you define
-any number of requests and bound the results to a child Component.</p>
-
-        
-      
-        
-        <p>In PWA-Starter there is a <code>WithRequest</code> HoC, that only manages one request.
-As your Components should be as simple as possible, a Component should
-not manage more than one resource.</p>
-
-        
-      
-        
-        <p>Another example, is embracing HoC to be used within your JSX, rather
-than utility functions:</p>
-
-        
-      
-        
-        <p>This:</p>
-
-        
-      
-        
-        <p><code>&lt;WithRequest request={{...}}&gt;...&lt;/WithRequest&gt;`</code></p>
-
-        
-      
-        
-        <p>Rather than this:</p>
-
-        
-      
-        
-        <p><code>withRequest({...})(Child)</code></p>
-
-        
-      
-        
         <h2 id="entry-point-of-your-app">Entry Point of Your App</h2>
 
         
@@ -296,9 +211,9 @@ for your entire app.</p>
       
         
         <p>Here, we import Components we want to render on <em>all</em> routes. For example,
-we include a global Header, Notification bar, and a <em>Not Found</em> component
+we include a global Header, Notification bar, and a <em>NotFound</em> component
 which renders when no route is matched.
-(If your app does not need a global Header, you can of course remove it.)</p>
+(If your app does not need these global elements, you can of course remove them.)</p>
 
         
           <div class='highlight'><pre><span class="hljs-keyword">import</span> Header <span class="hljs-keyword">from</span> <span class="hljs-string">'/elements/Header'</span>
@@ -307,9 +222,8 @@ which renders when no route is matched.
         
       
         
-        <p>Apps is a Higher Order Component for breaking out your routes into
-logical groupings. For ex., Account, Main, Admin, Marketing etc.
-See <a href="hoc/Apps.html">Apps</a> for more details.</p>
+        <p><a href="hoc/Apps.html">Apps</a> is a Higher Order Component for breaking out your
+routes into logical groupings. For ex., Account, Main, Admin, Marketing etc.</p>
 
         
           <div class='highlight'><pre><span class="hljs-keyword">import</span> Apps <span class="hljs-keyword">from</span> <span class="hljs-string">'/hoc/Apps'</span></pre></div>
@@ -369,7 +283,7 @@ into the DOM, and kick-start our app!</p>
       
         
         <p>Only render if we are in the browser, server-side rendering will be
-handled by <code>server/index.js</code></p>
+handled by the <code>server</code> (which is not covered here).</p>
 
         
           <div class='highlight'><pre><span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> !== <span class="hljs-string">'undefined'</span>) {
@@ -380,6 +294,136 @@ handled by <code>server/index.js</code></p>
 }
 
 </span></pre></div>
+        
+      
+        
+        <h2 id="contents">Contents</h2>
+
+        
+      
+        
+        
+        
+      
+        
+        <p><strong>/</strong></p>
+
+        
+      
+        
+        <ul>
+<li><a href="/consts.html">consts.js</a></li>
+<li><a href="/routes.html">routes.js</a></li>
+<li><a href="/store.html">store.js</a></li>
+</ul>
+
+        
+      
+        
+        <p><strong>apps/</strong></p>
+
+        
+      
+        
+        <p>This is where we organize project specific code into logical groupings.
+Each app will need to export a Component and <code>{routes}</code> Object.</p>
+
+        
+      
+        
+        <p><strong>assets/</strong></p>
+
+        
+      
+        
+        <p>Put any static files you want copied over to the <code>public/</code> folder.</p>
+
+        
+      
+        
+        <p><strong>elements/</strong></p>
+
+        
+      
+        
+        <p>Elements are reusable Components that render some JSX. These are generic
+and are common to use throughout all apps.</p>
+
+        
+      
+        
+        <ul>
+<li><a href="/hoc/Carousel">Carousel.js</a></li>
+<li><a href="/hoc/Dropdown">Dropdown.js</a></li>
+<li><a href="/hoc/Image">Image.js</a></li>
+<li><a href="/hoc/Level">Level.js</a></li>
+<li><a href="/hoc/LoadingIndicator">LoadingIndicator.js</a></li>
+<li><a href="/hoc/Modal">Modal.js</a></li>
+<li><a href="/hoc/Notification">Notification.js</a></li>
+<li><a href="/hoc/Pagination">Pagination.js</a></li>
+<li><a href="/hoc/Tooltip">Tooltip.js</a></li>
+<li><a href="/hoc/Form">Form.js</a></li>
+<li><a href="/hoc/Header">Header.js</a></li>
+<li><a href="/hoc/NotFound">NotFound.js</a></li>
+</ul>
+
+        
+      
+        
+        <p><strong>hoc/</strong></p>
+
+        
+      
+        
+        <p>Higher order Components, which abstract away logic, and generally
+don’t render any JSX of their own.</p>
+
+        
+      
+        
+        <ul>
+<li><a href="/hoc/Apps">Apps.js</a></li>
+<li><a href="/hoc/Helmet">Helmet.js</a></li>
+<li><a href="/hoc/ListResource">ListResource.js</a></li>
+<li><a href="/hoc/Resource">Resource.js</a></li>
+<li><a href="/hoc/Router">Router.js</a></li>
+<li><a href="/hoc/WithRequest">WithRequest.js</a></li>
+<li><a href="/hoc/WithState">WithState.js</a></li>
+</ul>
+
+        
+      
+        
+        <p><strong>modals/</strong></p>
+
+        
+      
+        
+        <p>Any global (cross-app) modals can go here. These should all use the
+<a href="/elements/Modal">Modal</a> element in their <code>render</code> method.</p>
+
+        
+      
+        
+        <p><strong>styles/</strong></p>
+
+        
+      
+        
+        <p>Global LESS files can go here. They should be manually imported by
+<code>src/index.js</code></p>
+
+        
+      
+        
+        <p><strong>util/</strong></p>
+
+        
+      
+        
+        <p>Simple helper functions used throughout your project. These should not
+be removed as they are all used by an included HoC or element.</p>
+
         
       
       <div class="fleur">h</div>

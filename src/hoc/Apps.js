@@ -27,8 +27,8 @@ export default class Apps extends WithState {
     // we want our `currentPath` reference.
     const {currentPath} = this.state._mappedState
 
-    // When called on a route (an Object with a `path` property), it will
-    // return true if it matches currentPath.
+    // When called on a route (an Object with a `path` property),
+    // `routeMatches` will return true if it matches currentPath.
     const routeMatches = r => exec(currentPath, r.path)
 
     // We iterate our `App => Object` route pairs. And when a match
