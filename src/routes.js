@@ -4,6 +4,7 @@
 
 import Main, {routes as mainRoutes} from '/apps/Main'
 import Account, {routes as accountRoutes} from '/apps/Account'
+import UserApp, {routes as userRoutes} from '/apps/Account/UserApp'
 
 // Defining the routes in this way allows our `urlFor` function to work
 // without having to wait on any Components to render. This is why routes
@@ -11,7 +12,8 @@ import Account, {routes as accountRoutes} from '/apps/Account'
 
 export const routes = [
   [Main, mainRoutes],
-  [Account, accountRoutes]
+  [Account, accountRoutes],
+  [UserApp, userRoutes]
 ]
 
 // `mainRoutes` and `accountRoutes` and any other routes you want to add

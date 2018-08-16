@@ -18,10 +18,10 @@ import WithState from '/hoc/WithState'
 import {exec} from '/hoc/Router'
 
 // And, we'll need our `App => Object` route pairs.
-import routes from '/routes'
+// import routes from '/routes'
 
 export default class Apps extends WithState {
-  render () {
+  render ({routes}) {
     // `_mappedState` is the namespace `WithState` uses to store what
     // `this.props.mapper` returns from the global state. In this case,
     // we want our `currentPath` reference.
