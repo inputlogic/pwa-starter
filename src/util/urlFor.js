@@ -1,13 +1,20 @@
 import qs from '/util/qs'
-import routePairs from '/routes'
+import routes from '/routes'
 
 // Transform our `Component => Object` pairs to a single Object.
 // The `urlFor` function below will reference it to return a URL string
 // for a given name.
 
-const allRoutes = routePairs
-  .map(p => p[1])
-  .reduce((acc, el) => ({...acc, ...el}), {})
+const getAllRoutes = routes =>
+  Object
+    .keys(routes || {})
+    .reduce((acc, r) =>
+      routes[r].hasOwnProperty('routes')
+        ? {...acc, ...getAllRoutes(routes[r].routes)}
+        : {...acc, [r]: routes[r]},
+      {})
+
+const allRoutes = getAllRoutes(routes)
 
 // Get the path string for the route with name `name`
 // Best understood with an example:

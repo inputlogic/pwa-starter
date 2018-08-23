@@ -8,11 +8,11 @@ import Videos from './Videos'
 export const routes = {
   home: {
     path: '/',
-    Page: Home
+    component: Home
   },
   videos: {
     path: '/videos',
-    Page: Videos
+    component: Videos
   }
 }
 

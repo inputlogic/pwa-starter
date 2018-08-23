@@ -12,10 +12,6 @@ const assets = sirv('public', {
   immutable: false
 })
 
-const reloadScript = DEV
-  ? `<script src="${process.env.BROWSER_REFRESH_URL}"></script>`
-  : ''
-
 const ssr = (req, res, next) => {
   console.log('ssr', req.url)
   renderReact(req.url)
@@ -33,7 +29,6 @@ const ssr = (req, res, next) => {
           <div class='main-app-container'>${html}</div>
           <script>window.__initial_store__ = ${JSON.stringify(state)};</script>
           <script src="./bundle.js"></script>
-          ${reloadScript}
         </body>
       </html>`)
     })
@@ -43,8 +38,5 @@ polka()
   .use(compress, assets, ssr)
   .listen(port)
   .then(() => {
-    if (DEV & process.send) {
-      process.send({event: 'online', url: `http://localhost:${port}/`})
-    }
     console.log(`> Ready on http://localhost:${port}`)
   })

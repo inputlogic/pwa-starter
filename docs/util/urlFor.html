@@ -51,13 +51,6 @@
               
                 
                 <li>
-                  <a class="source" href="../hoc/Apps.html">
-                    hoc/Apps.js
-                  </a>
-                </li>
-              
-                
-                <li>
                   <a class="source" href="../hoc/Helmet.html">
                     hoc/Helmet.js
                   </a>
@@ -192,7 +185,7 @@
         
         
           <div class='highlight'><pre><span class="hljs-keyword">import</span> qs <span class="hljs-keyword">from</span> <span class="hljs-string">'/util/qs'</span>
-<span class="hljs-keyword">import</span> routePairs <span class="hljs-keyword">from</span> <span class="hljs-string">'/routes'</span></pre></div>
+<span class="hljs-keyword">import</span> routes <span class="hljs-keyword">from</span> <span class="hljs-string">'/routes'</span></pre></div>
         
       
         
@@ -202,9 +195,16 @@ for a given name.</p>
 
         
           <div class='highlight'><pre>
-<span class="hljs-keyword">const</span> allRoutes = routePairs
-  .map(<span class="hljs-function"><span class="hljs-params">p</span> =&gt;</span> p[<span class="hljs-number">1</span>])
-  .reduce(<span class="hljs-function">(<span class="hljs-params">acc, el</span>) =&gt;</span> ({...acc, ...el}), {})</pre></div>
+<span class="hljs-keyword">const</span> getAllRoutes = <span class="hljs-function"><span class="hljs-params">routes</span> =&gt;</span>
+  <span class="hljs-built_in">Object</span>
+    .keys(routes || {})
+    .reduce(<span class="hljs-function">(<span class="hljs-params">acc, r</span>) =&gt;</span>
+      routes[r].hasOwnProperty(<span class="hljs-string">'routes'</span>)
+        ? {...acc, ...getAllRoutes(routes[r].routes)}
+        : {...acc, [r]: routes[r]},
+      {})
+
+<span class="hljs-keyword">const</span> allRoutes = getAllRoutes(routes)</pre></div>
         
       
         
