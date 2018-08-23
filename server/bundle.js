@@ -136,44 +136,6 @@ var possibleConstructorReturn = function (self, call) {
   return call && (typeof call === "object" || typeof call === "function") ? call : self;
 };
 
-var slicedToArray = function () {
-  function sliceIterator(arr, i) {
-    var _arr = [];
-    var _n = true;
-    var _d = false;
-    var _e = undefined;
-
-    try {
-      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-        _arr.push(_s.value);
-
-        if (i && _arr.length === i) break;
-      }
-    } catch (err) {
-      _d = true;
-      _e = err;
-    } finally {
-      try {
-        if (!_n && _i["return"]) _i["return"]();
-      } finally {
-        if (_d) throw _e;
-      }
-    }
-
-    return _arr;
-  }
-
-  return function (arr, i) {
-    if (Array.isArray(arr)) {
-      return arr;
-    } else if (Symbol.iterator in Object(arr)) {
-      return sliceIterator(arr, i);
-    } else {
-      throw new TypeError("Invalid attempt to destructure non-iterable instance");
-    }
-  };
-}();
-
 var toConsumableArray = function (arr) {
   if (Array.isArray(arr)) {
     for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
@@ -549,28 +511,26 @@ var Router = (function (_ref) {
       var currentPath = _ref3.currentPath;
 
       for (var route in routes) {
-        var routeArgs = exec(currentPath, routes[route].path);
-        if (routeArgs) {
-          var newRoute = {
-            name: route,
-            path: routes[route].path,
-            args: routeArgs
-          };
-          if (!equal(newRoute, getState().route)) {
-            setState({
-              route: {
-                name: route,
-                path: routes[route].path,
-                args: routeArgs
-              }
-            });
+        var isApp = routes[route].hasOwnProperty('routes');
+        if (isApp) {
+          console.log('check if nested App routes match!', Object.values(routes[route].routes));
+        } else {
+          var routeArgs = exec(currentPath, routes[route].path);
+          if (routeArgs) {
+            var newRoute = {
+              name: route,
+              path: routes[route].path,
+              args: routeArgs
+            };
+            if (!equal(newRoute, getState().route)) {
+              setState({ route: newRoute });
+            }
+            var Component = routes[route].component;
+            return Preact.h(Component, routeArgs);
           }
-          var Page = routes[route].Page;
-          return Preact.h(Page, routeArgs);
         }
       }
-    },
-    '}'
+    }
   );
 });
 
@@ -1584,11 +1544,11 @@ var Videos = (function () {
 var routes = {
   home: {
     path: '/',
-    Page: Home
+    component: Home
   },
   videos: {
     path: '/videos',
-    Page: Videos
+    component: Videos
   }
 };
 
@@ -2001,15 +1961,15 @@ var Login = (function () {
 var routes$1 = {
   users: {
     path: '/users',
-    Page: Users
+    component: Users
   },
   user: {
     path: '/users/:id',
-    Page: User
+    component: User
   },
   login: {
     path: '/login',
-    Page: Login
+    component: Login
   }
 };
 
@@ -2040,23 +2000,47 @@ var Account = (function () {
   );
 });
 
-// Here we define our routes as `Component => Object` pairs. This allows us to
+// `<Router />`'s accept two object formats. The first, which we'll cover now, is for
 
-// Defining the routes in this way allows our `urlFor` function to work
-// without having to wait on any Components to render. This is why routes
-// are not defined as child Components like `react-router`.
+// These app routes need to be defined here (outside of a Component's render function)
+// so that our [urlFor](/util/urlFor.html) function works without mounting any React
+// Components. These also get passed into a `<Router />` inside the [MainApp](/index.html)
+// Component and only render if a path within their `routes` object is currently matched.
+var routes$2 = {
+  main: {
+    routes: routes,
+    component: Main
+  },
+  account: {
+    routes: routes$1,
+    component: Account
+  }
 
-var routes$2 = [[Main, routes], [Account, routes$1]];
+  // The `routes` props for the `main` and `account` objects above, follow the second object
+  // format that our `<Router />`'s understand. Which follows the follwing signature:
+
+  // ```
+  // export const mainRoutes = {
+  //   routeName: {
+  //     path: '/',
+  //     component: Home
+  //   }
+  // }
+  // ```
+
+};
 
 // Transform our `Component => Object` pairs to a single Object.
 // The `urlFor` function below will reference it to return a URL string
 // for a given name.
 
-var allRoutes = routes$2.map(function (p) {
-  return p[1];
-}).reduce(function (acc, el) {
-  return _extends({}, acc, el);
-}, {});
+var getAllRoutes = function getAllRoutes(routes) {
+  return Object.keys(routes || {}).reduce(function (acc, r) {
+    return routes[r].hasOwnProperty('routes') ? _extends({}, acc, getAllRoutes(routes[r].routes)) : _extends({}, acc, defineProperty({}, r, routes[r]));
+  }, {});
+};
+
+var allRoutes = getAllRoutes(routes$2);
 
 // Get the path string for the route with name `name`
 // Best understood with an example:
@@ -2143,73 +2127,6 @@ var NotFound = (function (props) {
   return !getState().route ? Base() : null;
 });
 
-var Apps = function (_WithState) {
-  inherits(Apps, _WithState);
-
-  function Apps() {
-    classCallCheck(this, Apps);
-    return possibleConstructorReturn(this, (Apps.__proto__ || Object.getPrototypeOf(Apps)).apply(this, arguments));
-  }
-
-  createClass(Apps, [{
-    key: 'render',
-    value: function render$$1() {
-      // `_mappedState` is the namespace `WithState` uses to store what
-      // `this.props.mapper` returns from the global state. In this case,
-      // we want our `currentPath` reference.
-      var currentPath = this.state._mappedState.currentPath;
-
-      // When called on a route (an Object with a `path` property),
-      // `routeMatches` will return true if it matches currentPath.
-
-      var routeMatches = function routeMatches(r) {
-        return exec(currentPath, r.path);
-      };
-
-      // We iterate our `App => Object` route pairs. And when a match
-      // is found, we render that App:
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = routes$2[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var _ref = _step.value;
-
-          var _ref2 = slicedToArray(_ref, 2);
-
-          var App = _ref2[0];
-          var appRoutes = _ref2[1];
-
-          if (W.find(routeMatches, Object.values(appRoutes))) {
-            return Preact.h(App, null);
-          }
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
-      }
-
-      return null;
-    }
-  }]);
-  return Apps;
-}(WithState);
-Apps.defaultProps = { mapper: function mapper(_ref3) {
-    var currentPath = _ref3.currentPath;
-    return { currentPath: currentPath };
-  } };
-
 // And, finally, our MainApp! This is the top-level Component to render
 // into the DOM, and kick-start our app!
 var MainApp = function MainApp() {
@@ -2223,7 +2140,7 @@ var MainApp = function MainApp() {
     }),
     Preact.h(Header, null),
     Preact.h(Notification, null),
-    Preact.h(Apps, null),
+    Preact.h(Router, { routes: routes$2 }),
     Preact.h(NotFound, null)
   );
 };
@@ -2335,8 +2252,6 @@ var assets = sirv('public', {
   immutable: false
 });
 
-var reloadScript = DEV ? '<script src="' + process.env.BROWSER_REFRESH_URL + '"></script>' : '';
-
 var ssr = function ssr(req, res, next) {
   console.log('ssr', req.url);
   renderReact(req.url).then(function (_ref) {
@@ -2344,13 +2259,10 @@ var ssr = function ssr(req, res, next) {
         head = _ref.head,
         state = _ref.state;
 
-    res.end('<!doctype html>\n      <html lang="en">\n        <head>\n          <base href="/">\n          <meta charset="utf-8">\n          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">\n          <link rel="stylesheet" href="./bundle.css" />\n          ' + head + '\n        </head>\n        <body>\n          <div class=\'main-app-container\'>' + html + '</div>\n          <script>window.__initial_store__ = ' + JSON.stringify(state) + ';</script>\n          <script src="./bundle.js"></script>\n          ' + reloadScript + '\n        </body>\n      </html>');
+    res.end('<!doctype html>\n      <html lang="en">\n        <head>\n          <base href="/">\n          <meta charset="utf-8">\n          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">\n          <link rel="stylesheet" href="./bundle.css" />\n          ' + head + '\n        </head>\n        <body>\n          <div class=\'main-app-container\'>' + html + '</div>\n          <script>window.__initial_store__ = ' + JSON.stringify(state) + ';</script>\n          <script src="./bundle.js"></script>\n        </body>\n      </html>');
   });
 };
 
 polka().use(compress, assets, ssr).listen(port).then(function () {
-  if (DEV & process.send) {
-    process.send({ event: 'online', url: 'http://localhost:' + port + '/' });
-  }
   console.log('> Ready on http://localhost:' + port);
 });

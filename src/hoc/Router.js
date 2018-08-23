@@ -64,26 +64,29 @@ export default ({routes}) =>
   <WithState mapper={({currentPath}) => ({currentPath})}>
     {({currentPath}) => {
       for (let route in routes) {
-        const routeArgs = exec(currentPath, routes[route].path)
-        if (routeArgs) {
-          const newRoute = {
-            name: route,
-            path: routes[route].path,
-            args: routeArgs
+        if (routes[route].hasOwnProperty('routes')) {
+          const shouldRender = Object
+            .values(routes[route].routes)
+            .some(({path}) => path && exec(currentPath, path))
+          if (shouldRender) {
+            const App = routes[route].component
+            return <App />
           }
-          if (!equal(newRoute, getState().route)) {
-            setState({
-              route: {
-                name: route,
-                path: routes[route].path,
-                args: routeArgs
-              }
-            })
+        } else {
+          const routeArgs = exec(currentPath, routes[route].path)
+          if (routeArgs) {
+            const newRoute = {
+              name: route,
+              path: routes[route].path,
+              args: routeArgs
+            }
+            if (!equal(newRoute, getState().route)) {
+              setState({route: newRoute})
+            }
+            const Component = routes[route].component
+            return <Component {...routeArgs} />
           }
-          const Page = routes[route].Page
-          return <Page {...routeArgs} />
         }
       }
-    }
     }}
   </WithState>

@@ -14,14 +14,18 @@ import Header from '/elements/Header'
 import Notification from '/elements/Notification'
 import NotFound from '/elements/NotFound'
 
-// [Apps](hoc/Apps.html) is a Higher Order Component for breaking out your
-// routes into logical groupings. For ex., Account, Main, Admin, Marketing etc.
-import Apps from '/hoc/Apps'
-
 // Helmet is minimal alternative to [react-helmet](https://github.com/nfl/react-helmet).
 // It will render title, og and meta tags on the server, as well as update the document
 // title when navigating on the client.
 import Helmet from '/hoc/Helmet'
+
+// [Router](hoc/Router.html) is a Higher Order Component for rendering Components based
+// on the current route. Router's can be nested, allowing easy grouping of Components.
+import Router from '/hoc/Router'
+
+// The main [routes](/routes.html) file defines the top-level routes and their respective
+// Components.
+import routes from '/routes'
 
 // ### Styling
 
@@ -47,7 +51,7 @@ export const MainApp = () =>
     <Header />
     <Notification />
 
-    <Apps />
+    <Router routes={routes} />
 
     <NotFound />
   </div>

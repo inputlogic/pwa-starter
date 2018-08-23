@@ -51,13 +51,6 @@
               
                 
                 <li>
-                  <a class="source" href="hoc/Apps.html">
-                    hoc/Apps.js
-                  </a>
-                </li>
-              
-                
-                <li>
                   <a class="source" href="hoc/Helmet.html">
                     hoc/Helmet.js
                   </a>
@@ -222,20 +215,28 @@ which renders when no route is matched.
         
       
         
-        <p><a href="hoc/Apps.html">Apps</a> is a Higher Order Component for breaking out your
-routes into logical groupings. For ex., Account, Main, Admin, Marketing etc.</p>
-
-        
-          <div class='highlight'><pre><span class="hljs-keyword">import</span> Apps <span class="hljs-keyword">from</span> <span class="hljs-string">'/hoc/Apps'</span></pre></div>
-        
-      
-        
         <p>Helmet is minimal alternative to <a href="https://github.com/nfl/react-helmet">react-helmet</a>.
 It will render title, og and meta tags on the server, as well as update the document
 title when navigating on the client.</p>
 
         
           <div class='highlight'><pre><span class="hljs-keyword">import</span> Helmet <span class="hljs-keyword">from</span> <span class="hljs-string">'/hoc/Helmet'</span></pre></div>
+        
+      
+        
+        <p><a href="hoc/Router.html">Router</a> is a Higher Order Component for rendering Components based
+on the current route. Router’s can be nested, allowing easy grouping of Components.</p>
+
+        
+          <div class='highlight'><pre><span class="hljs-keyword">import</span> Router <span class="hljs-keyword">from</span> <span class="hljs-string">'/hoc/Router'</span></pre></div>
+        
+      
+        
+        <p>The main <a href="/routes.html">routes</a> file defines the top-level routes and their respective
+Components.</p>
+
+        
+          <div class='highlight'><pre><span class="hljs-keyword">import</span> routes <span class="hljs-keyword">from</span> <span class="hljs-string">'/routes'</span></pre></div>
         
       
         
@@ -275,10 +276,12 @@ into the DOM, and kick-start our app!</p>
     <span class="hljs-tag">&lt;<span class="hljs-name">Header</span> /&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">Notification</span> /&gt;</span>
 
-    <span class="hljs-tag">&lt;<span class="hljs-name">Apps</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-name">Router</span> <span class="hljs-attr">routes</span>=<span class="hljs-string">{routes}</span> /&gt;</span>
 
     <span class="hljs-tag">&lt;<span class="hljs-name">NotFound</span> /&gt;</span>
-  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span></pre></div>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+
+</span></pre></div>
         
       
         

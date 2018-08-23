@@ -8,15 +8,15 @@ import Login from './Login'
 export const routes = {
   users: {
     path: '/users',
-    Page: Users
+    component: Users
   },
   user: {
     path: '/users/:id',
-    Page: User
+    component: User
   },
   login: {
     path: '/login',
-    Page: Login
+    component: Login
   }
 }
 

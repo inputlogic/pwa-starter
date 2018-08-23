@@ -51,13 +51,6 @@
               
                 
                 <li>
-                  <a class="source" href="hoc/Apps.html">
-                    hoc/Apps.js
-                  </a>
-                </li>
-              
-                
-                <li>
                   <a class="source" href="hoc/Helmet.html">
                     hoc/Helmet.js
                   </a>
@@ -189,9 +182,27 @@
 
       
         
-        <p>Here we define our routes as <code>Component =&gt; Object</code> pairs. This allows us to
-define a parent (“app”) Component to render when one of the asociated
-routes is matched. The matching logic is contained in the <code>Apps</code> Component.</p>
+        <p><code>&lt;Router /&gt;</code>‘s accept two object formats. The first, which we’ll cover now, is for
+defining a parent Component for a group of routes. These parent Components are
+referred to as “Apps”. The parent component (or App) can render some global header
+or navigation type components that will render for all child routes.</p>
+
+        
+      
+        
+        <p>For example, you could have one set of header, footer, navigation type components
+for your landing or marketing routes. And these will be rendered for all marketing
+routes (aka your “Marketing” <em>App</em>), and not re-render when navigating between
+marketing routes. Then when you navigate to, say, your Admin <em>App</em> (or set of routes),
+those shared Marketing components will unmount, and whatever is contained in the
+Admin Component will be rendered.</p>
+
+        
+      
+        
+        <p>We break out these top-level routes, or Apps, into the <code>src/apps</code> folder. Each
+folder within <code>src/apps</code> should have an <code>index.js</code> that exports a Component as
+<code>default</code> and a <code>routes</code> const.</p>
 
         
           <div class='highlight'><pre>
@@ -200,25 +211,37 @@ routes is matched. The matching logic is contained in the <code>Apps</code> Comp
         
       
         
-        <p>Defining the routes in this way allows our <code>urlFor</code> function to work
-without having to wait on any Components to render. This is why routes
-are not defined as child Components like <code>react-router</code>.</p>
+        <p>These app routes need to be defined here (outside of a Component’s render function)
+so that our <a href="/util/urlFor.html">urlFor</a> function works without mounting any React
+Components. These also get passed into a <code>&lt;Router /&gt;</code> inside the <a href="/index.html">MainApp</a>
+Component and only render if a path within their <code>routes</code> object is currently matched.</p>
 
         
-          <div class='highlight'><pre>
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> routes = [
-  [Main, mainRoutes],
-  [Account, accountRoutes]
-]</pre></div>
+          <div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {
+  <span class="hljs-attr">main</span>: {
+    <span class="hljs-attr">routes</span>: mainRoutes,
+    <span class="hljs-attr">component</span>: Main
+  },
+  <span class="hljs-attr">account</span>: {
+    <span class="hljs-attr">routes</span>: accountRoutes,
+    <span class="hljs-attr">component</span>: Account
+  }
+}</pre></div>
         
       
         
-        <p><code>mainRoutes</code> and <code>accountRoutes</code> and any other routes you want to add
-will look something like this: <code>{routeName: {path: &#39;/path&#39;, Page: Component}}</code></p>
+        <p>The <code>routes</code> props for the <code>main</code> and <code>account</code> objects above, follow the second object
+format that our <code>&lt;Router /&gt;</code>‘s understand. Which follows the follwing signature:</p>
 
         
-          <div class='highlight'><pre>
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> routes</pre></div>
+      
+        
+        <pre><code><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> mainRoutes = {
+  <span class="hljs-attr">routeName</span>: {
+    <span class="hljs-attr">path</span>: <span class="hljs-string">'/'</span>,
+    <span class="hljs-attr">component</span>: Home
+  }
+}</code></pre>
         
       
       <div class="fleur">h</div>
