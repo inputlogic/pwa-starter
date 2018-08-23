@@ -184,17 +184,52 @@ var toConsumableArray = function (arr) {
   }
 };
 
+// PWA-Starter uses a very basic *store* for global state.
+// Any time you need to share state outside of a single Component,
+// you can use this `/store.js`.
+
+// We don't use Redux. We found actions and reducers introduced complexity
+// and boilerplate, that was not necessary, even for large projects.
+
+// First we define our inital state object.
+
 var state = _extends({
+  // In the browser, we initialize the currentPath prop, which is used
+  // by our [Router](/hoc/Router.html)
   currentPath: typeof window !== 'undefined' ? window.location.pathname + window.location.search : '/',
+  // `pendingRequests` is used by the [WithRequest](/hoc/WithRequest.html) HoC.
   pendingRequests: 0
 }, typeof window !== 'undefined' ? JSON.parse(window.__initial_store__ || '') : {});
+
+// This is a private reference to Component instances that will be updated
+// after every `setState`.
+
 var components = [];
 
+// Instead of passing in functions to call when state is changed, we pass in
+// Component instances. The easiest way to do so is in a Component's contructor:
+
+// `this.state = subscribe(this)`
+
+// this adds the Component instance to the array of components to update on state
+// changes, and returns the current state to set as the Component state. This makes
+// for very fast prototyping, and when needed, you can implement `shouldComponentUpdate`
+// logic on your Component to improve performance.
 var subscribe = function subscribe(component) {
   components.push(component);
   return getState();
 };
 
+// If you subscribe a Component instance, you need to remove it when the Component
+// is being destoyed:
+
+// ```
+// componentWillUnmount () {
+//   unsubscribe(this)
+// }
+// ```
+
+// `unsubscribe` simply removes the component from the local components array.
 var unsubscribe = function unsubscribe(component) {
   var idx = components.findIndex(function (c) {
     return c === component;
@@ -202,10 +237,19 @@ var unsubscribe = function unsubscribe(component) {
   idx > -1 && components.splice(idx, 1);
 };
 
+// `getState` returns the current state. `Object.freeze` is used, to return
+// an immutable copy of the state object. Well, almost. It's only a shallow
+// immutable copy. You should avoid mutations on nested objects and arrays,
+// as they will sync back to the global state. For now, I figure PRs can
+// catch this misuse. But, if it proves a problem, then a deep `Object.freeze`
+// could be implemented.
 var getState = function getState() {
   return Object.freeze(_extends({}, state));
 };
 
+// Just like React `setState`. If `DEBUG` is true, will log to console. And, of
+// course, it will iterate the subscribed components and call `component.setState`
+// on each of them.
 var setState = function setState(updatedState) {
   Object.assign(state, updatedState);
   DEBUG && console.log('setState', updatedState, state);
@@ -214,6 +258,9 @@ var setState = function setState(updatedState) {
   });
 };
 
+// And lastly, a helper to change state on click events. Often used on `<button />`'s.
+
+// `<button onClick={clickState(state => ({clicks: state.clicks + 1}))}>Click Me</button>`
 var clickState = function clickState(state) {
   return function (ev) {
     ev.preventDefault();
@@ -276,6 +323,42 @@ function equal(a, b) {
 
   return false;
 }
+
+// **WithState** let's you create Component's that rerender when a specified
+// part of the global state changes.
+
+// You could do this manually, as described in [store.js](/store.html), but
+// this abstracts away the performance logic of `shouldComponentUpdate`.
+
+// That said, this is still not the most-performant implementation, and any
+// Component that experiences performance issues may need more work done
+// within `shouldComponentUpdate` to be accetable.
+
+// `WithState` can be used as a HoC, or extended as a Class.
+
+// To use as a HoC:
+
+// ```
+// <WithState mapper={({clicks}) => ({clicks})}>
+//  {({clicks}) =>
+//     <p>You have clicked {clicks || 0} times.</p>
+//   }
+// </WithState>
+// ```
+
+// And to extend into your own class:
+
+// ```
+// class ClicksCount extends WithState {
+//   render () {
+//     const {clicks} = this.state._mappedState
+//     return (
+//       <p>You have clicked {clicks || 0} times.</p>
+//     )
+//   }
+// }
+// ClicksCount.defaultProps = {mapper: ({clicks}) => ({clicks})}
+// ```
 
 var WithState = function (_Preact$Component) {
   inherits(WithState, _Preact$Component);
@@ -1957,10 +2040,17 @@ var Account = (function () {
   );
 });
 
-// Here we define our routes as key => values pairs. This allows us to
-// keep the Component reference next to it's routes. It would not work
-// as a key on a plain object, and `Map` seemed like overkill.
+// Here we define our routes as `Component => Object` pairs. This allows us to
+
+// Defining the routes in this way allows our `urlFor` function to work
+// without having to wait on any Components to render. This is why routes
+// are not defined as child Components like `react-router`.
+
 var routes$2 = [[Main, routes], [Account, routes$1]];
+
+// Transform our `Component => Object` pairs to a single Object.
+// The `urlFor` function below will reference it to return a URL string
+// for a given name.
 
 var allRoutes = routes$2.map(function (p) {
   return p[1];
@@ -1968,22 +2058,20 @@ var allRoutes = routes$2.map(function (p) {
   return _extends({}, acc, el);
 }, {});
 
-/**
- * Get the path string for the route with name `name`
- * Best understood with an example:
- *
- * ```
- * const routes = {
- *  myRoute: '/some/:fancy/:route'
- * }
- *
- * urlFor('myRoute', {
- *   args: {fancy: 12, route: 'r2d2'},
- *   queries: {search: 'hi'}
- * })
- * > '/some/12/r2d2?search=hi'
- * ```
- */
+// Get the path string for the route with name `name`
+// Best understood with an example:
+
+// ```
+// const routes = {
+//   myRoute: '/some/:fancy/:route'
+// }
+// urlFor('myRoute', {
+//   args: {fancy: 12, route: 'r2d2'},
+//   queries: {search: 'hi'}
+// })
+// > '/some/12/r2d2?search=hi'
+// ```
+
 var urlFor = function urlFor(name) {
   var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
       _ref$args = _ref.args,
@@ -2065,27 +2153,33 @@ var Apps = function (_WithState) {
 
   createClass(Apps, [{
     key: 'render',
-    value: function render$$1(_ref, _ref2) {
-      var children = _ref.children;
-      var _mappedState = _ref2._mappedState;
-      var currentPath = _mappedState.currentPath;
+    value: function render$$1() {
+      // `_mappedState` is the namespace `WithState` uses to store what
+      // `this.props.mapper` returns from the global state. In this case,
+      // we want our `currentPath` reference.
+      var currentPath = this.state._mappedState.currentPath;
+
+      // When called on a route (an Object with a `path` property),
+      // `routeMatches` will return true if it matches currentPath.
 
       var routeMatches = function routeMatches(r) {
         return exec(currentPath, r.path);
       };
 
+      // We iterate our `App => Object` route pairs. And when a match
+      // is found, we render that App:
       var _iteratorNormalCompletion = true;
       var _didIteratorError = false;
       var _iteratorError = undefined;
 
       try {
         for (var _iterator = routes$2[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var _ref3 = _step.value;
+          var _ref = _step.value;
 
-          var _ref4 = slicedToArray(_ref3, 2);
+          var _ref2 = slicedToArray(_ref, 2);
 
-          var App = _ref4[0];
-          var appRoutes = _ref4[1];
+          var App = _ref2[0];
+          var appRoutes = _ref2[1];
 
           if (W.find(routeMatches, Object.values(appRoutes))) {
             return Preact.h(App, null);
@@ -2111,14 +2205,13 @@ var Apps = function (_WithState) {
   }]);
   return Apps;
 }(WithState);
-
-
-Apps.defaultProps = { mapper: function mapper(_ref5) {
-    var currentPath = _ref5.currentPath;
+Apps.defaultProps = { mapper: function mapper(_ref3) {
+    var currentPath = _ref3.currentPath;
     return { currentPath: currentPath };
   } };
 
-// And, finally, our MainApp!
+// And, finally, our MainApp! This is the top-level Component to render
+// into the DOM, and kick-start our app!
 var MainApp = function MainApp() {
   return Preact.h(
     'div',
@@ -2136,10 +2229,74 @@ var MainApp = function MainApp() {
 };
 
 // Only render if we are in the browser, server-side rendering will be
-// handled by `server/index.js`
+// handled by the `server` (which is not covered here).
 if (typeof window !== 'undefined') {
   Preact.render(Preact.h(MainApp, null), document.body, document.body.children[0]);
 }
+
+// Contents
+// --------
+
+// **/**
+
+// - [consts.js](/consts.html)
+// - [routes.js](/routes.html)
+// - [store.js](/store.html)
+
+// **apps/**
+
+// This is where we organize project specific code into logical groupings.
+// Each app will need to export a Component and `{routes}` Object.
+
+// **assets/**
+
+// Put any static files you want copied over to the `public/` folder.
+
+// **elements/**
+
+// Elements are reusable Components that render some JSX. These are generic
+// and are common to use throughout all apps.
+
+// - [Carousel.js](/elements/Carousel)
+// - [Dropdown.js](/elements/Dropdown)
+// - [Image.js](/elements/Image)
+// - [Level.js](/elements/Level)
+// - [LoadingIndicator.js](/elements/LoadingIndicator)
+// - [Modal.js](/elements/Modal)
+// - [Notification.js](/elements/Notification)
+// - [Pagination.js](/elements/Pagination)
+// - [Tooltip.js](/elements/Tooltip)
+// - [Form.js](/elements/Form)
+// - [Header.js](/elements/Header)
+// - [NotFound.js](/elements/NotFound)
+
+// **hoc/**
+
+// Higher order Components, which abstract away logic, and generally
+// don't render any JSX of their own.
+
+// - [Apps.js](/hoc/Apps)
+// - [Helmet.js](/hoc/Helmet)
+// - [ListResource.js](/hoc/ListResource)
+// - [Resource.js](/hoc/Resource)
+// - [Router.js](/hoc/Router)
+// - [WithRequest.js](/hoc/WithRequest)
+// - [WithState.js](/hoc/WithState)
+
+// **modals/**
+
+// Any global (cross-app) modals can go here. These should all use the
+// [Modal](/elements/Modal) element in their `render` method.
+
+// **styles/**
+
+// Global LESS files can go here. They should be manually imported by
+// `src/index.js`
+
+// **util/**
+
+// Simple helper functions used throughout your project. These should not
+// be removed as they are all used by an included HoC or element.
 
 var renderReact = function renderReact(url) {
   return new Promise(function (resolve, reject) {
@@ -2170,12 +2327,15 @@ var sirv = require('sirv');
 var polka = require('polka');
 var compress = require('compression')();
 
+var DEV = process.env.NODE_ENV !== 'production';
 var port = process.env.PORT || 5000;
 
 var assets = sirv('public', {
-  maxAge: 31536000, // 1Y
+  maxAge: !DEV ? 31536000 : 0, // 1Y
   immutable: false
 });
+
+var reloadScript = DEV ? '<script src="' + process.env.BROWSER_REFRESH_URL + '"></script>' : '';
 
 var ssr = function ssr(req, res, next) {
   console.log('ssr', req.url);
@@ -2184,10 +2344,13 @@ var ssr = function ssr(req, res, next) {
         head = _ref.head,
         state = _ref.state;
 
-    res.end('<!doctype html>\n      <html lang="en">\n        <head>\n          <base href="/">\n          <meta charset="utf-8">\n          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">\n          <link rel="stylesheet" href="./bundle.css" />\n          ' + head + '\n        </head>\n        <body>\n          <div class=\'main-app-container\'>' + html + '</div>\n          <script>window.__initial_store__ = ' + JSON.stringify(state) + ';</script>\n          <script src="./bundle.js"></script>\n        </body>\n      </html>');
+    res.end('<!doctype html>\n      <html lang="en">\n        <head>\n          <base href="/">\n          <meta charset="utf-8">\n          <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">\n          <link rel="stylesheet" href="./bundle.css" />\n          ' + head + '\n        </head>\n        <body>\n          <div class=\'main-app-container\'>' + html + '</div>\n          <script>window.__initial_store__ = ' + JSON.stringify(state) + ';</script>\n          <script src="./bundle.js"></script>\n          ' + reloadScript + '\n        </body>\n      </html>');
   });
 };
 
 polka().use(compress, assets, ssr).listen(port).then(function () {
+  if (DEV & process.send) {
+    process.send({ event: 'online', url: 'http://localhost:' + port + '/' });
+  }
   console.log('> Ready on http://localhost:' + port);
 });
