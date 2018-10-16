@@ -18,7 +18,7 @@ export default {
   },
   plugins: [
     css({
-      include: ['**/*.less'],
+      include: ['**/*.less', 'node_modules/@app-elements/**/*.less'],
       output: function (styles, styleNodes) {
         less
           .render(styles, {})
@@ -32,22 +32,25 @@ export default {
       }
     }),
     babel({
-      exclude: 'node_modules/**'
+      include: ['src/**', 'server/**', 'node_modules/@app-elements/**']
     }),
     cjs({
-      exclude: 'node_modules/process-es6/**',
+      exclude: [
+        'node_modules/@app-elements/**',
+        'node_modules/process-es6/**'
+      ],
       include: [
         'node_modules/preact/**',
         'node_modules/preact-portal/**'
       ]
     }),
+    resolve({
+      browser: false,
+      modulesOnly: false // Default: false
+    }),
     globals(),
     replace({
       'process.env.NODE_ENV': JSON.stringify('development')
-    }),
-    resolve({
-      browser: true,
-      main: true
     })
   ]
 }
