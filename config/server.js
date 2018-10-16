@@ -2,7 +2,9 @@
 import babel from 'rollup-plugin-babel'
 import cjs from 'rollup-plugin-commonjs'
 import css from 'rollup-plugin-css-only'
-// import resolve from 'rollup-plugin-node-resolve'
+import globals from 'rollup-plugin-node-globals'
+import replace from 'rollup-plugin-replace'
+import resolve from 'rollup-plugin-node-resolve'
 
 export default {
   input: 'server/index.js',
@@ -19,14 +21,24 @@ export default {
       }
     }),
     babel({
-      exclude: 'node_modules/**'
+      include: ['src/**', 'server/**', 'node_modules/@app-elements/**']
     }),
     cjs({
-      exclude: 'node_modules/process-es6/**',
+      exclude: [
+        'node_modules/process-es6/**'
+      ],
       include: [
         'node_modules/preact/**',
         'node_modules/preact-portal/**'
       ]
+    }),
+    resolve({
+      browser: false,
+      modulesOnly: false // Default: false
+    }),
+    globals(),
+    replace({
+      'process.env.NODE_ENV': JSON.stringify('development')
     })
   ]
 }

@@ -7,7 +7,7 @@
     "preinstall": "if test \"$NODE_ENV\" = \"production\"; then rm -rf public; mkdir public; fi",
     "postinstall": "if test \"$NODE_ENV\" = \"production\"; then npm run build; npm run build-server; fi",
     "start": "if test \"$NODE_ENV\" = \"production\"; then npm run browse; else npm run dev; fi",
-    "dev": "npm run build-server && npm run build && npm run watch",
+    "dev": "npm run build-server && npm run watch",
     "build-server": "rollup -c config/server.js",
     "watch": "npm-run-all --parallel build:dev watch-assets browse:dev",
     "prebuild:dev": "npm run std --silent",
@@ -27,7 +27,8 @@
   "author": "Adrian Unger",
   "license": "MIT",
   "dependencies": {
-    "@app-elements/tooltip": "^1.0.0",
+    "@app-elements/image": "1.0.1",
+    "@app-elements/tooltip": "1.0.1",
     "compression": "1.7.3",
     "polka": "0.4.0",
     "preact": "8.3.0",
