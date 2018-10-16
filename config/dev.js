@@ -32,7 +32,7 @@ export default {
       }
     }),
     babel({
-      exclude: 'node_modules/**'
+      include: ['src/**', 'server/**', 'node_modules/@app-elements/**']
     }),
     cjs({
       exclude: 'node_modules/process-es6/**',

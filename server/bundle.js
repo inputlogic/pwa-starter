@@ -5,6 +5,7 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 var Preact = _interopDefault(require('preact'));
 var W = _interopDefault(require('wasmuth'));
 var Portal = _interopDefault(require('preact-portal'));
+var Tooltip = _interopDefault(require('@app-elements/tooltip'));
 var render = _interopDefault(require('preact-render-to-string'));
 
 var DEBUG = typeof window !== 'undefined' ? window.location.hostname.indexOf('local') > -1 : process.env.NODE_ENV;
@@ -511,9 +512,15 @@ var Router = (function (_ref) {
       var currentPath = _ref3.currentPath;
 
       for (var route in routes) {
-        var isApp = routes[route].hasOwnProperty('routes');
-        if (isApp) {
-          console.log('check if nested App routes match!', Object.values(routes[route].routes));
+        if (routes[route].hasOwnProperty('routes')) {
+          var shouldRender = Object.values(routes[route].routes).some(function (_ref4) {
+            var path = _ref4.path;
+            return path && exec(currentPath, path);
+          });
+          if (shouldRender) {
+            var App = routes[route].component;
+            return Preact.h(App, null);
+          }
         } else {
           var routeArgs = exec(currentPath, routes[route].path);
           if (routeArgs) {
@@ -933,34 +940,6 @@ function LoadingIndicator(_ref) {
       variant = _ref$variant === undefined ? 'flashing' : _ref$variant;
 
   return Preact.h('div', { className: 'dot-' + variant });
-}
-
-var getPos = function getPos(props) {
-  return W.pipe(W.pick(['up', 'right', 'down', 'left']), W.filter(function (x) {
-    return !!x;
-  }), W.toPairs, W.path('0.0'))(props);
-};
-
-function Tooltip(_ref) {
-  var _ref$className = _ref.className,
-      className = _ref$className === undefined ? '' : _ref$className,
-      _ref$text = _ref.text,
-      text = _ref$text === undefined ? 'I am default text' : _ref$text,
-      _ref$length = _ref.length,
-      length = _ref$length === undefined ? 'medium' : _ref$length,
-      children = _ref.children,
-      props = objectWithoutProperties(_ref, ['className', 'text', 'length', 'children']);
-
-  return Preact.h(
-    'div',
-    _extends({
-      className: 'tooltip ' + className,
-      'data-tooltip': text,
-      'data-tooltip-pos': getPos(props),
-      'data-tooltip-length': length
-    }, props),
-    children
-  );
 }
 
 var ref = void 0;

@@ -1,9 +1,9 @@
 import W from 'wasmuth'
+import Tooltip from '@app-elements/tooltip'
 
 import Carousel from '/elements/Carousel'
 import Dropdown from '/elements/Dropdown'
 import LoadingIndicator from '/elements/LoadingIndicator'
-import Tooltip from '/elements/Tooltip'
 
 import {showNotification} from '/elements/Notification'
 
