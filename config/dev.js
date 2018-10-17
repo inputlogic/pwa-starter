@@ -1,7 +1,9 @@
+import {resolve as pathResolve} from 'path'
 import {writeFileSync} from 'fs'
 import less from 'less'
 
 // Rollup plugins.
+import alias from 'rollup-plugin-alias'
 import babel from 'rollup-plugin-babel'
 import cjs from 'rollup-plugin-commonjs'
 import css from 'rollup-plugin-css-only'
@@ -36,12 +38,12 @@ export default {
     }),
     cjs({
       exclude: [
-        'node_modules/@app-elements/**',
         'node_modules/process-es6/**'
       ],
       include: [
         'node_modules/preact/**',
-        'node_modules/preact-portal/**'
+        'node_modules/preact-portal/**',
+        'node_modules/unistore/**'
       ]
     }),
     resolve({
@@ -51,6 +53,13 @@ export default {
     globals(),
     replace({
       'process.env.NODE_ENV': JSON.stringify('development')
+    }),
+    alias({
+      react: pathResolve(
+        __dirname,
+        '../node_modules/preact/src/preact.js'
+      ),
+      'unistore/react': 'unistore/preact'
     })
   ]
 }

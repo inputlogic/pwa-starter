@@ -1,5 +1,8 @@
 import Preact from 'preact'
 
+import createStore from 'unistore'
+import {Provider} from 'unistore/preact'
+
 // Entry Point of Your App
 // -----------------------
 
@@ -38,23 +41,28 @@ import routes from '/routes'
 import '/styles/variables.less'
 import '/styles/base.less'
 
+// Replacing our custom store with Redux-compatible `unistore`
+let store = createStore({})
+
 // And, finally, our MainApp! This is the top-level Component to render
 // into the DOM, and kick-start our app!
 export const MainApp = () =>
-  <div className='main-app-container' >
-    <Helmet
-      title='Welcome'
-      titleTemplate='PWA Starter | %s'
-      defaultTitle='Welcome'
-    />
+  <Provider store={store}>
+    <div className='main-app-container' >
+      <Helmet
+        title='Welcome'
+        titleTemplate='PWA Starter | %s'
+        defaultTitle='Welcome'
+      />
 
-    <Header />
-    <Notification />
+      <Header />
+      <Notification />
 
-    <Router routes={routes} />
+      <Router routes={routes} />
 
-    <NotFound />
-  </div>
+      <NotFound />
+    </div>
+  </Provider>
 
 // Only render if we are in the browser, server-side rendering will be
 // handled by the `server` (which is not covered here).
