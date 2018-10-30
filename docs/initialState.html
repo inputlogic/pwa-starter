@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>consts.js</title>
+  <title>initialState.js</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
   <link rel="stylesheet" media="all" href="docco.css" />
@@ -13,7 +13,7 @@
 
       <div class="header">
         
-          <h1>consts.js</h1>
+          <h1>initialState.js</h1>
         
 
         
@@ -114,16 +114,36 @@
         
         
         
-          <div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> DEBUG = <span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> !== <span class="hljs-string">'undefined'</span>
-  ? <span class="hljs-built_in">window</span>.location.hostname.indexOf(<span class="hljs-string">'local'</span>) &gt; <span class="hljs-number">-1</span>
-  : process.env.NODE_ENV
+          <div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> {</pre></div>
+        
+      
+        
+        <p>In the browser, we initialize the currentPath prop, which is used
+by our <a href="/hoc/Router.html">Router</a></p>
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> WEB_URL = (<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> === <span class="hljs-string">'undefined'</span>) {
-    <span class="hljs-keyword">return</span> <span class="hljs-string">'https://cool-app.com'</span>
-  }
-  <span class="hljs-keyword">return</span> <span class="hljs-built_in">window</span>.location.href.replace(<span class="hljs-built_in">window</span>.location.pathname, <span class="hljs-string">''</span>)
-})()</pre></div>
+        
+          <div class='highlight'><pre>  currentPath: <span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> !== <span class="hljs-string">'undefined'</span>
+    ? <span class="hljs-built_in">window</span>.location.pathname + <span class="hljs-built_in">window</span>.location.search
+    : <span class="hljs-string">'/'</span>,</pre></div>
+        
+      
+        
+        <p><code>pendingRequests</code> is used by the <a href="/hoc/WithRequest.html">WithRequest</a> HoC.</p>
+
+        
+          <div class='highlight'><pre>  pendingRequests: <span class="hljs-number">0</span>,</pre></div>
+        
+      
+        
+        <p>Server-side rendering will have already computed some
+values for global state, and should be initialized on the client.
+This avoids redoing initial logic that was just computed on the server.</p>
+
+        
+          <div class='highlight'><pre>  ...(<span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> !== <span class="hljs-string">'undefined'</span>
+      ? <span class="hljs-built_in">JSON</span>.parse(<span class="hljs-built_in">window</span>.__initial_store__ || <span class="hljs-string">''</span>)
+      : {})
+}</pre></div>
         
       
       <div class="fleur">h</div>

@@ -1,22 +1,27 @@
 import Preact from 'preact'
 
+// Entry Point of Your App
+// -----------------------
+
+// `src/index.js` contains your top-most Component that will be mounted to the DOM and
+// is the entry point for your entire app. Everything starts here!
+
+// We use [unistore](https://github.com/developit/unistore) for global state management.
+// It is a tiny alternative to Redux, yet maintains compatibility with Redux DevTools!
 import createStore from 'unistore'
 import {Provider} from 'unistore/preact'
 
+// [inputlogic/elements](https://github.com/inputlogic/elements) houses common Components
+// that many PWAs will end up needing. In this case, we are importing Helmet for managing
+// title and meta tags, Notification for displaying notifications, and Router which may be
+// the most important Component of all.
 import Helmet from '@app-elements/helmet'
 import Notification from '@app-elements/notification'
 import Router from '@app-elements/router'
 
-// Entry Point of Your App
-// -----------------------
-
-// `src/index.js` contains your top-most Component and is the entry point
-// for your entire app.
-
 // Here, we import Components we want to render on *all* routes. For example,
-// we include a global Header, Notification bar, and a *NotFound* component
-// which renders when no route is matched.
-// (If your app does not need these global elements, you can of course remove them.)
+// we include a global Header, and a *NotFound* component which renders when no route is
+// matched. (If your app does not need these global elements, you can of course remove them.)
 import Header from '/elements/Header'
 import NotFound from '/elements/NotFound'
 
@@ -24,6 +29,7 @@ import NotFound from '/elements/NotFound'
 // Components.
 import routes from '/routes'
 
+// And our apps' initial state. Any defaults you want set when the app starts fresh.
 import initialState from '/initialState'
 
 // ### Styling
@@ -37,12 +43,17 @@ import initialState from '/initialState'
 import '/styles/variables.less'
 import '/styles/base.less'
 
-// Replacing our custom store with Redux-compatible `unistore`
+// Initializing our Redux-compatible `unistore`
 export let store = createStore(initialState)
 
-// And, finally, our MainApp! This is the top-level Component to render
-// into the DOM, and kick-start our app!
-export const MainApp = () =>
+// And, finally, our RootApp! This is the top-level Component to render
+// into the DOM and kick-start our entire app!
+
+// First, our entire app is wrapped in the _unistore_ `Provider` component.
+// This adds the store to the React context, meaning any child can access our
+// store reference.
+// Then we include those Component's that we want to be rendered on *all* routes.
+export const RootApp = () =>
   <Provider store={store}>
     <div className='main-app-container' >
       <Helmet
@@ -64,7 +75,7 @@ export const MainApp = () =>
 // handled by the `server` (which is not covered here).
 if (typeof window !== 'undefined') {
   Preact.render(
-    <MainApp />,
+    <RootApp />,
     document.body, document.body.children[0]
   )
 }
@@ -76,7 +87,7 @@ if (typeof window !== 'undefined') {
 
 // - [consts.js](/consts.html)
 // - [routes.js](/routes.html)
-// - [store.js](/store.html)
+// - [initialState.js](/initialState.html)
 
 // **apps/**
 
@@ -92,36 +103,15 @@ if (typeof window !== 'undefined') {
 // Elements are reusable Components that render some JSX. These are generic
 // and are common to use throughout all apps.
 
-// - [Carousel.js](/elements/Carousel)
-// - [Dropdown.js](/elements/Dropdown)
-// - [Image.js](/elements/Image)
-// - [Level.js](/elements/Level)
-// - [LoadingIndicator.js](/elements/LoadingIndicator)
-// - [Modal.js](/elements/Modal)
-// - [Notification.js](/elements/Notification)
-// - [Pagination.js](/elements/Pagination)
-// - [Tooltip.js](/elements/Tooltip)
-// - [Form.js](/elements/Form)
 // - [Header.js](/elements/Header)
 // - [NotFound.js](/elements/NotFound)
-
-// **hoc/**
-
-// Higher order Components, which abstract away logic, and generally
-// don't render any JSX of their own.
-
-// - [Apps.js](/hoc/Apps)
-// - [Helmet.js](/hoc/Helmet)
-// - [ListResource.js](/hoc/ListResource)
-// - [Resource.js](/hoc/Resource)
-// - [Router.js](/hoc/Router)
-// - [WithRequest.js](/hoc/WithRequest)
-// - [WithState.js](/hoc/WithState)
 
 // **modals/**
 
 // Any global (cross-app) modals can go here. These should all use the
-// [Modal](/elements/Modal) element in their `render` method.
+// [Modal](https://github.com/inputlogic/elements/tree/master/packages/Modal) element in their `render` method.
+
+// - [ExampleModal.js](/modals/ExampleModal)
 
 // **styles/**
 
@@ -130,5 +120,4 @@ if (typeof window !== 'undefined') {
 
 // **util/**
 
-// Simple helper functions used throughout your project. These should not
-// be removed as they are all used by an included HoC or element.
+// Simple helper functions used throughout your project.

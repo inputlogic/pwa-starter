@@ -51,50 +51,15 @@
               
                 
                 <li>
-                  <a class="source" href="hoc/Helmet.html">
-                    hoc/Helmet.js
-                  </a>
-                </li>
-              
-                
-                <li>
-                  <a class="source" href="hoc/ListResource.html">
-                    hoc/ListResource.js
-                  </a>
-                </li>
-              
-                
-                <li>
-                  <a class="source" href="hoc/Resource.html">
-                    hoc/Resource.js
-                  </a>
-                </li>
-              
-                
-                <li>
-                  <a class="source" href="hoc/Router.html">
-                    hoc/Router.js
-                  </a>
-                </li>
-              
-                
-                <li>
-                  <a class="source" href="hoc/WithRequest.html">
-                    hoc/WithRequest.js
-                  </a>
-                </li>
-              
-                
-                <li>
-                  <a class="source" href="hoc/WithState.html">
-                    hoc/WithState.js
-                  </a>
-                </li>
-              
-                
-                <li>
                   <a class="source" href="index.html">
                     index.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="initialState.html">
+                    initialState.js
                   </a>
                 </li>
               
@@ -114,13 +79,6 @@
               
                 
                 <li>
-                  <a class="source" href="store.html">
-                    store.js
-                  </a>
-                </li>
-              
-                
-                <li>
                   <a class="source" href="util/equal.html">
                     util/equal.js
                   </a>
@@ -130,34 +88,6 @@
                 <li>
                   <a class="source" href="util/loadImage.html">
                     util/loadImage.js
-                  </a>
-                </li>
-              
-                
-                <li>
-                  <a class="source" href="util/makeRequest.html">
-                    util/makeRequest.js
-                  </a>
-                </li>
-              
-                
-                <li>
-                  <a class="source" href="util/paginationRange.html">
-                    util/paginationRange.js
-                  </a>
-                </li>
-              
-                
-                <li>
-                  <a class="source" href="util/qs.html">
-                    util/qs.js
-                  </a>
-                </li>
-              
-                
-                <li>
-                  <a class="source" href="util/updateQuery.html">
-                    util/updateQuery.js
                   </a>
                 </li>
               
@@ -197,38 +127,40 @@
         
       
         
-        <p><code>src/index.js</code> contains your top-most Component and is the entry point
-for your entire app.</p>
+        <p><code>src/index.js</code> contains your top-most Component that will be mounted to the DOM and
+is the entry point for your entire app. Everything starts here!</p>
 
+        
+      
+        
+        <p>We use <a href="https://github.com/developit/unistore">unistore</a> for global state management.
+It is a tiny alternative to Redux, yet maintains compatibility with Redux DevTools!</p>
+
+        
+          <div class='highlight'><pre><span class="hljs-keyword">import</span> createStore <span class="hljs-keyword">from</span> <span class="hljs-string">'unistore'</span>
+<span class="hljs-keyword">import</span> {Provider} <span class="hljs-keyword">from</span> <span class="hljs-string">'unistore/preact'</span></pre></div>
+        
+      
+        
+        <p><a href="https://github.com/inputlogic/elements">inputlogic/elements</a> houses common Components
+that many PWAs will end up needing. In this case, we are importing Helmet for managing
+title and meta tags, Notification for displaying notifications, and Router which may be
+the most important Component of all.</p>
+
+        
+          <div class='highlight'><pre><span class="hljs-keyword">import</span> Helmet <span class="hljs-keyword">from</span> <span class="hljs-string">'@app-elements/helmet'</span>
+<span class="hljs-keyword">import</span> Notification <span class="hljs-keyword">from</span> <span class="hljs-string">'@app-elements/notification'</span>
+<span class="hljs-keyword">import</span> Router <span class="hljs-keyword">from</span> <span class="hljs-string">'@app-elements/router'</span></pre></div>
         
       
         
         <p>Here, we import Components we want to render on <em>all</em> routes. For example,
-we include a global Header, Notification bar, and a <em>NotFound</em> component
-which renders when no route is matched.
-(If your app does not need these global elements, you can of course remove them.)</p>
+we include a global Header, and a <em>NotFound</em> component which renders when no route is
+matched. (If your app does not need these global elements, you can of course remove them.)</p>
 
         
           <div class='highlight'><pre><span class="hljs-keyword">import</span> Header <span class="hljs-keyword">from</span> <span class="hljs-string">'/elements/Header'</span>
-<span class="hljs-keyword">import</span> Notification <span class="hljs-keyword">from</span> <span class="hljs-string">'/elements/Notification'</span>
 <span class="hljs-keyword">import</span> NotFound <span class="hljs-keyword">from</span> <span class="hljs-string">'/elements/NotFound'</span></pre></div>
-        
-      
-        
-        <p>Helmet is minimal alternative to <a href="https://github.com/nfl/react-helmet">react-helmet</a>.
-It will render title, og and meta tags on the server, as well as update the document
-title when navigating on the client.</p>
-
-        
-          <div class='highlight'><pre><span class="hljs-keyword">import</span> Helmet <span class="hljs-keyword">from</span> <span class="hljs-string">'/hoc/Helmet'</span></pre></div>
-        
-      
-        
-        <p><a href="hoc/Router.html">Router</a> is a Higher Order Component for rendering Components based
-on the current route. Router’s can be nested, allowing easy grouping of Components.</p>
-
-        
-          <div class='highlight'><pre><span class="hljs-keyword">import</span> Router <span class="hljs-keyword">from</span> <span class="hljs-string">'/hoc/Router'</span></pre></div>
         
       
         
@@ -237,6 +169,13 @@ Components.</p>
 
         
           <div class='highlight'><pre><span class="hljs-keyword">import</span> routes <span class="hljs-keyword">from</span> <span class="hljs-string">'/routes'</span></pre></div>
+        
+      
+        
+        <p>And out apps’ initial state. Any defaults you want set when the app starts fresh.</p>
+
+        
+          <div class='highlight'><pre><span class="hljs-keyword">import</span> initialState <span class="hljs-keyword">from</span> <span class="hljs-string">'/initialState'</span></pre></div>
         
       
         
@@ -261,25 +200,42 @@ changing the way we write CSS.</p>
         
       
         
-        <p>And, finally, our MainApp! This is the top-level Component to render
-into the DOM, and kick-start our app!</p>
+        <p>Initializing our Redux-compatible <code>unistore</code></p>
 
         
-          <div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> MainApp = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span>
-  &lt;div className=<span class="hljs-string">'main-app-container'</span> &gt;
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Helmet</span>
-      <span class="hljs-attr">title</span>=<span class="hljs-string">'Welcome'</span>
-      <span class="hljs-attr">titleTemplate</span>=<span class="hljs-string">'PWA Starter | %s'</span>
-      <span class="hljs-attr">defaultTitle</span>=<span class="hljs-string">'Welcome'</span>
-    /&gt;</span>
+          <div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">let</span> store = createStore(initialState)</pre></div>
+        
+      
+        
+        <p>And, finally, our RootApp! This is the top-level Component to render
+into the DOM and kick-start our entire app!</p>
 
-    <span class="hljs-tag">&lt;<span class="hljs-name">Header</span> /&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">Notification</span> /&gt;</span>
+        
+      
+        
+        <p>First, our entire app is wrapped in the <em>unistore</em> <code>Provider</code> component.
+This adds the store to the React context, meaning any child can access our
+store reference.
+Then we include those Component’s that we want to be rendered on <em>all</em> routes.</p>
 
-    <span class="hljs-tag">&lt;<span class="hljs-name">Router</span> <span class="hljs-attr">routes</span>=<span class="hljs-string">{routes}</span> /&gt;</span>
+        
+          <div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> RootApp = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span>
+  &lt;Provider store={store}&gt;
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">'main-app-container'</span> &gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Helmet</span>
+        <span class="hljs-attr">title</span>=<span class="hljs-string">'Welcome'</span>
+        <span class="hljs-attr">titleTemplate</span>=<span class="hljs-string">'PWA Starter | %s'</span>
+        <span class="hljs-attr">defaultTitle</span>=<span class="hljs-string">'Welcome'</span>
+      /&gt;</span>
 
-    <span class="hljs-tag">&lt;<span class="hljs-name">NotFound</span> /&gt;</span>
-  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Header</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Notification</span> /&gt;</span>
+
+      <span class="hljs-tag">&lt;<span class="hljs-name">Router</span> <span class="hljs-attr">routes</span>=<span class="hljs-string">{routes}</span> /&gt;</span>
+
+      <span class="hljs-tag">&lt;<span class="hljs-name">NotFound</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-name">Provider</span>&gt;</span>
 
 </span></pre></div>
         
@@ -291,7 +247,7 @@ handled by the <code>server</code> (which is not covered here).</p>
         
           <div class='highlight'><pre><span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> !== <span class="hljs-string">'undefined'</span>) {
   Preact.render(
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">MainApp</span> /&gt;</span>,
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">RootApp</span> /&gt;</span>,
     document.body, document.body.children[0]
   )
 }
@@ -317,7 +273,7 @@ handled by the <code>server</code> (which is not covered here).</p>
         <ul>
 <li><a href="/consts.html">consts.js</a></li>
 <li><a href="/routes.html">routes.js</a></li>
-<li><a href="/store.html">store.js</a></li>
+<li><a href="/initialState.html">initialState.js</a></li>
 </ul>
 
         
@@ -356,42 +312,8 @@ and are common to use throughout all apps.</p>
       
         
         <ul>
-<li><a href="/elements/Carousel">Carousel.js</a></li>
-<li><a href="/elements/Dropdown">Dropdown.js</a></li>
-<li><a href="/elements/Image">Image.js</a></li>
-<li><a href="/elements/Level">Level.js</a></li>
-<li><a href="/elements/LoadingIndicator">LoadingIndicator.js</a></li>
-<li><a href="/elements/Modal">Modal.js</a></li>
-<li><a href="/elements/Notification">Notification.js</a></li>
-<li><a href="/elements/Pagination">Pagination.js</a></li>
-<li><a href="/elements/Tooltip">Tooltip.js</a></li>
-<li><a href="/elements/Form">Form.js</a></li>
 <li><a href="/elements/Header">Header.js</a></li>
 <li><a href="/elements/NotFound">NotFound.js</a></li>
-</ul>
-
-        
-      
-        
-        <p><strong>hoc/</strong></p>
-
-        
-      
-        
-        <p>Higher order Components, which abstract away logic, and generally
-don’t render any JSX of their own.</p>
-
-        
-      
-        
-        <ul>
-<li><a href="/hoc/Apps">Apps.js</a></li>
-<li><a href="/hoc/Helmet">Helmet.js</a></li>
-<li><a href="/hoc/ListResource">ListResource.js</a></li>
-<li><a href="/hoc/Resource">Resource.js</a></li>
-<li><a href="/hoc/Router">Router.js</a></li>
-<li><a href="/hoc/WithRequest">WithRequest.js</a></li>
-<li><a href="/hoc/WithState">WithState.js</a></li>
 </ul>
 
         
@@ -403,7 +325,14 @@ don’t render any JSX of their own.</p>
       
         
         <p>Any global (cross-app) modals can go here. These should all use the
-<a href="/elements/Modal">Modal</a> element in their <code>render</code> method.</p>
+<a href="https://github.com/inputlogic/elements/tree/master/packages/Modal">Modal</a> element in their <code>render</code> method.</p>
+
+        
+      
+        
+        <ul>
+<li><a href="/modals/ExampleModal">ExampleModal.js</a></li>
+</ul>
 
         
       
@@ -424,8 +353,7 @@ don’t render any JSX of their own.</p>
         
       
         
-        <p>Simple helper functions used throughout your project. These should not
-be removed as they are all used by an included HoC or element.</p>
+        <p>Simple helper functions used throughout your project.</p>
 
         
       
