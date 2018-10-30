@@ -1,10 +1,11 @@
 // import W from 'wasmuth'
 import render from 'preact-render-to-string'
 
-import {getState, setState} from '/store'
-import {MainApp} from '/index'
+import Helmet, {rewind} from '@app-elements/helmet'
 
-import Helmet, {rewind} from '/hoc/Helmet'
+import {MainApp, store} from '/index'
+
+const {setState, getState} = store
 
 export const renderReact = (url) => new Promise((resolve, reject) => {
   setState({currentPath: url})

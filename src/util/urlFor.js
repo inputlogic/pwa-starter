@@ -1,4 +1,5 @@
-import qs from '/util/qs'
+import qs from '@app-elements/router/qs'
+
 import routes from '/routes'
 
 // Transform our `Component => Object` pairs to a single Object.

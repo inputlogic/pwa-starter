@@ -1,5 +1,5 @@
 import React from 'react'
-import makeRequest from '/util/makeRequest'
+import makeRequest from '@app-elements/with-request/makeRequest'
 
 const isReactNative = typeof window !== 'undefined' && window.navigator.product === 'ReactNative'
 

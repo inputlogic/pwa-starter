@@ -3,6 +3,10 @@ import Preact from 'preact'
 import createStore from 'unistore'
 import {Provider} from 'unistore/preact'
 
+import Helmet from '@app-elements/helmet'
+import Notification from '@app-elements/notification'
+import Router from '@app-elements/router'
+
 // Entry Point of Your App
 // -----------------------
 
@@ -14,21 +18,13 @@ import {Provider} from 'unistore/preact'
 // which renders when no route is matched.
 // (If your app does not need these global elements, you can of course remove them.)
 import Header from '/elements/Header'
-import Notification from '/elements/Notification'
 import NotFound from '/elements/NotFound'
-
-// Helmet is minimal alternative to [react-helmet](https://github.com/nfl/react-helmet).
-// It will render title, og and meta tags on the server, as well as update the document
-// title when navigating on the client.
-import Helmet from '/hoc/Helmet'
-
-// [Router](hoc/Router.html) is a Higher Order Component for rendering Components based
-// on the current route. Router's can be nested, allowing easy grouping of Components.
-import Router from '/hoc/Router'
 
 // The main [routes](/routes.html) file defines the top-level routes and their respective
 // Components.
 import routes from '/routes'
+
+import initialState from '/initialState'
 
 // ### Styling
 
@@ -42,7 +38,7 @@ import '/styles/variables.less'
 import '/styles/base.less'
 
 // Replacing our custom store with Redux-compatible `unistore`
-let store = createStore({})
+export let store = createStore(initialState)
 
 // And, finally, our MainApp! This is the top-level Component to render
 // into the DOM, and kick-start our app!

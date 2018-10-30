@@ -1,9 +1,12 @@
-import {getState} from '/store'
+import {connect} from 'unistore/preact'
 
 const Base = () =>
   <div>
     Not Found :(
   </div>
 
-export default (props) =>
-  !getState().route ? Base() : null
+const NotFound = connect('currentRoute', {})(({currentRoute}) =>
+  !currentRoute ? Base() : null
+)
+
+export default NotFound

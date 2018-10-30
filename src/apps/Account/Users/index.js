@@ -1,4 +1,4 @@
-import ListResource from '/hoc/ListResource'
+import ListResource from '@app-elements/list-resource'
 
 const endpoint = 'https://jsonplaceholder.typicode.com/users'
 

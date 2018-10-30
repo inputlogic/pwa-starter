@@ -1,5 +1,5 @@
-import Helmet from '/hoc/Helmet'
-import Resource from '/hoc/Resource'
+import Helmet from '@app-elements/helmet'
+import {Resource} from '@app-elements/list-resource'
 
 import urlFor from '/util/urlFor'
 

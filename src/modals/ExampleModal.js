@@ -1,4 +1,4 @@
-import Modal from '/elements/Modal'
+import Modal from '@app-elements/modal'
 
 export default function ExampleModal () {
   return (

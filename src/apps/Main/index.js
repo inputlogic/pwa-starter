@@ -1,5 +1,6 @@
-import Router from '/hoc/Router'
-import {Modals} from '/elements/Modal'
+import {Modals} from '@app-elements/modal'
+import Router from '@app-elements/Router'
+
 import ExampleModal from '/modals/ExampleModal'
 
 import Home from './Home'

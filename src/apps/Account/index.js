@@ -1,4 +1,5 @@
-import Router from '/hoc/Router'
+import Router from '@app-elements/Router'
+
 import urlFor from '/util/urlFor'
 
 import Users from './Users'

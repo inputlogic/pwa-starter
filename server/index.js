@@ -36,7 +36,7 @@ const ssr = (req, res, next) => {
 
 polka()
   .use(compress, assets, ssr)
-  .listen(port)
-  .then(() => {
+  .listen(port, err => {
+    if (err) throw err
     console.log(`> Ready on http://localhost:${port}`)
   })

@@ -912,9 +912,8 @@ function Component(props, context) {
 
 extend(Component.prototype, {
 	setState: function setState(state, callback) {
-		var prev = this.prevState = this.state;
-		if (typeof state === 'function') state = state(prev, this.props);
-		this.state = extend(extend({}, prev), state);
+		if (!this.prevState) this.prevState = this.state;
+		this.state = extend(extend({}, this.state), typeof state === 'function' ? state(this.state, this.props) : state);
 		if (callback) this._renderCallbacks.push(callback);
 		enqueueRender(this);
 	},
@@ -950,16 +949,11 @@ var preact$1 = /*#__PURE__*/Object.freeze({
             options: options
 });
 
-var e=/acit|ex(?:s|g|n|p|$)|rph|ows|mnc|ntw|ine[ch]|zoo|^ord/i,n=Object.keys||function(e){var n=[];for(var r in e)e.hasOwnProperty(r)&&n.push(r);return n},r=function(e){return String(e).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")},t=function(e,n){return String(e).replace(/(\n+)/g,"$1"+(n||"\t"))},o=function(e,n,r){return String(e).length>(n||40)||!r&&-1!==String(e).indexOf("\n")||-1!==String(e).indexOf("<")},i={};function a(n){var r="";for(var t in n){var o=n[t];null!=o&&(r&&(r+=" "),r+=i[t]||(i[t]=t.replace(/([A-Z])/g,"-$1").toLowerCase()),r+=": ",r+=o,"number"==typeof o&&!1===e.test(t)&&(r+="px"),r+=";");}return r||void 0}function l(e,n){for(var r in n)e[r]=n[r];return e}var f={shallow:!0},c=[],u=/^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/;p.render=p;var s=function(e,n){return p(e,n,f)};function p(e,i,f,s,h){if(null==e||"boolean"==typeof e)return "";var d=e.nodeName,g=e.attributes,v=!1;i=i||{};var m,b=(f=f||{}).pretty,x="string"==typeof b?b:"\t";if("object"!=typeof e&&!d)return r(e);if("function"==typeof d){if(v=!0,!f.shallow||!s&&!1!==f.renderRootComponent){var y,w=function(e){var n=e.nodeName.defaultProps,r=l({},n||e.attributes);return n&&l(r,e.attributes),e.children&&(r.children=e.children),r}(e);if(d.prototype&&"function"==typeof d.prototype.render){var k=new d(w,i);k._disable=k.__x=!0,k.props=w,k.context=i,k.componentWillMount&&k.componentWillMount(),y=k.render(k.props,k.state,k.context),k.getChildContext&&(i=l(l({},i),k.getChildContext()));}else y=d(w,i);return p(y,i,f,!1!==f.shallowHighOrder)}d=(m=d).displayName||m!==Function&&m.name||function(e){var n=(Function.prototype.toString.call(e).match(/^\s*function\s+([^( ]+)/)||"")[1];if(!n){for(var r=-1,t=c.length;t--;)if(c[t]===e){r=t;break}r<0&&(r=c.push(e)-1),n="UnnamedComponent"+r;}return n}(m);}var O,C="";if(g){var S=n(g);f&&!0===f.sortAttributes&&S.sort();for(var j=0;j<S.length;j++){var $=S[j],_=g[$];if("children"!==$&&(!$.match(/[\s\n\\/='"\0<>]/)&&(f&&f.allAttributes||"key"!==$&&"ref"!==$))){if("className"===$){if(g.class)continue;$="class";}else h&&$.match(/^xlink:?./)&&($=$.toLowerCase().replace(/^xlink:?/,"xlink:"));"style"===$&&_&&"object"==typeof _&&(_=a(_));var H=f.attributeHook&&f.attributeHook($,_,i,f,v);if(H||""===H)C+=H;else if("dangerouslySetInnerHTML"===$)O=_&&_.__html;else if((_||0===_||""===_)&&"function"!=typeof _){if(!(!0!==_&&""!==_||(_=$,f&&f.xml))){C+=" "+$;continue}C+=" "+$+'="'+r(_)+'"';}}}}var N=C.replace(/^\n\s*/," ");if(N===C||~N.indexOf("\n")?b&&~C.indexOf("\n")&&(C+="\n"):C=N,C="<"+d+C+">",d.match(/[\s\n\\/='"\0<>]/))throw C;var A=d.match(u);A&&(C=C.replace(/>$/," />"));var L=[];if(O)b&&o(O)&&(O="\n"+x+t(O,x)),C+=O;else if(e.children){for(var M=~C.indexOf("\n"),F=0;F<e.children.length;F++){var P=e.children[F];if(null!=P&&!1!==P){var R=p(P,i,f,!0,"svg"===d||"foreignObject"!==d&&h);!M&&b&&o(R)&&(M=!0),R&&L.push(R);}}if(b&&M)for(var W=L.length;W--;)L[W]="\n"+x+t(L[W],x);}if(L.length)C+=L.join("");else if(f&&f.xml)return C.substring(0,C.length-1)+" />";return A||(b&&~C.indexOf("\n")&&(C+="\n"),C+="</"+d+">"),C}p.shallowRender=s;
+var e=/acit|ex(?:s|g|n|p|$)|rph|ows|mnc|ntw|ine[ch]|zoo|^ord/i,t=function(e){return String(e).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")},r={};function n(t){var n="";for(var o in t){var a=t[o];null!=a&&(n&&(n+=" "),n+=r[o]||(r[o]=o.replace(/([A-Z])/g,"-$1").toLowerCase()),n+=": ",n+=a,"number"==typeof a&&!1===e.test(o)&&(n+="px"),n+=";");}return n||void 0}function o(e,t){for(var r in t)e[r]=t[r];return e}var a={shallow:!0},i=[],l=/^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/;c.render=c;var s=function(e,t){return c(e,t,a)};function c(e,r,a,s,f){if(null==e||"boolean"==typeof e)return "";var u,p=e.nodeName,v=e.attributes,d=!1;if(r=r||{},a=a||{},"object"!=typeof e&&!p)return t(e);if("function"==typeof p){if(d=!0,!a.shallow||!s&&!1!==a.renderRootComponent){var h,m=function(e){var t=o({},e.attributes);t.children=e.children;var r=e.nodeName.defaultProps;if(void 0!==r)for(var n in r)void 0===t[n]&&(t[n]=r[n]);return t}(e);if(p.prototype&&"function"==typeof p.prototype.render){var g=new p(m,r);g._disable=g.__x=!0,g.props=m,g.context=r,p.getDerivedStateFromProps?g.state=o(o({},g.state),p.getDerivedStateFromProps(g.props,g.state)):g.componentWillMount&&g.componentWillMount(),h=g.render(g.props,g.state,g.context),g.getChildContext&&(r=o(o({},r),g.getChildContext()));}else h=p(m,r);return c(h,r,a,!1!==a.shallowHighOrder)}p=(u=p).displayName||u!==Function&&u.name||function(e){var t=(Function.prototype.toString.call(e).match(/^\s*function\s+([^( ]+)/)||"")[1];if(!t){for(var r=-1,n=i.length;n--;)if(i[n]===e){r=n;break}r<0&&(r=i.push(e)-1),t="UnnamedComponent"+r;}return t}(u);}var b,y="";if(v){var x=Object.keys(v);a&&!0===a.sortAttributes&&x.sort();for(var w=0;w<x.length;w++){var k=x[w],C=v[k];if("children"!==k&&(!k.match(/[\s\n\\/='"\0<>]/)&&(a&&a.allAttributes||"key"!==k&&"ref"!==k))){if("className"===k){if(v.class)continue;k="class";}else f&&k.match(/^xlink:?./)&&(k=k.toLowerCase().replace(/^xlink:?/,"xlink:"));"style"===k&&C&&"object"==typeof C&&(C=n(C));var S=a.attributeHook&&a.attributeHook(k,C,r,a,d);if(S||""===S)y+=S;else if("dangerouslySetInnerHTML"===k)b=C&&C.__html;else if((C||0===C||""===C)&&"function"!=typeof C){if(!(!0!==C&&""!==C||(C=k,a&&a.xml))){y+=" "+k;continue}y+=" "+k+'="'+t(C)+'"';}}}}if(y="<"+p+y+">",String(p).match(/[\s\n\\/='"\0<>]/))throw y;var j=String(p).match(l);j&&(y=y.replace(/>$/," />"));var _=[];if(b)y+=b;else if(e.children)for(var F=0;F<e.children.length;F++){var H=e.children[F];if(null!=H&&!1!==H){var N=c(H,r,a,!0,"svg"===p||"foreignObject"!==p&&f);N&&_.push(N);}}if(_.length)y+=_.join("");else if(a&&a.xml)return y.substring(0,y.length-1)+" />";return j||(y+="</"+p+">"),y}c.shallowRender=s;
 
-var DEBUG = typeof window !== 'undefined' ? window.location.hostname.indexOf('local') > -1 : "development";
+var e$1=function(e){return {}.toString.call(e).toLowerCase().slice(8,-1)};function r$1(r,t){for(var o,n,a=0,i=(r=Array.prototype.slice.call(r)).length;a<i;++a)if(o=e$1(r[a]),"-any"!==(n=t[a]))if("array"===e$1(n)){for(var f=!1,p=0,l=n.length;p<l;++p)f=f||o===n[p];if(!f)throw new TypeError("Expected one of ["+n.join(", ")+"] given '"+o+"' for argument at index "+a)}else if(o!==n)throw new TypeError("Expected '"+n+"' given '"+o+"' for argument at index "+a)}r$1.prototype.toType=e$1;
 
-var WEB_URL = function () {
-  if (typeof window === 'undefined') {
-    return 'https://cool-app.com';
-  }
-  return window.location.href.replace(window.location.pathname, '');
-}();
+function t$1(r,t){return t=[r].concat(Array.prototype.slice.call(t)),r.bind.apply(r,t)}var n$1=r$1.prototype.toType;function e$2(o,a,u){return arguments.length<2?t$1(e$2,arguments):(r$1(arguments,["number","number",["array","string"]]),"array"===n$1(u)?Array.prototype.slice.call(u,o,a):String.prototype.slice.call(u,o,a))}function o$1(t){return r$1(arguments,[["object","array"]]),JSON.parse(JSON.stringify(t))}var a$1=r$1.prototype.toType;function u(n,e){return arguments.length<2?t$1(u,arguments):(r$1(arguments,["function",["array","object"]]),"array"===a$1(e)?Array.prototype.filter.call(e,n):function(r,t){for(var n=Object.keys(t),e=n.length,o={},a=0;a<e;a++)r(t[n[a]])&&(o[n[a]]=t[n[a]]);return o}(n,e))}function i$1(n,e){if(arguments.length<2)return t$1(i$1,arguments);r$1(arguments,["array","object"]);for(var o={},a=0;a<n.length;a++){var u=n[a];o[u]=e[u];}return o}var c$1=r$1.prototype.toType;function y(n,e){return arguments.length<2?t$1(y,arguments):(r$1(arguments,[["string","array"],"object"]),"string"===c$1(n)&&(n=[n]),i$1(u(function(r){return -1===n.indexOf(r)},Object.keys(e)),e))}function p(n,e,o){if(arguments.length<2)return t$1(p,arguments);r$1(arguments,["function","array","-any"]);for(var a,u=e.length,i=0;i<u;i++)if(n(a=e[i],i,e))return o?i:a}function l$1(n,e,o){return arguments.length<3?t$1(l$1,arguments):(r$1(arguments,["function","-any","array"]),Array.prototype.reduce.call(o,n,e))}var f=r$1.prototype.toType;var g="[^\\.\\s@:][^\\s@:]*(?!\\.)@[^\\.\\s@]+(?:\\.[^\\.\\s@]+)*";var s$1=r$1.prototype.toType;var h$1=r$1.prototype.toType;var v=r$1.prototype.toType;function d(){for(var r=arguments,t=arguments.length,n={},e=0;e<t;e++){if("object"!==v(r[e]))throw new TypeError("All arguments must be objects!");for(var o=r[e],a=Object.keys(o),u=a.length,i=0;i<u;i++){var c=a[i],y=v(o[c]);n[c]="object"===y?d(o[c]):"array"===y?o[c].slice(0):o[c];}}return n}function b(n,e){if(arguments.length<2)return t$1(b,arguments);r$1(arguments,[["array","string"],["array","object","window"]]),"string"===r$1.prototype.toType(n)&&(n=n.split("."));for(var o=e,a=0;a<n.length;a++){if(null==o)return;o=o[n[a]];}return o}function j(n,e,a){if(arguments.length<3)return t$1(j,arguments);r$1(arguments,[["array","string"],"-any",["object","array"]]),"string"===r$1.prototype.toType(n)&&(n=n.split("."));var u="object"===r$1.prototype.toType(n)?d({},a):o$1(a);return l$1(function(r,t,o){return r[t]=r[t]||{},n.length===o+1&&(r[t]=e),r[t]},u,n),u}var m=r$1.prototype.toType;var w=r$1.prototype.toType;var T=r$1.prototype.toType;var O=r$1.prototype.toType;var A=r$1.prototype.toType;var W = {assoc:j,check:r$1,chunk:function n(o,a){if(arguments.length<2)return t$1(n,arguments);r$1(arguments,["number",["array","string"]]);for(var u=[],i=a.length,c=0;c<i;)u.push(e$2(c,c+=o,a));return u},deepClone:o$1,diffObj:function(t,n){r$1(arguments,["object","object"]);for(var e={},o=Object.keys(t),a=0;a<o.length;a++){var u=o[a];t[u]!==n[u]&&(e[u]=n[u]);}for(var i=Object.keys(n),c=0;c<i.length;c++)t[i[c]]||(e[i[c]]=n[i[c]]);return e},dissoc:function r(n,e){return arguments.length<2?t$1(r,arguments):y([n],e)},filter:u,find:p,findIndex:function r(n,e){return arguments.length<2?t$1(r,arguments):p(n,e,!0)},fromPairs:function(t){r$1(arguments,["array"]);for(var n={},e=0;e<t.length;e++)n[t[e][0]]=t[e][1];return n},groupBy:function n(e,o){return arguments.length<2?t$1(n,arguments):(r$1(arguments,["string","array"]),l$1(function(r,t){return r[t[e]]||(r[t[e]]=[]),r[t[e]].push(t),r},{},o))},groupPropBy:function n(e,o,a){return arguments.length<3?t$1(n,arguments):(r$1(arguments,["string","string","array"]),l$1(function(r,t){return r[t[o]]||(r[t[o]]=[]),r[t[o]].push(t[e]),r},{},a))},guid:function(){var r=function(){return Math.floor(65536*(1+Math.random())).toString(16).substring(1)};return r()+r()+"-"+r()+"-"+r()+"-"+r()+"-"+r()+r()+r()},includes:function n(e,o){return arguments.length<2?t$1(n,arguments):(r$1(arguments,["-any",["array","string"]]),"array"===f(o)?Array.prototype.includes.call(o,e):String.prototype.includes.call(o,e))},isEmail:function(r){return new RegExp("^"+g+"$").test(r)},join:function n(e,o){return 0===arguments.length?n:"array"===s$1(e)&&void 0===o?Array.prototype.join.call(e):"string"===s$1(e)&&void 0===o?t$1(n,arguments):(r$1(arguments,["string","array"]),Array.prototype.join.call(o,e))},last:function(t){return r$1([arguments[0]],["array"]),t[t.length?t.length-1:0]},map:function n(e,o){return arguments.length<2?t$1(n,arguments):(r$1(arguments,["function",["array","object"]]),"array"===h$1(o)?1===e.length?function(r,t){for(var n=t.length,e=[],o=0;o<n;o++)e[o]=r(t[o]);return e}(e,o):Array.prototype.map.call(o,e):function(r,t){for(var n=Object.keys(t),e=n.length,o={},a=0;a<e;a++){var u=n[a];o[u]=r(u,t[u]);}return o}(e,o))},merge:d,partial:t$1,path:b,pathEq:function r(n,e,o){return arguments.length<3?t$1(r,arguments):b(n,o)===e},pathOr:function r(n,e,o){return arguments.length<3?t$1(r,arguments):b(e,o)||n},pathSet:j,pick:i$1,pipe:function(){if(arguments&&arguments.length){var r=arguments,t=r.length;return function(n){for(var e=0;e<t;e++)r[e]&&(n=r[e](n));return n}}},range:function(t,n){r$1(arguments,["number","number"]);for(var e=[],o=t;o<n;)e.push(o),o+=1;return e},reduce:l$1,reject:function n(e,o){return arguments.length<2?t$1(n,arguments):(r$1(arguments,["function",["array","object"]]),"array"===m(o)?function(r,t){for(var n=t.length,e=[],o=0;o<n;o++)r(t[o])||e.push(t[o]);return e}(e,o):function(r,t){for(var n=Object.keys(t),e=n.length,o={},a=0;a<e;a++)r(t[n[a]])||(o[n[a]]=t[n[a]]);return o}(e,o))},relativeTime:function(r,t){"string"===w(r)&&(r=new Date(r));var n=(t=t||Date.now())-r;return n<=0?"just now":n<6e4?Math.round(n/1e3)+" seconds ago":n<36e5?Math.round(n/6e4)+" minutes ago":n<864e5?Math.round(n/36e5)+" hours ago":n<2592e6?Math.round(n/864e5)+" days ago":n<31536e6?Math.round(n/2592e6)+" months ago":Math.round(n/31536e6)+" years ago"},safeWindow:function(r){for(var t=[],n=arguments.length-1;n-- >0;)t[n]=arguments[n+1];if("undefined"!=typeof window){var e=b(r,window);return "function"===T(e)?e.call.apply(e,[r.indexOf("localStorage")>-1?window.localStorage:window].concat(t)):e}},slice:e$2,slugify:function(r){return r.toLowerCase().replace(/[^a-zA-Z0-9 ]/g,"").replace(/\s/g,"-").replace(" ","-")},some:function n(e,o){return arguments.length<2?t$1(n,arguments):(r$1(arguments,["function",["array","object"]]),"array"===O(o)?Array.prototype.some.call(o,e):function(r,t){for(var n=Object.keys(t),e=n.length,o=0;o<e;o++)if(r(t[n[o]]))return !0;return !1}(e,o))},sort:function n(e,o){return 0===arguments.length?n:"array"===A(e)&&void 0===o?Array.prototype.sort.call(e):"function"===A(e)&&void 0===o?t$1(n,arguments):(r$1(arguments,["function","array"]),Array.prototype.sort.call(o,e))},toPairs:function(t){r$1(arguments,["object"]);for(var n=Object.keys(t),e=n.length,o=[],a=0;a<e;a++)o.push([n[a],t[n[a]]]);return o},toType:r$1.prototype.toType,uniq:function(t){r$1(arguments,["array"]);for(var n=[],e=0;e<t.length;e++)-1===n.indexOf(t[e])&&n.push(t[e]);return n},where:function n(e,o,a){return arguments.length<3?t$1(n,arguments):(r$1(Array.prototype.slice.call(arguments,0,3),["string","-any","object"]),a[e]===o)},without:y};
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
   return typeof obj;
@@ -1020,31 +1014,6 @@ var _extends = Object.assign || function (target) {
   return target;
 };
 
-var get = function get(object, property, receiver) {
-  if (object === null) object = Function.prototype;
-  var desc = Object.getOwnPropertyDescriptor(object, property);
-
-  if (desc === undefined) {
-    var parent = Object.getPrototypeOf(object);
-
-    if (parent === null) {
-      return undefined;
-    } else {
-      return get(parent, property, receiver);
-    }
-  } else if ("value" in desc) {
-    return desc.value;
-  } else {
-    var getter = desc.get;
-
-    if (getter === undefined) {
-      return undefined;
-    }
-
-    return getter.call(receiver);
-  }
-};
-
 var inherits = function (subClass, superClass) {
   if (typeof superClass !== "function" && superClass !== null) {
     throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
@@ -1091,91 +1060,110 @@ var toConsumableArray = function (arr) {
   }
 };
 
-// PWA-Starter uses a very basic *store* for global state.
-// Any time you need to share state outside of a single Component,
-// you can use this `/store.js`.
+var refs = [];
 
-// We don't use Redux. We found actions and reducers introduced complexity
-// and boilerplate, that was not necessary, even for large projects.
-
-// First we define our inital state object.
-
-var state = _extends({
-  // In the browser, we initialize the currentPath prop, which is used
-  // by our [Router](/hoc/Router.html)
-  currentPath: typeof window !== 'undefined' ? window.location.pathname + window.location.search : '/',
-  // `pendingRequests` is used by the [WithRequest](/hoc/WithRequest.html) HoC.
-  pendingRequests: 0
-}, typeof window !== 'undefined' ? JSON.parse(window.__initial_store__ || '') : {});
-
-// This is a private reference to Component instances that will be updated
-// after every `setState`.
-
-var components = [];
-
-// Instead of passing in functions to call when state is changed, we pass in
-// Component instances. The easiest way to do so is in a Component's contructor:
-
-// `this.state = subscribe(this)`
-
-// this adds the Component instance to the array of components to update on state
-// changes, and returns the current state to set as the Component state. This makes
-// for very fast prototyping, and when needed, you can implement `shouldComponentUpdate`
-// logic on your Component to improve performance.
-var subscribe = function subscribe(component) {
-  components.push(component);
-  return getState();
+var rewind = function rewind() {
+  var res = W.reduce(function (acc, el) {
+    return W.merge(acc, el.props);
+  }, {}, refs);
+  return res;
 };
 
-// If you subscribe a Component instance, you need to remove it when the Component
-// is being destoyed:
+var Wrapper = function Wrapper(_ref) {
+  var children = _ref.children;
 
-// ```
-// componentWillUnmount () {
-//   unsubscribe(this)
-// }
-// ```
-
-// `unsubscribe` simply removes the component from the local components array.
-var unsubscribe = function unsubscribe(component) {
-  var idx = components.findIndex(function (c) {
-    return c === component;
-  });
-  idx > -1 && components.splice(idx, 1);
+  if (typeof window !== 'undefined') {
+    var titleChild = W.find(function (_ref2) {
+      var nodeName = _ref2.nodeName;
+      return nodeName === 'title';
+    }, children);
+    if (titleChild) {
+      var title = titleChild.children[0];
+      if (title !== document.title) {
+        document.title = title;
+      }
+    }
+    return null;
+  } else {
+    return preact.h(
+      'div',
+      null,
+      children
+    );
+  }
 };
 
-// `getState` returns the current state. `Object.freeze` is used, to return
-// an immutable copy of the state object. Well, almost. It's only a shallow
-// immutable copy. You should avoid mutations on nested objects and arrays,
-// as they will sync back to the global state. For now, I figure PRs can
-// catch this misuse. But, if it proves a problem, then a deep `Object.freeze`
-// could be implemented.
-var getState = function getState() {
-  return Object.freeze(_extends({}, state));
-};
+var Helmet = function (_React$Component) {
+  inherits(Helmet, _React$Component);
 
-// Just like React `setState`. If `DEBUG` is true, will log to console. And, of
-// course, it will iterate the subscribed components and call `component.setState`
-// on each of them.
-var setState = function setState(updatedState) {
-  Object.assign(state, updatedState);
-  DEBUG && console.log('setState', updatedState, state);
-  components.forEach(function (c) {
-    return c.setState(state);
-  });
-};
+  function Helmet(props) {
+    classCallCheck(this, Helmet);
 
-// And lastly, a helper to change state on click events. Often used on `<button />`'s.
+    var _this = possibleConstructorReturn(this, (Helmet.__proto__ || Object.getPrototypeOf(Helmet)).call(this, props));
 
-// `<button onClick={clickState(state => ({clicks: state.clicks + 1}))}>Click Me</button>`
-var clickState = function clickState(state) {
-  return function (ev) {
-    ev.preventDefault();
-    setState(typeof state === 'function' ? state(getState(), ev) : state);
-  };
-};
+    refs.push(_this);
+    return _this;
+  }
 
-function n$1(n,t){for(var r in t)n[r]=t[r];return n}function createStore(t){var r=[];function u(n){for(var t=[],u=0;u<r.length;u++)r[u]===n?n=null:t.push(r[u]);r=t;}function e(u,e,f){t=e?u:n$1(n$1({},t),u);for(var i=r,o=0;o<i.length;o++)i[o](t,f);}return t=t||{},{action:function(n){function r(t){e(t,!1,n);}return function(){for(var u=arguments,e=[t],f=0;f<arguments.length;f++)e.push(u[f]);var i=n.apply(this,e);if(null!=i)return i.then?i.then(r):r(i)}},setState:e,subscribe:function(n){return r.push(n),function(){u(n);}},unsubscribe:u,getState:function(){return t}}}
+  createClass(Helmet, [{
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      var _this2 = this;
+
+      var newRefs = W.reject(function (c) {
+        return c === _this2;
+      }, refs);
+      refs = newRefs;
+      document.title = this._getTitle({});
+    }
+  }, {
+    key: '_getTitle',
+    value: function _getTitle(props) {
+      var _rewind$props = _extends({}, rewind(), props),
+          title = _rewind$props.title,
+          _rewind$props$titleTe = _rewind$props.titleTemplate,
+          titleTemplate = _rewind$props$titleTe === undefined ? '%s' : _rewind$props$titleTe,
+          defaultTitle = _rewind$props.defaultTitle;
+
+      return titleTemplate.replace('%s', title || defaultTitle || '');
+    }
+  }, {
+    key: '_getMeta',
+    value: function _getMeta(_ref3) {
+      var _ref3$meta = _ref3.meta,
+          meta = _ref3$meta === undefined ? [] : _ref3$meta;
+
+      return meta.map(function (_ref4) {
+        var name = _ref4.name,
+            property = _ref4.property,
+            content = _ref4.content;
+        return preact.h('meta', {
+          name: name,
+          property: property,
+          content: content,
+          'data-helmet': true
+        });
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render$$1() {
+      return preact.h(
+        Wrapper,
+        null,
+        preact.h(
+          'title',
+          { 'data-helmet': 'true' },
+          this._getTitle(this.props)
+        ),
+        this._getMeta(this.props)
+      );
+    }
+  }]);
+  return Helmet;
+}(preact.Component);
+
+function n$2(n,t){for(var r in t)n[r]=t[r];return n}function createStore(t){var r=[];function u(n){for(var t=[],u=0;u<r.length;u++)r[u]===n?n=null:t.push(r[u]);r=t;}function e(u,e,f){t=e?u:n$2(n$2({},t),u);for(var i=r,o=0;o<i.length;o++)i[o](t,f);}return t=t||{},{action:function(n){function r(t){e(t,!1,n);}return function(){for(var u=arguments,e=[t],f=0;f<arguments.length;f++)e.push(u[f]);var i=n.apply(this,e);if(null!=i)return i.then?i.then(r):r(i)}},setState:e,subscribe:function(n){return r.push(n),function(){u(n);}},unsubscribe:u,getState:function(){return t}}}
 
 var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -1183,7 +1171,11 @@ function createCommonjsModule(fn, module) {
 	return module = { exports: {} }, fn(module, module.exports), module.exports;
 }
 
-var require$$0 = ( preact$1 && preact ) || preact$1;
+function getCjsExportFromNamespace (n) {
+	return n && n.default || n;
+}
+
+var require$$0 = getCjsExportFromNamespace(preact$1);
 
 var preact$2 = createCommonjsModule(function (module, exports) {
 var t=require$$0;function n(t,n){for(var r in n)t[r]=n[r];return t}function r(t){this.getChildContext=function(){return {store:t.store}};}r.prototype.render=function(t){return t.children[0]},exports.connect=function(r,e){var o;return "function"!=typeof r&&("string"==typeof(o=r||[])&&(o=o.split(/\s*,\s*/)),r=function(t){for(var n={},r=0;r<o.length;r++)n[o[r]]=t[o[r]];return n}),function(o){function i(i,u){var c=this,f=u.store,s=r(f?f.getState():{},i),a=e?function(t,n){"function"==typeof t&&(t=t(n));var r={};for(var e in t)r[e]=n.action(t[e]);return r}(e,f):{store:f},p=function(){var t=r(f?f.getState():{},c.props);for(var n in t)if(t[n]!==s[n])return s=t,c.setState(null);for(var e in s)if(!(e in t))return s=t,c.setState(null)};this.componentDidMount=function(){f.subscribe(p);},this.componentWillUnmount=function(){f.unsubscribe(p);},this.render=function(r){return t.h(o,n(n(n({},a),r),s))};}return (i.prototype=new t.Component).constructor=i}},exports.Provider=r;
@@ -1191,6 +1183,71 @@ var t=require$$0;function n(t,n){for(var r in n)t[r]=n[r];return t}function r(t)
 });
 var preact_1 = preact$2.connect;
 var preact_2 = preact$2.Provider;
+
+var ref = void 0;
+
+function showNotification(notification) {
+  ref && ref.setState(_extends({}, ref.state, notification, { open: true }));
+}
+
+/**
+ * Display a notification when `showNotification` is called.
+ *
+ * @TODO: Update to use store/global state.
+ */
+
+var Notification = function (_React$Component) {
+  inherits(Notification, _React$Component);
+
+  function Notification(props) {
+    classCallCheck(this, Notification);
+
+    var _this = possibleConstructorReturn(this, (Notification.__proto__ || Object.getPrototypeOf(Notification)).call(this, props));
+
+    _this.state = { open: false, message: null, type: 'error', length: 3000 };
+    return _this;
+  }
+
+  createClass(Notification, [{
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      var _this2 = this;
+
+      if (this.state.message) {
+        this.timeout && clearTimeout(this.timeout);
+        this.timeout = setTimeout(function () {
+          return _this2.timeout && _this2.setState({ open: false });
+        }, this.state.length);
+      }
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      this.timeout && clearTimeout(this.timeout);
+    }
+  }, {
+    key: 'render',
+    value: function render$$1(_, _ref) {
+      var open = _ref.open,
+          message = _ref.message,
+          type = _ref.type;
+
+      if (!ref) ref = this;
+      if (!message) return null;
+      return preact.h(
+        'div',
+        { className: 'notification-bar ' + type + ' ' + (open ? 'open' : 'close') },
+        preact.h(
+          'span',
+          { className: 'text' },
+          message
+        ),
+        preact.h('div', { className: 'close-icon', onClick: this.onClose })
+      );
+    }
+  }]);
+  return Notification;
+}(preact.Component);
 
 var isArray = Array.isArray;
 var keyList = Object.keys;
@@ -1248,88 +1305,122 @@ function equal(a, b) {
   return false;
 }
 
-// **WithState** let's you create Component's that rerender when a specified
-// part of the global state changes.
+var WithState = function (_React$Component) {
+  inherits(WithState, _React$Component);
 
-// You could do this manually, as described in [store.js](/store.html), but
-// this abstracts away the performance logic of `shouldComponentUpdate`.
-
-// That said, this is still not the most-performant implementation, and any
-// Component that experiences performance issues may need more work done
-// within `shouldComponentUpdate` to be accetable.
-
-// `WithState` can be used as a HoC, or extended as a Class.
-
-// To use as a HoC:
-
-// ```
-// <WithState mapper={({clicks}) => ({clicks})}>
-//  {({clicks}) =>
-//     <p>You have clicked {clicks || 0} times.</p>
-//   }
-// </WithState>
-// ```
-
-// And to extend into your own class:
-
-// ```
-// class ClicksCount extends WithState {
-//   render () {
-//     const {clicks} = this.state._mappedState
-//     return (
-//       <p>You have clicked {clicks || 0} times.</p>
-//     )
-//   }
-// }
-// ClicksCount.defaultProps = {mapper: ({clicks}) => ({clicks})}
-// ```
-
-var WithState = function (_Preact$Component) {
-  inherits(WithState, _Preact$Component);
-
-  function WithState(props) {
+  function WithState(props, _ref) {
+    var store = _ref.store;
     classCallCheck(this, WithState);
 
     var _this = possibleConstructorReturn(this, (WithState.__proto__ || Object.getPrototypeOf(WithState)).call(this, props));
 
-    var state = subscribe(_this);
-    _this.state = _extends({}, state, { _mappedState: props.mapper(state, props) });
+    _this._store = store;
+    _this._update = _this._update.bind(_this);
+    _this._unsubscribe = store.subscribe(_this._update);
+    _this.state = _extends({}, _this.state, { _mappedState: props.mapper(store.getState(), props) });
     return _this;
   }
 
   createClass(WithState, [{
+    key: '_update',
+    value: function _update(state) {
+      console.log('_update', this.props);
+      this.setState({ _mappedState: this.props.mapper(this._store.getState(), this.props) });
+    }
+  }, {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
-      unsubscribe(this);
+      this._unsubscribe();
     }
   }, {
     key: 'shouldComponentUpdate',
     value: function shouldComponentUpdate(nextProps, nextState) {
-      return !equal(nextProps.mapper(nextState, nextProps), this.state._mappedState);
+      var mappedStateChanged = !equal(nextProps.mapper(nextState, nextProps), this.state._mappedState);
+      if (mappedStateChanged) {
+        return true;
+      } else if (!equal(nextState, this.state)) {
+        return true;
+      }
+      return false;
     }
   }, {
     key: 'componentDidUpdate',
     value: function componentDidUpdate() {
-      var _mappedState = this.props.mapper(getState(), this.props);
+      var _mappedState = this.props.mapper(this._store.getState(), this.props);
       if (!equal(_mappedState, this.state._mappedState)) {
         this.setState({ _mappedState: _mappedState });
       }
     }
   }, {
     key: 'render',
-    value: function render$$1(_ref, _ref2) {
-      var children = _ref.children;
-      var _mappedState = _ref2._mappedState;
+    value: function render$$1() {
+      var _mappedState = this.state._mappedState;
 
-      var child = children[0];
+      var child = this.children ? this.children[0] : this.props.children[0];
       if (!child || typeof child !== 'function') {
         throw new Error('WithState requires a function as its only child');
       }
-      return child(_mappedState);
+      return child(_extends({}, _mappedState, { store: this._store }));
     }
   }]);
   return WithState;
 }(preact.Component);
+
+var isArray$1 = Array.isArray;
+var keyList$1 = Object.keys;
+var hasProp$1 = Object.prototype.hasOwnProperty;
+
+function equal$1(a, b) {
+  if (a === b) return true;
+
+  if (a && b && (typeof a === 'undefined' ? 'undefined' : _typeof(a)) === 'object' && (typeof b === 'undefined' ? 'undefined' : _typeof(b)) === 'object') {
+    var arrA = isArray$1(a);
+    var arrB = isArray$1(b);
+
+    var i = void 0;
+    var length = void 0;
+    var key = void 0;
+
+    if (arrA && arrB) {
+      length = a.length;
+      if (length !== b.length) return false;
+      for (i = length; i-- !== 0;) {
+        if (!equal$1(a[i], b[i])) return false;
+      }
+      return true;
+    }
+
+    if (arrA !== arrB) return false;
+
+    var dateA = a instanceof Date;
+    var dateB = b instanceof Date;
+    if (dateA !== dateB) return false;
+    if (dateA && dateB) return a.getTime() === b.getTime();
+
+    var regexpA = a instanceof RegExp;
+    var regexpB = b instanceof RegExp;
+    if (regexpA !== regexpB) return false;
+    if (regexpA && regexpB) return a.toString() === b.toString();
+
+    var keys = keyList$1(a);
+    length = keys.length;
+
+    if (length !== keyList$1(b).length) return false;
+
+    for (i = length; i-- !== 0;) {
+      if (!hasProp$1.call(b, keys[i])) return false;
+    }
+
+    for (i = length; i-- !== 0;) {
+      key = keys[i];
+      if (!equal$1(a[key], b[key])) return false;
+    }
+
+    return true;
+  }
+
+  return false;
+}
 
 var has = Object.prototype.hasOwnProperty;
 
@@ -1403,10 +1494,18 @@ var qs = {
   parse: parse
 };
 
+var storeRef = void 0;
+
 var segmentize = function segmentize(url) {
   return url.replace(/(^\/+|\/+$)/g, '').split('/');
 };
 
+function updateQuery(queries) {
+  var existingParams = qs.parse(window.location.search);
+  return window.location.pathname + ('?' + qs.stringify(_extends({}, existingParams, queries)));
+}
+
+// route matching logic, taken from preact-router
 var exec = function exec(url, route) {
   var reg = /(?:\?([^#]*))?(#.*)?$/;
   var c = url.match(reg);
@@ -1447,20 +1546,6 @@ var exec = function exec(url, route) {
   return matches;
 };
 
-if (typeof window !== 'undefined') {
-  document.addEventListener('click', function (ev) {
-    if (ev.target.nodeName === 'A') {
-      if (ev.metaKey) return;
-      ev.preventDefault();
-      ev.stopImmediatePropagation();
-      window.scrollTo(0, 0);
-      var url = ev.target.getAttribute('href');
-      window.history['pushState'](null, null, url);
-      setState({ currentPath: url });
-    }
-  });
-}
-
 var Router = (function (_ref) {
   var routes = _ref.routes;
   return preact.h(
@@ -1470,8 +1555,10 @@ var Router = (function (_ref) {
         return { currentPath: currentPath };
       } },
     function (_ref3) {
-      var currentPath = _ref3.currentPath;
+      var currentPath = _ref3.currentPath,
+          store = _ref3.store;
 
+      if (!storeRef) storeRef = store;
       for (var route in routes) {
         if (routes[route].hasOwnProperty('routes')) {
           var shouldRender = Object.values(routes[route].routes).some(function (_ref4) {
@@ -1490,8 +1577,8 @@ var Router = (function (_ref) {
               path: routes[route].path,
               args: routeArgs
             };
-            if (!equal(newRoute, getState().route)) {
-              setState({ route: newRoute });
+            if (!equal$1(newRoute, store.getState().currentRoute)) {
+              store.setState({ currentRoute: newRoute });
             }
             var Component$$1 = routes[route].component;
             return preact.h(Component$$1, routeArgs);
@@ -1502,9 +1589,22 @@ var Router = (function (_ref) {
   );
 });
 
-var e$1=function(e){return {}.toString.call(e).toLowerCase().slice(8,-1)};function r$1(r,t){for(var o,n,a=0,i=(r=Array.prototype.slice.call(r)).length;a<i;++a)if(o=e$1(r[a]),"-any"!==(n=t[a]))if("array"===e$1(n)){for(var f=!1,p=0,l=n.length;p<l;++p)f=f||o===n[p];if(!f)throw new TypeError("Expected one of ["+n.join(", ")+"] given '"+o+"' for argument at index "+a)}else if(o!==n)throw new TypeError("Expected '"+n+"' given '"+o+"' for argument at index "+a)}r$1.prototype.toType=e$1;
-
-function t$1(r,t){return t=[r].concat(Array.prototype.slice.call(t)),r.bind.apply(r,t)}var n$2=r$1.prototype.toType;function e$2(o,a,u){return arguments.length<2?t$1(e$2,arguments):(r$1(arguments,["number","number",["array","string"]]),"array"===n$2(u)?Array.prototype.slice.call(u,o,a):String.prototype.slice.call(u,o,a))}function o$1(t){return r$1(arguments,[["object","array"]]),JSON.parse(JSON.stringify(t))}var a$1=r$1.prototype.toType;function u$1(n,e){return arguments.length<2?t$1(u$1,arguments):(r$1(arguments,["function",["array","object"]]),"array"===a$1(e)?Array.prototype.filter.call(e,n):function(r,t){for(var n=Object.keys(t),e=n.length,o={},a=0;a<e;a++)r(t[n[a]])&&(o[n[a]]=t[n[a]]);return o}(n,e))}function i$1(n,e){if(arguments.length<2)return t$1(i$1,arguments);r$1(arguments,["array","object"]);for(var o={},a=0;a<n.length;a++){var u=n[a];o[u]=e[u];}return o}var c$1=r$1.prototype.toType;function y(n,e){return arguments.length<2?t$1(y,arguments):(r$1(arguments,[["string","array"],"object"]),"string"===c$1(n)&&(n=[n]),i$1(u$1(function(r){return -1===n.indexOf(r)},Object.keys(e)),e))}function p$1(n,e,o){if(arguments.length<2)return t$1(p$1,arguments);r$1(arguments,["function","array","-any"]);for(var a,u=e.length,i=0;i<u;i++)if(n(a=e[i],i,e))return o?i:a}function l$1(n,e,o){return arguments.length<3?t$1(l$1,arguments):(r$1(arguments,["function","-any","array"]),Array.prototype.reduce.call(o,n,e))}var f$1=r$1.prototype.toType;var g="[^\\.\\s@:][^\\s@:]*(?!\\.)@[^\\.\\s@]+(?:\\.[^\\.\\s@]+)*";var s$1=r$1.prototype.toType;var h$1=r$1.prototype.toType;var v=r$1.prototype.toType;function d(){for(var r=arguments,t=arguments.length,n={},e=0;e<t;e++){if("object"!==v(r[e]))throw new TypeError("All arguments must be objects!");for(var o=r[e],a=Object.keys(o),u=a.length,i=0;i<u;i++){var c=a[i],y=v(o[c]);n[c]="object"===y?d(o[c]):"array"===y?o[c].slice(0):o[c];}}return n}function b(n,e){if(arguments.length<2)return t$1(b,arguments);r$1(arguments,[["array","string"],["array","object","window"]]),"string"===r$1.prototype.toType(n)&&(n=n.split("."));for(var o=e,a=0;a<n.length;a++){if(null==o)return;o=o[n[a]];}return o}function j(n,e,a){if(arguments.length<3)return t$1(j,arguments);r$1(arguments,[["array","string"],"-any",["object","array"]]),"string"===r$1.prototype.toType(n)&&(n=n.split("."));var u="object"===r$1.prototype.toType(n)?d({},a):o$1(a);return l$1(function(r,t,o){return r[t]=r[t]||{},n.length===o+1&&(r[t]=e),r[t]},u,n),u}var m=r$1.prototype.toType;var w=r$1.prototype.toType;var T=r$1.prototype.toType;var O=r$1.prototype.toType;var A=r$1.prototype.toType;var W = {assoc:j,check:r$1,chunk:function n(o,a){if(arguments.length<2)return t$1(n,arguments);r$1(arguments,["number",["array","string"]]);for(var u=[],i=a.length,c=0;c<i;)u.push(e$2(c,c+=o,a));return u},deepClone:o$1,diffObj:function(t,n){r$1(arguments,["object","object"]);for(var e={},o=Object.keys(t),a=0;a<o.length;a++){var u=o[a];t[u]!==n[u]&&(e[u]=n[u]);}for(var i=Object.keys(n),c=0;c<i.length;c++)t[i[c]]||(e[i[c]]=n[i[c]]);return e},dissoc:function r(n,e){return arguments.length<2?t$1(r,arguments):y([n],e)},filter:u$1,find:p$1,findIndex:function r(n,e){return arguments.length<2?t$1(r,arguments):p$1(n,e,!0)},fromPairs:function(t){r$1(arguments,["array"]);for(var n={},e=0;e<t.length;e++)n[t[e][0]]=t[e][1];return n},groupBy:function n(e,o){return arguments.length<2?t$1(n,arguments):(r$1(arguments,["string","array"]),l$1(function(r,t){return r[t[e]]||(r[t[e]]=[]),r[t[e]].push(t),r},{},o))},groupPropBy:function n(e,o,a){return arguments.length<3?t$1(n,arguments):(r$1(arguments,["string","string","array"]),l$1(function(r,t){return r[t[o]]||(r[t[o]]=[]),r[t[o]].push(t[e]),r},{},a))},guid:function(){var r=function(){return Math.floor(65536*(1+Math.random())).toString(16).substring(1)};return r()+r()+"-"+r()+"-"+r()+"-"+r()+"-"+r()+r()+r()},includes:function n(e,o){return arguments.length<2?t$1(n,arguments):(r$1(arguments,["-any",["array","string"]]),"array"===f$1(o)?Array.prototype.includes.call(o,e):String.prototype.includes.call(o,e))},isEmail:function(r){return new RegExp("^"+g+"$").test(r)},join:function n(e,o){return 0===arguments.length?n:"array"===s$1(e)&&void 0===o?Array.prototype.join.call(e):"string"===s$1(e)&&void 0===o?t$1(n,arguments):(r$1(arguments,["string","array"]),Array.prototype.join.call(o,e))},last:function(t){return r$1([arguments[0]],["array"]),t[t.length?t.length-1:0]},map:function n(e,o){return arguments.length<2?t$1(n,arguments):(r$1(arguments,["function",["array","object"]]),"array"===h$1(o)?1===e.length?function(r,t){for(var n=t.length,e=[],o=0;o<n;o++)e[o]=r(t[o]);return e}(e,o):Array.prototype.map.call(o,e):function(r,t){for(var n=Object.keys(t),e=n.length,o={},a=0;a<e;a++){var u=n[a];o[u]=r(u,t[u]);}return o}(e,o))},merge:d,partial:t$1,path:b,pathEq:function r(n,e,o){return arguments.length<3?t$1(r,arguments):b(n,o)===e},pathOr:function r(n,e,o){return arguments.length<3?t$1(r,arguments):b(e,o)||n},pathSet:j,pick:i$1,pipe:function(){if(arguments&&arguments.length){var r=arguments,t=r.length;return function(n){for(var e=0;e<t;e++)r[e]&&(n=r[e](n));return n}}},range:function(t,n){r$1(arguments,["number","number"]);for(var e=[],o=t;o<n;)e.push(o),o+=1;return e},reduce:l$1,reject:function n(e,o){return arguments.length<2?t$1(n,arguments):(r$1(arguments,["function",["array","object"]]),"array"===m(o)?function(r,t){for(var n=t.length,e=[],o=0;o<n;o++)r(t[o])||e.push(t[o]);return e}(e,o):function(r,t){for(var n=Object.keys(t),e=n.length,o={},a=0;a<e;a++)r(t[n[a]])||(o[n[a]]=t[n[a]]);return o}(e,o))},relativeTime:function(r,t){"string"===w(r)&&(r=new Date(r));var n=(t=t||Date.now())-r;return n<=0?"just now":n<6e4?Math.round(n/1e3)+" seconds ago":n<36e5?Math.round(n/6e4)+" minutes ago":n<864e5?Math.round(n/36e5)+" hours ago":n<2592e6?Math.round(n/864e5)+" days ago":n<31536e6?Math.round(n/2592e6)+" months ago":Math.round(n/31536e6)+" years ago"},safeWindow:function(r){for(var t=[],n=arguments.length-1;n-- >0;)t[n]=arguments[n+1];if("undefined"!=typeof window){var e=b(r,window);return "function"===T(e)?e.call.apply(e,[r.indexOf("localStorage")>-1?window.localStorage:window].concat(t)):e}},slice:e$2,slugify:function(r){return r.toLowerCase().replace(/[^a-zA-Z0-9 ]/g,"").replace(/\s/g,"-").replace(" ","-")},some:function n(e,o){return arguments.length<2?t$1(n,arguments):(r$1(arguments,["function",["array","object"]]),"array"===O(o)?Array.prototype.some.call(o,e):function(r,t){for(var n=Object.keys(t),e=n.length,o=0;o<e;o++)if(r(t[n[o]]))return !0;return !1}(e,o))},sort:function n(e,o){return 0===arguments.length?n:"array"===A(e)&&void 0===o?Array.prototype.sort.call(e):"function"===A(e)&&void 0===o?t$1(n,arguments):(r$1(arguments,["function","array"]),Array.prototype.sort.call(o,e))},toPairs:function(t){r$1(arguments,["object"]);for(var n=Object.keys(t),e=n.length,o=[],a=0;a<e;a++)o.push([n[a],t[n[a]]]);return o},toType:r$1.prototype.toType,uniq:function(t){r$1(arguments,["array"]);for(var n=[],e=0;e<t.length;e++)-1===n.indexOf(t[e])&&n.push(t[e]);return n},where:function n(e,o,a){return arguments.length<3?t$1(n,arguments):(r$1(Array.prototype.slice.call(arguments,0,3),["string","-any","object"]),a[e]===o)},without:y};
+if (typeof window !== 'undefined') {
+  document.addEventListener('click', function (ev) {
+    if (ev.target.nodeName === 'A' && storeRef) {
+      if (ev.metaKey) return;
+      ev.preventDefault();
+      ev.stopImmediatePropagation();
+      window.scrollTo(0, 0);
+      var url = ev.target.getAttribute('href');
+      var currentPath = storeRef.getState().currentPath;
+      if (currentPath !== url) {
+        window.history['pushState'](null, null, url);
+        storeRef.setState({ currentPath: url });
+      }
+    }
+  });
+}
 
 var preactPortal = createCommonjsModule(function (module, exports) {
 (function (global, factory) {
@@ -1630,118 +1730,249 @@ var isOverlay = function isOverlay(el) {
   return el.classList && el.classList.contains('modal-container');
 };
 
-var Modal = function (_Preact$Component) {
-  inherits(Modal, _Preact$Component);
-
-  function Modal(props) {
-    classCallCheck(this, Modal);
-
-    var _this = possibleConstructorReturn(this, (Modal.__proto__ || Object.getPrototypeOf(Modal)).call(this, props));
-
-    _this.onContainerClick = _this.onContainerClick.bind(_this);
-    _this.closeModal = _this.closeModal.bind(_this);
-    return _this;
-  }
-
-  createClass(Modal, [{
-    key: 'onContainerClick',
-    value: function onContainerClick(ev) {
-      if (isOverlay(ev.target)) {
-        this.props.onClose ? this.props.onClose() : setState({ modal: null });
+var actions = function actions(store) {
+  return {
+    onContainerClick: function onContainerClick(state, event) {
+      if (isOverlay(event.target)) {
+        return { modal: null };
       }
+    },
+    closeModal: function closeModal(state) {
+      return { modal: null };
     }
-  }, {
-    key: 'closeModal',
-    value: function closeModal() {
-      this.props.onClose ? this.props.onClose() : setState({ modal: null });
-    }
-  }, {
-    key: 'render',
-    value: function render$$1(_ref) {
-      var _ref$className = _ref.className,
-          className = _ref$className === undefined ? '' : _ref$className,
-          children = _ref.children;
+  };
+};
 
-      return preact.h(
-        preactPortal,
-        { into: 'body' },
+var Modal = preact_1('', actions)(function (_ref) {
+  var onContainerClick = _ref.onContainerClick,
+      closeModal = _ref.closeModal,
+      _ref$className = _ref.className,
+      className = _ref$className === undefined ? '' : _ref$className,
+      children = _ref.children;
+  return preact.h(
+    preactPortal,
+    { into: 'body' },
+    preact.h(
+      'div',
+      {
+        'class': 'modal-container ' + className,
+        onClick: onContainerClick
+      },
+      preact.h(
+        'div',
+        { 'class': 'modal-content' },
         preact.h(
           'div',
-          {
-            'class': 'modal-container ' + className,
-            onClick: this.onContainerClick
-          },
-          preact.h(
-            'div',
-            { 'class': 'modal-content' },
-            preact.h(
-              'div',
-              { className: 'close', onClick: this.closeModal },
-              'close'
-            ),
-            children
-          )
-        )
-      );
+          { className: 'close', onClick: closeModal },
+          'close'
+        ),
+        children
+      )
+    )
+  );
+});
+
+/**
+* Component that should wrap any modal instances.
+*
+*   <Modals>
+*     <SomeModal />
+*     <AnotherModal />
+*   </Modals>
+*/
+var prevState = {};
+var Modals = preact_1('currentRoute, modal', actions)(function (_ref2) {
+  var currentRoute = _ref2.currentRoute,
+      modal = _ref2.modal,
+      closeModal = _ref2.closeModal,
+      children = _ref2.children;
+
+  var prevModal = prevState.modal;
+  var prevRouteName = W.path('currentRoute.name', prevState);
+
+  prevState = { currentRoute: currentRoute, modal: modal };
+
+  if (!modal) {
+    if (prevModal != null) {
+      document.body.classList.remove('modal-open');
     }
-  }]);
-  return Modal;
-}(preact.Component);
-
-
-var Modals = function (_WithState) {
-  inherits(Modals, _WithState);
-
-  function Modals() {
-    classCallCheck(this, Modals);
-    return possibleConstructorReturn(this, (Modals.__proto__ || Object.getPrototypeOf(Modals)).apply(this, arguments));
+    return;
+  } else if (modal !== prevModal) {
+    document.body.classList.add('modal-open');
   }
 
-  createClass(Modals, [{
-    key: 'componentDidUpdate',
-    value: function componentDidUpdate(_, prevState) {
-      get(Modals.prototype.__proto__ || Object.getPrototypeOf(Modals.prototype), 'componentDidUpdate', this).call(this);
-      var modal = this.state._mappedState.modal;
-
-      var prevModal = W.path('_mappedState.modal', prevState);
-      if (!modal) {
-        if (prevModal != null) {
-          document.body.classList.remove('modal-open');
-        }
-        return;
-      } else if (modal !== prevModal) {
-        document.body.classList.add('modal-open');
-      }
-
-      var route = W.path('_mappedState.route.name', this.state);
-      var prevRoute = W.path('_mappedState.route.name', prevState);
-      if (route !== prevRoute) {
-        setState({ modal: null });
-      }
-    }
-  }, {
-    key: 'render',
-    value: function render$$1(_ref2, _ref3) {
-      var children = _ref2.children;
-      var _mappedState = _ref3._mappedState;
-      var modal = _mappedState.modal;
-
-      var child = W.find(function (c) {
-        return W.pathEq('nodeName.name', modal, c);
-      }, children);
-      return child;
-    }
-  }]);
-  return Modals;
-}(WithState);
-
-Modals.defaultProps = {
-  mapper: function mapper(_ref4) {
-    var modal = _ref4.modal,
-        route = _ref4.route;
-    return { modal: modal, route: route };
+  if (W.path('name', currentRoute || {}) !== prevRouteName) {
+    closeModal();
   }
+
+  var child = W.find(function (c) {
+    return W.pathEq('nodeName.name', modal, c);
+  }, children);
+  return child;
+});
+
+var isArray$2 = Array.isArray;
+var keyList$2 = Object.keys;
+var hasProp$2 = Object.prototype.hasOwnProperty;
+
+function equal$2(a, b) {
+  if (a === b) return true;
+
+  if (a && b && (typeof a === 'undefined' ? 'undefined' : _typeof(a)) === 'object' && (typeof b === 'undefined' ? 'undefined' : _typeof(b)) === 'object') {
+    var arrA = isArray$2(a);
+    var arrB = isArray$2(b);
+
+    var i = void 0;
+    var length = void 0;
+    var key = void 0;
+
+    if (arrA && arrB) {
+      length = a.length;
+      if (length !== b.length) return false;
+      for (i = length; i-- !== 0;) {
+        if (!equal$2(a[i], b[i])) return false;
+      }
+      return true;
+    }
+
+    if (arrA !== arrB) return false;
+
+    var dateA = a instanceof Date;
+    var dateB = b instanceof Date;
+    if (dateA !== dateB) return false;
+    if (dateA && dateB) return a.getTime() === b.getTime();
+
+    var regexpA = a instanceof RegExp;
+    var regexpB = b instanceof RegExp;
+    if (regexpA !== regexpB) return false;
+    if (regexpA && regexpB) return a.toString() === b.toString();
+
+    var keys = keyList$2(a);
+    length = keys.length;
+
+    if (length !== keyList$2(b).length) return false;
+
+    for (i = length; i-- !== 0;) {
+      if (!hasProp$2.call(b, keys[i])) return false;
+    }
+
+    for (i = length; i-- !== 0;) {
+      key = keys[i];
+      if (!equal$2(a[key], b[key])) return false;
+    }
+
+    return true;
+  }
+
+  return false;
+}
+
+var storeRef$1 = void 0;
+
+var segmentize$1 = function segmentize(url) {
+  return url.replace(/(^\/+|\/+$)/g, '').split('/');
 };
+
+// route matching logic, taken from preact-router
+var exec$1 = function exec(url, route) {
+  var reg = /(?:\?([^#]*))?(#.*)?$/;
+  var c = url.match(reg);
+  var matches = {};
+  var ret = void 0;
+  if (c && c[1]) {
+    var p = c[1].split('&');
+    for (var i = 0; i < p.length; i++) {
+      var r = p[i].split('=');
+      matches[decodeURIComponent(r[0])] = decodeURIComponent(r.slice(1).join('='));
+    }
+  }
+  url = segmentize$1(url.replace(reg, ''));
+  route = segmentize$1(route || '');
+  var max = Math.max(url.length, route.length);
+  for (var _i = 0; _i < max; _i++) {
+    if (route[_i] && route[_i].charAt(0) === ':') {
+      var param = route[_i].replace(/(^:|[+*?]+$)/g, '');
+      var flags = (route[_i].match(/[+*?]+$/) || {})[0] || '';
+      var plus = ~flags.indexOf('+');
+      var star = ~flags.indexOf('*');
+      var val = url[_i] || '';
+      if (!val && !star && (flags.indexOf('?') < 0 || plus)) {
+        ret = false;
+        break;
+      }
+      matches[param] = decodeURIComponent(val);
+      if (plus || star) {
+        matches[param] = url.slice(_i).map(decodeURIComponent).join('/');
+        break;
+      }
+    } else if (route[_i] !== url[_i]) {
+      ret = false;
+      break;
+    }
+  }
+  if (ret === false) return false;
+  return matches;
+};
+
+var Router$1 = (function (_ref) {
+  var routes = _ref.routes;
+  return preact.h(
+    WithState,
+    { mapper: function mapper(_ref2) {
+        var currentPath = _ref2.currentPath;
+        return { currentPath: currentPath };
+      } },
+    function (_ref3) {
+      var currentPath = _ref3.currentPath,
+          store = _ref3.store;
+
+      if (!storeRef$1) storeRef$1 = store;
+      for (var route in routes) {
+        if (routes[route].hasOwnProperty('routes')) {
+          var shouldRender = Object.values(routes[route].routes).some(function (_ref4) {
+            var path = _ref4.path;
+            return path && exec$1(currentPath, path);
+          });
+          if (shouldRender) {
+            var App = routes[route].component;
+            return preact.h(App, null);
+          }
+        } else {
+          var routeArgs = exec$1(currentPath, routes[route].path);
+          if (routeArgs) {
+            var newRoute = {
+              name: route,
+              path: routes[route].path,
+              args: routeArgs
+            };
+            if (!equal$2(newRoute, store.getState().currentRoute)) {
+              store.setState({ currentRoute: newRoute });
+            }
+            var Component$$1 = routes[route].component;
+            return preact.h(Component$$1, routeArgs);
+          }
+        }
+      }
+    }
+  );
+});
+
+if (typeof window !== 'undefined') {
+  document.addEventListener('click', function (ev) {
+    if (ev.target.nodeName === 'A' && storeRef$1) {
+      if (ev.metaKey) return;
+      ev.preventDefault();
+      ev.stopImmediatePropagation();
+      window.scrollTo(0, 0);
+      var url = ev.target.getAttribute('href');
+      var currentPath = storeRef$1.getState().currentPath;
+      if (currentPath !== url) {
+        window.history['pushState'](null, null, url);
+        storeRef$1.setState({ currentPath: url });
+      }
+    }
+  });
+}
 
 function ExampleModal() {
   return preact.h(
@@ -1754,6 +1985,176 @@ function ExampleModal() {
     )
   );
 }
+
+var Level = function Level(_ref) {
+  var children = _ref.children,
+      props = objectWithoutProperties(_ref, ['children']);
+  return preact.h(
+    'div',
+    props,
+    preact.h(
+      'div',
+      { className: 'level' },
+      children
+    )
+  );
+};
+
+var Carousel = function (_React$Component) {
+  inherits(Carousel, _React$Component);
+
+  function Carousel(props) {
+    classCallCheck(this, Carousel);
+
+    var _this = possibleConstructorReturn(this, (Carousel.__proto__ || Object.getPrototypeOf(Carousel)).call(this, props));
+
+    _this.state = { active: _this.props.active || 0, width: 0 };
+    _this.next = _this.next.bind(_this);
+    _this.prev = _this.prev.bind(_this);
+    _this.setActive = _this.setActive.bind(_this);
+    _this.getRef = _this.getRef.bind(_this);
+    _this.getStyle = _this.getStyle.bind(_this);
+    _this.getSlidesStyle = _this.getSlidesStyle.bind(_this);
+    return _this;
+  }
+
+  createClass(Carousel, [{
+    key: 'next',
+    value: function next(ev) {
+      ev.preventDefault();
+      var active = this.state.active + this.state.numFit;
+      var n = active >= this.props.children.length - 1 ? 0 : this.state.active + 1;
+      this.setState({ active: n });
+    }
+  }, {
+    key: 'prev',
+    value: function prev(ev) {
+      ev.preventDefault();
+      var n = this.state.active <= 0 ? this.props.children.length - (this.state.numFit + 1) : this.state.active - 1;
+      this.setState({ active: n });
+    }
+  }, {
+    key: 'setActive',
+    value: function setActive(active) {
+      var _this2 = this;
+
+      return function (ev) {
+        ev.preventDefault();
+        _this2.setState({ active: active });
+      };
+    }
+  }, {
+    key: 'getRef',
+    value: function getRef(ref) {
+      var _this3 = this;
+
+      if (!ref || this.ref) return;
+      this.ref = ref;
+      window.requestAnimationFrame(function () {
+        var width = _this3.ref.offsetWidth;
+        var parent = _this3.ref.parentNode;
+        var parentWidth = parent.offsetWidth;
+        var numFit = parent != null ? Math.max(0, Math.floor(parent.offsetWidth / width) - 1) : 0;
+        _this3.setState({ width: width, parentWidth: parentWidth, numFit: numFit });
+      });
+    }
+  }, {
+    key: 'getStyle',
+    value: function getStyle(idx, active) {
+      var _state = this.state,
+          parentWidth = _state.parentWidth,
+          width = _state.width;
+
+      var style = parentWidth != null ? 'width: ' + parentWidth + 'px;' : '';
+      if (active === 0 || idx >= active) {
+        return style;
+      }
+      return style + ' margin-left: -' + width + 'px;';
+    }
+  }, {
+    key: 'getSlidesStyle',
+    value: function getSlidesStyle() {
+      return 'width: ' + this.state.parentWidth * this.props.children.length + 'px;';
+    }
+  }, {
+    key: 'render',
+    value: function render$$1() {
+      var _this4 = this;
+
+      var _props = this.props,
+          children = _props.children,
+          _props$className = _props.className,
+          className = _props$className === undefined ? 'carousel-slide' : _props$className,
+          _props$noNav = _props.noNav,
+          noNav = _props$noNav === undefined ? false : _props$noNav,
+          _props$withDots = _props.withDots,
+          withDots = _props$withDots === undefined ? false : _props$withDots,
+          _props$wrapperClass = _props.wrapperClass,
+          wrapperClass = _props$wrapperClass === undefined ? '' : _props$wrapperClass;
+      var active = this.state.active;
+
+
+      return preact.h(
+        'div',
+        { className: 'carousel ' + wrapperClass },
+        preact.h(
+          'div',
+          null,
+          preact.h(
+            'div',
+            { className: 'carousel-inner' },
+            !noNav && preact.h(
+              'nav',
+              { className: 'nav prev' },
+              preact.h('button', { onClick: this.prev })
+            ),
+            preact.h(
+              'div',
+              { className: 'slides-wrapper' },
+              preact.h(
+                'div',
+                { className: 'slides', style: this.getSlidesStyle() },
+                W.map(function (c, idx) {
+                  return preact.h(
+                    'div',
+                    {
+                      ref: function ref(_ref) {
+                        return idx === 0 && _this4.getRef(_ref);
+                      },
+                      style: _this4.getStyle(idx, active),
+                      'class': '' + className + (idx === active ? ' active' : '')
+                    },
+                    c
+                  );
+                }, children)
+              )
+            ),
+            !noNav && preact.h(
+              'nav',
+              { className: 'nav next' },
+              preact.h('button', { onClick: this.next })
+            )
+          ),
+          withDots && preact.h(
+            Level,
+            { className: 'carousel-dots' },
+            W.map(function (i) {
+              return preact.h(
+                'button',
+                {
+                  onClick: _this4.setActive(i),
+                  className: '' + (i === active ? 'active' : '')
+                },
+                i
+              );
+            }, W.range(0, children.length))
+          )
+        )
+      );
+    }
+  }]);
+  return Carousel;
+}(preact.Component);
 
 /**
  * Virtual DOM Node
@@ -2130,7 +2531,7 @@ function setAccessor$1(node, name, old, value, isSvg) {
  * @private
  */
 function eventProxy$1(e) {
-	return this._listeners[e.type](options$1.event && options$1.event(e) || e);
+	return this._listeners[e.type](e);
 }
 
 /**
@@ -2152,7 +2553,6 @@ let hydrating$1 = false;
 function flushMounts$1() {
 	let c;
 	while ((c=mounts$1.pop())) {
-		if (options$1.afterMount) options$1.afterMount(c);
 		if (c.componentDidMount) c.componentDidMount();
 	}
 }
@@ -2702,7 +3102,6 @@ function renderComponent$1(component, renderMode, mountAll, isChild) {
 		if (component.componentDidUpdate) {
 			component.componentDidUpdate(previousProps, previousState, snapshot);
 		}
-		if (options$1.afterUpdate) options$1.afterUpdate(component);
 	}
 
 	while (component._renderCallbacks.length) component._renderCallbacks.pop().call(component);
@@ -2768,7 +3167,6 @@ function buildComponentFromVNode$1(dom, vnode, context, mountAll) {
  * @private
  */
 function unmountComponent$1(component) {
-	if (options$1.beforeUnmount) options$1.beforeUnmount(component);
 
 	let base = component.base;
 
@@ -2848,9 +3246,11 @@ extend$1(Component$1.prototype, {
 	 * 	updated
 	 */
 	setState(state, callback) {
-		const prev = this.prevState = this.state;
-		if (typeof state === 'function') state = state(prev, this.props);
-		this.state = extend$1(extend$1({}, prev), state);
+		if (!this.prevState) this.prevState = this.state;
+		this.state = extend$1(
+			extend$1({}, this.state),
+			typeof state === 'function' ? state(this.state, this.props) : state
+		);
 		if (callback) this._renderCallbacks.push(callback);
 		enqueueRender$1(this);
 	},
@@ -2903,7 +3303,7 @@ function render$1(vnode, parent, merge) {
 	return diff$1(merge, vnode, {}, false, parent, false);
 }
 
-var preact$3 = {
+var require$$0$1 = {
 	h: h$2,
 	createElement: h$2,
 	cloneElement: cloneElement$1,
@@ -2913,19 +3313,6 @@ var preact$3 = {
 	options: options$1
 };
 
-var preact$4 = /*#__PURE__*/Object.freeze({
-            default: preact$3,
-            h: h$2,
-            createElement: h$2,
-            cloneElement: cloneElement$1,
-            Component: Component$1,
-            render: render$1,
-            rerender: rerender$1,
-            options: options$1
-});
-
-var require$$0$1 = ( preact$4 && preact$3 ) || preact$4;
-
 var react = createCommonjsModule(function (module, exports) {
 var t=require$$0$1;function r(t,r){for(var n in r)t[n]=r[n];return t}var n={store:function(){}};var o=function(r){function n(){r.apply(this,arguments);}return r&&(n.__proto__=r),(n.prototype=Object.create(r&&r.prototype)).constructor=n,n.prototype.getChildContext=function(){return {store:this.props.store}},n.prototype.render=function(){return t.Children.only(this.props.children)},n}(t.Component);o.childContextTypes=n,exports.connect=function(o,e){var i;return "function"!=typeof o&&("string"==typeof(i=o||[])&&(i=i.split(/\s*,\s*/)),o=function(t){for(var r={},n=0;n<i.length;n++)r[i[n]]=t[i[n]];return r}),function(i){function c(n,c){var p=this;t.Component.call(this,n,c);var u=c.store,s=o(u?u.getState():{},n),f=e?function(t,r){"function"==typeof t&&(t=t(r));var n={};for(var o in t)n[o]=r.action(t[o]);return n}(e,u):{store:u},a=function(){var t=o(u?u.getState():{},p.props);for(var r in t)if(t[r]!==s[r])return s=t,p.forceUpdate();for(var n in s)if(!(n in t))return s=t,p.forceUpdate()};this.componentDidMount=function(){u.subscribe(a);},this.componentWillUnmount=function(){u.unsubscribe(a);},this.render=function(){return t.createElement(i,r(r(r({},f),p.props),s))};}return c.contextTypes=n,(c.prototype=Object.create(t.Component.prototype)).constructor=c}},exports.Provider=o;
 
@@ -2933,30 +3320,16 @@ var t=require$$0$1;function r(t,r){for(var n in r)t[n]=r[n];return t}var n={stor
 var react_1 = react.connect;
 var react_2 = react.Provider;
 
-var Level = function Level(_ref) {
-  var children = _ref.children,
-      props = objectWithoutProperties(_ref, ['children']);
-  return preact.h(
-    'div',
-    props,
-    preact.h(
-      'div',
-      { className: 'level' },
-      children
-    )
-  );
-};
-
-var storeRef = void 0; // Will get populated by `getStoreReference`
+var storeRef$2 = void 0; // Will get populated by `getStoreReference`
 
 var getStoreReference = function getStoreReference(actions) {
   return function (store) {
-    storeRef = store;
+    storeRef$2 = store;
     return actions;
   };
 };
 
-var actions = getStoreReference({
+var actions$1 = getStoreReference({
   toggle: function toggle(_ref, uid) {
     var dropdown = _ref.dropdown;
 
@@ -2975,7 +3348,7 @@ var mapper = function mapper(_ref2, _ref3) {
   return { isOpen: dropdown === uid };
 };
 
-var Dropdown = react_1(mapper, actions)(function (_ref4) {
+var Dropdown = react_1(mapper, actions$1)(function (_ref4) {
   var isOpen = _ref4.isOpen,
       toggle = _ref4.toggle,
       Trigger = _ref4.Trigger,
@@ -3019,8 +3392,8 @@ var isDropdown = function isDropdown(el) {
 
 try {
   document.body.addEventListener('click', function (ev) {
-    if (!storeRef) return;
-    var activeDropdown = W.path('dropdown', storeRef.getState());
+    if (!storeRef$2) return;
+    var activeDropdown = W.path('dropdown', storeRef$2.getState());
     if (!activeDropdown) {
       return;
     }
@@ -3030,7 +3403,7 @@ try {
       el = el.parentNode;
       if (isDropdown(el)) return;
     }
-    storeRef.setState({ dropdown: null });
+    storeRef$2.setState({ dropdown: null });
   });
 } catch (_) {}
 
@@ -3144,6 +3517,13 @@ var Image = function (_React$Component) {
   return Image;
 }(preact.Component);
 
+function LoadingIndicator(_ref) {
+  var _ref$variant = _ref.variant,
+      variant = _ref$variant === undefined ? 'flashing' : _ref$variant;
+
+  return preact.h('div', { className: 'dot-' + variant });
+}
+
 var getPos = function getPos(props) {
   return W.pipe(W.pick(['up', 'right', 'down', 'left']), W.filter(function (x) {
     return !!x;
@@ -3172,240 +3552,6 @@ function Tooltip(_ref) {
   );
 }
 
-var Level$1 = function Level(_ref) {
-  var children = _ref.children,
-      props = objectWithoutProperties(_ref, ['children']);
-  return preact.h(
-    'div',
-    props,
-    preact.h(
-      'div',
-      { className: 'level' },
-      children
-    )
-  );
-};
-
-var Carousel = function (_Preact$Component) {
-  inherits(Carousel, _Preact$Component);
-
-  function Carousel(props) {
-    classCallCheck(this, Carousel);
-
-    var _this = possibleConstructorReturn(this, (Carousel.__proto__ || Object.getPrototypeOf(Carousel)).call(this, props));
-
-    _this.state = { active: _this.props.active || 0, width: 0 };
-    _this.next = _this.next.bind(_this);
-    _this.prev = _this.prev.bind(_this);
-    _this.setActive = _this.setActive.bind(_this);
-    _this.getRef = _this.getRef.bind(_this);
-    _this.getStyle = _this.getStyle.bind(_this);
-    _this.getSlidesStyle = _this.getSlidesStyle.bind(_this);
-    return _this;
-  }
-
-  createClass(Carousel, [{
-    key: 'next',
-    value: function next(ev) {
-      ev.preventDefault();
-      var active = this.state.active + this.state.numFit;
-      var n = active >= this.props.children.length - 1 ? 0 : this.state.active + 1;
-      this.setState({ active: n });
-    }
-  }, {
-    key: 'prev',
-    value: function prev(ev) {
-      ev.preventDefault();
-      var n = this.state.active <= 0 ? this.props.children.length - (this.state.numFit + 1) : this.state.active - 1;
-      this.setState({ active: n });
-    }
-  }, {
-    key: 'setActive',
-    value: function setActive(active) {
-      var _this2 = this;
-
-      return function (ev) {
-        ev.preventDefault();
-        _this2.setState({ active: active });
-      };
-    }
-  }, {
-    key: 'getRef',
-    value: function getRef(ref) {
-      var _this3 = this;
-
-      if (!ref || this.ref) return;
-      this.ref = ref;
-      window.requestAnimationFrame(function () {
-        var width = _this3.ref.offsetWidth;
-        var parent = _this3.ref.parentNode;
-        var parentWidth = parent.offsetWidth;
-        var numFit = parent != null ? Math.max(0, Math.floor(parent.offsetWidth / width) - 1) : 0;
-        _this3.setState({ width: width, parentWidth: parentWidth, numFit: numFit });
-      });
-    }
-  }, {
-    key: 'getStyle',
-    value: function getStyle(idx, active) {
-      var _state = this.state,
-          parentWidth = _state.parentWidth,
-          width = _state.width;
-
-      var style = parentWidth != null ? 'width: ' + parentWidth + 'px;' : '';
-      if (active === 0 || idx >= active) {
-        return style;
-      }
-      return style + ' margin-left: -' + width + 'px;';
-    }
-  }, {
-    key: 'getSlidesStyle',
-    value: function getSlidesStyle() {
-      return 'width: ' + this.state.parentWidth * this.props.children.length + 'px;';
-    }
-  }, {
-    key: 'render',
-    value: function render$$1(_ref) {
-      var _this4 = this;
-
-      var children = _ref.children,
-          _ref$className = _ref.className,
-          className = _ref$className === undefined ? 'carousel-slide' : _ref$className,
-          _ref$noNav = _ref.noNav,
-          noNav = _ref$noNav === undefined ? false : _ref$noNav,
-          _ref$withDots = _ref.withDots,
-          withDots = _ref$withDots === undefined ? false : _ref$withDots,
-          _ref$wrapperClass = _ref.wrapperClass,
-          wrapperClass = _ref$wrapperClass === undefined ? '' : _ref$wrapperClass;
-      var active = this.state.active;
-
-      return preact.h(
-        'div',
-        { className: 'carousel ' + wrapperClass },
-        preact.h(
-          'div',
-          null,
-          preact.h(
-            'div',
-            { className: 'carousel-inner' },
-            !noNav && preact.h(
-              'nav',
-              { className: 'nav prev' },
-              preact.h('button', { onClick: this.prev })
-            ),
-            preact.h(
-              'div',
-              { className: 'slides-wrapper' },
-              preact.h(
-                'div',
-                { className: 'slides', style: this.getSlidesStyle() },
-                W.map(function (c, idx) {
-                  return preact.h(
-                    'div',
-                    {
-                      ref: function ref(_ref2) {
-                        return idx === 0 && _this4.getRef(_ref2);
-                      },
-                      style: _this4.getStyle(idx, active),
-                      'class': '' + className + (idx === active ? ' active' : '')
-                    },
-                    c
-                  );
-                }, children)
-              )
-            ),
-            !noNav && preact.h(
-              'nav',
-              { className: 'nav next' },
-              preact.h('button', { onClick: this.next })
-            )
-          ),
-          withDots && preact.h(
-            Level$1,
-            { className: 'carousel-dots' },
-            W.map(function (i) {
-              return preact.h(
-                'button',
-                {
-                  onClick: _this4.setActive(i),
-                  className: '' + (i === active ? 'active' : '')
-                },
-                i
-              );
-            }, W.range(0, children.length))
-          )
-        )
-      );
-    }
-  }]);
-  return Carousel;
-}(preact.Component);
-
-function LoadingIndicator(_ref) {
-  var _ref$variant = _ref.variant,
-      variant = _ref$variant === undefined ? 'flashing' : _ref$variant;
-
-  return preact.h('div', { className: 'dot-' + variant });
-}
-
-var ref = void 0;
-
-function showNotification(notification) {
-  ref && ref.setState(_extends({}, ref.state, notification, { open: true }));
-}
-
-var Notification = function (_Preact$Component) {
-  inherits(Notification, _Preact$Component);
-
-  function Notification(props) {
-    classCallCheck(this, Notification);
-
-    var _this = possibleConstructorReturn(this, (Notification.__proto__ || Object.getPrototypeOf(Notification)).call(this, props));
-
-    _this.state = { open: false, message: null, type: 'error', length: 3000 };
-    return _this;
-  }
-
-  createClass(Notification, [{
-    key: 'componentDidUpdate',
-    value: function componentDidUpdate() {
-      var _this2 = this;
-
-      if (this.state.message) {
-        this.timeout && clearTimeout(this.timeout);
-        this.timeout = setTimeout(function () {
-          return _this2.timeout && _this2.setState({ open: false });
-        }, this.state.length);
-      }
-    }
-  }, {
-    key: 'componentWillUnmount',
-    value: function componentWillUnmount() {
-      this.timeout && clearTimeout(this.timeout);
-    }
-  }, {
-    key: 'render',
-    value: function render$$1(_, _ref) {
-      var open = _ref.open,
-          message = _ref.message,
-          type = _ref.type;
-
-      if (!ref) ref = this;
-      if (!message) return null;
-      return preact.h(
-        'div',
-        { className: 'notification-bar ' + type + ' ' + (open ? 'open' : 'close') },
-        preact.h(
-          'span',
-          { className: 'text' },
-          message
-        ),
-        preact.h('div', { className: 'close-icon', onClick: this.onClose })
-      );
-    }
-  }]);
-  return Notification;
-}(preact.Component);
-
 var Home = (function () {
   return preact.h(
     'div',
@@ -3429,7 +3575,7 @@ var Home = (function () {
         preact.h(
           'button',
           { onClick: function onClick(ev) {
-              return setState({ modal: 'ExampleModal' });
+              return store.setState({ modal: 'ExampleModal' });
             } },
           'Open Example Modal'
         )
@@ -3464,230 +3610,6 @@ var Home = (function () {
     )
   );
 });
-
-var API_URL = 'http://10.0.2.2:8000';
-
-var XMLHttpRequest = typeof window !== 'undefined' ? window.XMLHttpRequest : require('xmlhttprequest').XMLHttpRequest;
-
-var safelyParse = function safelyParse(json, key) {
-  try {
-    var parsed = JSON.parse(json);
-    return key != null ? parsed[key] : parsed;
-  } catch (_) {
-    return json;
-  }
-};
-
-var getAuthHeader = function getAuthHeader() {
-  var headers = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-  var token = getState().token;
-  if (token) {
-    headers.Authorization = 'Token ' + token;
-  }
-  return headers;
-};
-
-var makeErr = function makeErr(code, msg) {
-  var e = new Error(msg);
-  e.code = code;
-  if (code === 401) {
-    typeof window !== 'undefined' && window.localStorage.removeItem('token');
-  }
-  console.log('makeErr', { code: code, msg: msg });
-  return e;
-};
-
-function makeRequest(_ref) {
-  var endpoint = _ref.endpoint,
-      url = _ref.url,
-      _ref$method = _ref.method,
-      method = _ref$method === undefined ? 'get' : _ref$method,
-      data = _ref.data,
-      headers = _ref.headers,
-      invalidate = _ref.invalidate;
-
-  if (endpoint != null) {
-    url = endpoint.indexOf('http') === -1 ? API_URL + '/' + endpoint : endpoint;
-  }
-
-  var xhr = new XMLHttpRequest();
-  var promise = new Promise(function (resolve, reject) {
-    xhr.open(method.toUpperCase(), url);
-
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState !== 4) return;
-      invalidate && clearCache(invalidate);
-      xhr.status >= 400 ? reject(makeErr(xhr.status, safelyParse(xhr.responseText, 'detail'))) : resolve(safelyParse(xhr.responseText));
-    };
-    xhr.onerror = function () {
-      return reject(xhr);
-    };
-    xhr.setRequestHeader('Content-Type', 'application/json');
-
-    headers = getAuthHeader(headers);
-    if (headers && W.toType(headers) === 'object') {
-      W.map(function (k, v) {
-        return xhr.setRequestHeader(k, v);
-      }, headers);
-    }
-
-    var dataType = W.toType(data);
-
-    xhr.send(dataType === 'object' || dataType === 'array' ? JSON.stringify(data) : data);
-  });
-  return { xhr: xhr, promise: promise };
-}
-
-var OK_TIME = 30000;
-
-var getCache = function getCache() {
-  return getState().CACHE || {};
-};
-
-var clearCache = function clearCache(endpoint) {
-  return setState({ CACHE: W.dissoc(endpoint, getCache()) });
-};
-
-var cache = function cache(endpoint, result) {
-  return setState({ CACHE: W.assoc([endpoint], { result: result, timestamp: Date.now() }, getCache()) });
-};
-
-var validCache = function validCache(endpoint) {
-  var CACHE = getCache();
-  var ts = CACHE[endpoint] && CACHE[endpoint].timestamp;
-  if (!ts) return false;
-  var diff = Date.now() - ts;
-  if (diff < OK_TIME) {
-    return CACHE[endpoint];
-  }
-  clearCache(endpoint);
-  return false;
-};
-
-var reducePending = function reducePending() {
-  var curr = getState().pendingRequests;
-  if (curr > 0) {
-    setState({ pendingRequests: curr - 1 });
-  }
-};
-
-var _existing = {};
-
-var WithRequest = function (_React$Component) {
-  inherits(WithRequest, _React$Component);
-
-  function WithRequest(props) {
-    classCallCheck(this, WithRequest);
-
-    var _this = possibleConstructorReturn(this, (WithRequest.__proto__ || Object.getPrototypeOf(WithRequest)).call(this, props));
-
-    _this.state = _extends({}, _this.state || {}, { isLoading: true, result: null, error: null });
-    setState({ pendingRequests: getState().pendingRequests + 1 });
-    _this._loadResult(_this.props);
-    return _this;
-  }
-
-  createClass(WithRequest, [{
-    key: '_loadResult',
-    value: function _loadResult(props) {
-      if (!props.request || !props.request.endpoint) {
-        return;
-      }
-
-      var _props$request = props.request,
-          endpoint = _props$request.endpoint,
-          parse = _props$request.parse;
-
-
-      if (_existing[endpoint] && !this.state.error) {
-        this._handlePromise(endpoint, _existing[endpoint]);
-        console.log('_existing', endpoint);
-        return;
-      }
-
-      var cached = validCache(endpoint);
-      if (cached) {
-        this.setState({ result: cached.result, isLoading: false });
-        reducePending();
-      } else {
-        this._performRequest(endpoint, parse);
-      }
-    }
-  }, {
-    key: '_performRequest',
-    value: function _performRequest(endpoint, parse) {
-      var token = getState().token;
-      var headers = {};
-      if (token) {
-        headers.Authorization = 'Token ' + token;
-      }
-
-      console.log('_performRequest', endpoint);
-
-      var _makeRequest = makeRequest({ endpoint: endpoint, headers: headers }),
-          promise = _makeRequest.promise;
-
-      _existing[endpoint] = promise;
-      _existing[endpoint]._endpoint = endpoint;
-
-      this._handlePromise(endpoint, promise);
-    }
-  }, {
-    key: '_handlePromise',
-    value: function _handlePromise(endpoint, promise) {
-      var _this2 = this;
-
-      promise.then(function (result) {
-        cache(endpoint, result);
-        _this2.setState({ result: result, isLoading: false });
-        reducePending();
-      }).catch(function (error) {
-        console.log('_performRequest', { error: error });
-        _this2.setState({ error: error, isLoading: false });
-        reducePending();
-      });
-    }
-  }, {
-    key: 'shouldComponentUpdate',
-    value: function shouldComponentUpdate(nextProps, nextState) {
-      var nextEndpoint = (nextProps.request || {}).endpoint;
-      var currEndpoint = (this.props.request || {}).endpoint;
-      if (currEndpoint !== nextEndpoint) {
-        return true;
-      }
-      return !equal(nextState, this.state);
-    }
-  }, {
-    key: 'componentDidUpdate',
-    value: function componentDidUpdate(prevProps, prevState, snapshot) {
-      var endpointChanged = this.props.request !== prevProps.request;
-      if (endpointChanged) {
-        this.setState({ isLoading: true, result: null });
-        this._loadResult(this.props);
-        return;
-      }
-      var endpoint = (this.props.request || {}).endpoint;
-      if (!_existing[endpoint]) return;
-      if (endpoint !== _existing[endpoint]._endpoint) {
-        this.setState({ isLoading: true });
-        this._loadResult(this.props);
-      }
-    }
-  }, {
-    key: 'render',
-    value: function render$$1(_ref) {
-      var children = _ref.children;
-
-      var child = children[0];
-      if (!child || typeof child !== 'function') {
-        throw new Error('WithRequest requires a function as its only child');
-      }
-      return child(this.state);
-    }
-  }]);
-  return WithRequest;
-}(preact.Component);
 
 function paginationRange(current, numPages) {
   var delta = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
@@ -3757,17 +3679,12 @@ function paginationRange(current, numPages) {
   return rangeWithDots;
 }
 
-function updateQuery(queries) {
-  var existingParams = qs.parse(window.location.search);
-  return window.location.pathname + ('?' + qs.stringify(_extends({}, existingParams, queries)));
-}
-
 var pageBuilder = function pageBuilder(page) {
   return updateQuery({ page: page });
 };
 
-var Pagination = function (_Preact$Component) {
-  inherits(Pagination, _Preact$Component);
+var Pagination = function (_React$Component) {
+  inherits(Pagination, _React$Component);
 
   function Pagination() {
     classCallCheck(this, Pagination);
@@ -3776,10 +3693,11 @@ var Pagination = function (_Preact$Component) {
 
   createClass(Pagination, [{
     key: 'render',
-    value: function render$$1(_ref) {
-      var activePage = _ref.activePage,
-          pageSize = _ref.pageSize,
-          request = _ref.request;
+    value: function render$$1() {
+      var _props = this.props,
+          activePage = _props.activePage,
+          pageSize = _props.pageSize,
+          request = _props.request;
       var count = request.count,
           next = request.next,
           previous = request.previous;
@@ -3841,72 +3759,252 @@ var Pagination = function (_Preact$Component) {
   return Pagination;
 }(preact.Component);
 
-var OK_TYPES = ['function', 'object'];
+var storage = null;
+var apiUrl = 'http://10.0.2.2:8000';
 
-var ListResource = function (_WithState) {
-  inherits(ListResource, _WithState);
+var safelyParse = function safelyParse(json, key) {
+  try {
+    var parsed = JSON.parse(json);
+    // console.log('safelyParse', parsed)
+    return key != null ? parsed[key] : parsed;
+  } catch (_) {
+    return json;
+  }
+};
 
-  function ListResource() {
-    classCallCheck(this, ListResource);
-    return possibleConstructorReturn(this, (ListResource.__proto__ || Object.getPrototypeOf(ListResource)).apply(this, arguments));
+var getAuthHeader = function getAuthHeader() {
+  var headers = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var token = arguments[1];
+
+  if (token) {
+    headers.Authorization = 'Token ' + token;
+  }
+  return headers;
+};
+
+var makeErr = function makeErr(code, msg) {
+  var e = new Error(msg);
+  e.code = code;
+  if (code === 401) {
+    storage && storage.removeItem('token');
+  }
+  console.error('makeErr', { code: code, msg: msg });
+  return e;
+};
+
+function makeRequest(_ref2) {
+  var endpoint = _ref2.endpoint,
+      url = _ref2.url,
+      _ref2$method = _ref2.method,
+      method = _ref2$method === undefined ? 'get' : _ref2$method,
+      data = _ref2.data,
+      headers = _ref2.headers,
+      _ref2$noAuth = _ref2.noAuth,
+      noAuth = _ref2$noAuth === undefined ? false : _ref2$noAuth;
+
+  if (endpoint != null && endpoint.indexOf('http') === -1) {
+    url = apiUrl + '/' + endpoint;
   }
 
-  createClass(ListResource, [{
-    key: 'render',
-    value: function render$$1(_ref) {
-      var children = _ref.children,
-          endpoint = _ref.endpoint,
-          _ref$list = _ref.list,
-          list = _ref$list === undefined ? true : _ref$list,
-          limit = _ref.limit,
-          _ref$pagination = _ref.pagination,
-          pagination = _ref$pagination === undefined ? false : _ref$pagination;
+  if (url == null) {
+    url = endpoint;
+  }
 
-      var Child = children[0];
-      var type = typeof Child === 'undefined' ? 'undefined' : _typeof(Child);
-      if (!Child || !OK_TYPES.includes(type)) {
-        throw new Error('ListResource requires a function or Component as its only child');
+  var xhr = new window.XMLHttpRequest();
+  var promise = new Promise(function (resolve, reject) {
+    xhr.open(method.toUpperCase(), url);
+
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState !== 4) return;
+      xhr.status >= 400 ? reject(makeErr(xhr.status, safelyParse(xhr.response, 'detail'))) : resolve(safelyParse(xhr.response));
+    };
+    xhr.onerror = function () {
+      return reject(xhr);
+    };
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    headers = !noAuth ? getAuthHeader(headers) : {};
+    if (headers && W.toType(headers) === 'object') {
+      W.map(function (k, v) {
+        return xhr.setRequestHeader(k, v);
+      }, headers);
+    }
+
+    var dataType = W.toType(data);
+
+    xhr.send(dataType === 'object' || dataType === 'array' ? JSON.stringify(data) : data);
+  });
+  return { xhr: xhr, promise: promise };
+}
+
+var OK_TIME = 30000;
+var CACHE = {};
+
+var cache = function cache(endpoint, result) {
+  CACHE[endpoint] = { result: result, timestamp: Date.now() };
+};
+
+var validCache = function validCache(endpoint) {
+  var ts = CACHE[endpoint] && CACHE[endpoint].timestamp;
+  if (!ts) return false;
+  var diff = Date.now() - ts;
+  return diff < OK_TIME;
+};
+
+var WithRequest = function (_React$Component) {
+  inherits(WithRequest, _React$Component);
+
+  function WithRequest(props) {
+    classCallCheck(this, WithRequest);
+
+    var _this = possibleConstructorReturn(this, (WithRequest.__proto__ || Object.getPrototypeOf(WithRequest)).call(this, props));
+
+    _this.state = _extends({}, _this.state || {}, { isLoading: true, result: null, error: null });
+    _this._existing = null;
+    return _this;
+  }
+
+  createClass(WithRequest, [{
+    key: '_performRequest',
+    value: function _performRequest(endpoint, parse) {
+      var _this2 = this;
+
+      var token = this.context.store.getState().token;
+      var headers = {};
+      if (token) {
+        headers.Authorization = 'Token ' + token;
       }
-      var func = type === 'function' ? Child : function (props) {
-        return preact.h(Child, props);
-      };
 
-      // @TODO: Needs to access search params on SSR
-      var search = typeof window !== 'undefined' ? window.location.search : '';
-      var args = qs.parse(search);
-      var activePage = args.page ? parseInt(args.page, 10) : 1;
+      var _makeRequest = makeRequest({ endpoint: endpoint, headers: headers }),
+          xhr = _makeRequest.xhr,
+          promise = _makeRequest.promise;
 
-      var request = {
-        endpoint: limit != null ? endpoint + '?limit=' + limit + (activePage > 1 ? '&offset=' + limit * activePage : '') : endpoint
-      };
-      return preact.h(
-        WithRequest,
-        { request: request },
-        function (_ref2) {
-          var result = _ref2.result,
-              isLoading = _ref2.isLoading;
-          return isLoading ? preact.h(
-            'p',
-            null,
-            'Loading...'
-          ) : preact.h(
-            'div',
-            { key: request.endpoint },
-            list ? W.map(func, W.pathOr(result, 'results', result)) : func(_extends({}, result)),
-            pagination && limit != null ? preact.h(Pagination, { activePage: activePage, request: result, pageSize: limit }) : null
-          );
+      this._existing = xhr;
+      this._existing._endpoint = endpoint;
+
+      promise.then(function (result) {
+        cache(endpoint, result);
+        if (_this2.props.mutateResult) {
+          _this2.setState({ result: _this2.props.mutateResult(result, _this2.state.result), isLoading: false });
+        } else {
+          _this2.setState({ result: result, isLoading: false });
         }
-      );
+      }).catch(function (error) {
+        return console.log('_performRequest', { error: error }) || _this2.setState({ error: error, isLoading: false });
+      });
+    }
+  }, {
+    key: '_loadResult',
+    value: function _loadResult(props) {
+      if (!props.request || !props.request.endpoint) {
+        return;
+      }
+      if (this._existing && !this.state.error) {
+        this._existing.abort();
+        this._existing = null;
+      }
+
+      var _props$request = props.request,
+          endpoint = _props$request.endpoint,
+          parse = _props$request.parse;
+
+      if (validCache(endpoint)) {
+        this.setState({ result: CACHE[endpoint].result, isLoading: false });
+      } else {
+        this._performRequest(endpoint, parse);
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this._loadResult(this.props);
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextState) {
+      var nextEnpoint = (nextProps.request || {}).endpoint;
+      var currEnpoint = (this.props.request || {}).endpoint;
+      if (currEnpoint !== nextEnpoint) {
+        return true;
+      }
+      return !equal$1(nextState, this.state);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState, snapshot) {
+      if (!this._existing) return;
+      if ((this.props.request || {}).endpoint !== this._existing._endpoint) {
+        this._loadResult(this.props);
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render$$1() {
+      var child = this.children ? this.children[0] : this.props.children[0];
+      if (!child || typeof child !== 'function') {
+        console.log({ child: child });
+        throw new Error('WithRequest requires a function as its only child');
+      }
+      return child(this.state);
     }
   }]);
-  return ListResource;
-}(WithState);
+  return WithRequest;
+}(preact.Component);
 
+var OK_TYPES = ['function', 'object'];
 
-ListResource.defaultProps = { mapper: function mapper(_ref3) {
-    var currentPath = _ref3.currentPath;
-    return { currentPath: currentPath };
-  } };
+// We subscribe to `currentPath` to rerender on route change
+var ListResource = react_1('currentPath', {})(function (_ref) {
+  var endpoint = _ref.endpoint,
+      limit = _ref.limit,
+      _ref$list = _ref.list,
+      list = _ref$list === undefined ? true : _ref$list,
+      _ref$pagination = _ref.pagination,
+      pagination = _ref$pagination === undefined ? false : _ref$pagination,
+      children = _ref.children;
+
+  var Child = children[0];
+  var type = typeof Child === 'undefined' ? 'undefined' : _typeof(Child);
+  if (!Child || !OK_TYPES.includes(type)) {
+    throw new Error('ListResource requires a function or Component as its only child');
+  }
+  var func = type === 'function' ? Child : function (props) {
+    return preact.h(Child, props);
+  };
+
+  // @TODO: Needs to access search params on SSR
+  var search = typeof window !== 'undefined' ? window.location.search : '';
+  var args = qs.parse(search);
+  var activePage = args.page ? parseInt(args.page, 10) : 1;
+
+  var request = {
+    endpoint: limit != null ? endpoint + '?limit=' + limit + (activePage > 1 ? '&offset=' + limit * activePage : '') : endpoint
+  };
+  return preact.h(
+    WithRequest,
+    { request: request },
+    function (_ref2) {
+      var result = _ref2.result,
+          isLoading = _ref2.isLoading;
+      return isLoading ? preact.h(
+        'p',
+        null,
+        'Loading...'
+      ) : preact.h(
+        'div',
+        { key: request.endpoint },
+        list ? W.map(func, W.pathOr(result, 'results', result)) : func(_extends({}, result)),
+        pagination && limit != null ? preact.h(Pagination, { activePage: activePage, request: result, pageSize: limit }) : null
+      );
+    }
+  );
+});
+
+var Resource = function Resource(_ref3) {
+  var endpoint = _ref3.endpoint,
+      props = objectWithoutProperties(_ref3, ['endpoint']);
+  return preact.h(ListResource, _extends({ key: 'resource-' + endpoint, list: false, endpoint: endpoint }, props));
+};
 
 var endpoint = 'https://input-qee-prod.herokuapp.com/videos';
 
@@ -3944,7 +4042,7 @@ var Main = (function () {
   return preact.h(
     'div',
     null,
-    preact.h(Router, { routes: routes }),
+    preact.h(Router$1, { routes: routes }),
     preact.h(
       Modals,
       null,
@@ -3985,114 +4083,14 @@ var Users = (function () {
   );
 });
 
-var refs = [];
+var DEBUG = typeof window !== 'undefined' ? window.location.hostname.indexOf('local') > -1 : "development";
 
-var rewind = function rewind() {
-  var res = W.reduce(function (acc, el) {
-    return W.merge(acc, el.props);
-  }, {}, refs);
-  return res;
-};
-
-var Wrapper = function Wrapper(_ref) {
-  var children = _ref.children;
-
-  if (typeof window !== 'undefined') {
-    var titleChild = W.find(function (_ref2) {
-      var nodeName = _ref2.nodeName;
-      return nodeName === 'title';
-    }, children);
-    if (titleChild) {
-      var title = titleChild.children[0];
-      if (title !== document.title) {
-        document.title = title;
-      }
-    }
-    return null;
-  } else {
-    return preact.h(
-      'div',
-      null,
-      children
-    );
+var WEB_URL = function () {
+  if (typeof window === 'undefined') {
+    return 'https://cool-app.com';
   }
-};
-
-var Helmet = function (_Preact$Component) {
-  inherits(Helmet, _Preact$Component);
-
-  function Helmet(props) {
-    classCallCheck(this, Helmet);
-
-    var _this = possibleConstructorReturn(this, (Helmet.__proto__ || Object.getPrototypeOf(Helmet)).call(this, props));
-
-    refs.push(_this);
-    return _this;
-  }
-
-  createClass(Helmet, [{
-    key: 'componentWillUnmount',
-    value: function componentWillUnmount() {
-      var _this2 = this;
-
-      var newRefs = W.reject(function (c) {
-        return c === _this2;
-      }, refs);
-      refs = newRefs;
-      document.title = this._getTitle({});
-    }
-  }, {
-    key: '_getTitle',
-    value: function _getTitle(props) {
-      var _rewind$props = _extends({}, rewind(), props),
-          title = _rewind$props.title,
-          _rewind$props$titleTe = _rewind$props.titleTemplate,
-          titleTemplate = _rewind$props$titleTe === undefined ? '%s' : _rewind$props$titleTe,
-          defaultTitle = _rewind$props.defaultTitle;
-
-      return titleTemplate.replace('%s', title || defaultTitle || '');
-    }
-  }, {
-    key: '_getMeta',
-    value: function _getMeta(_ref3) {
-      var _ref3$meta = _ref3.meta,
-          meta = _ref3$meta === undefined ? [] : _ref3$meta;
-
-      return meta.map(function (_ref4) {
-        var name = _ref4.name,
-            property = _ref4.property,
-            content = _ref4.content;
-        return preact.h('meta', {
-          name: name,
-          property: property,
-          content: content,
-          'data-helmet': true
-        });
-      });
-    }
-  }, {
-    key: 'render',
-    value: function render$$1() {
-      return preact.h(
-        Wrapper,
-        null,
-        preact.h(
-          'title',
-          { 'data-helmet': 'true' },
-          this._getTitle(this.props)
-        ),
-        this._getMeta(this.props)
-      );
-    }
-  }]);
-  return Helmet;
-}(preact.Component);
-
-var Resource = (function (_ref) {
-  var endpoint = _ref.endpoint,
-      props = objectWithoutProperties(_ref, ['endpoint']);
-  return preact.h(ListResource, _extends({ key: 'resource-' + endpoint, list: false, endpoint: endpoint }, props));
-});
+  return window.location.href.replace(window.location.pathname, '');
+}();
 
 var url = 'https://jsonplaceholder.typicode.com/users/';
 
@@ -4384,7 +4382,7 @@ var Account = (function () {
     'div',
     { id: 'account-layout' },
     preact.h(AccountHeader, null),
-    preact.h(Router, { routes: routes$1 })
+    preact.h(Router$1, { routes: routes$1 })
   );
 });
 
@@ -4463,43 +4461,44 @@ var urlFor = function urlFor(name) {
   return '' + replaced + (!hasQueries ? '' : '?' + qs.stringify(queries));
 };
 
-var Header = (function () {
-  return preact.h(
-    WithState,
-    { mapper: function mapper(_ref) {
-        var clicks = _ref.clicks;
-        return { clicks: clicks };
-      } },
-    function (_ref2) {
-      var clicks = _ref2.clicks;
-      return preact.h(
-        'header',
-        { 'class': 'layout-center' },
-        preact.h(
-          'h1',
-          null,
-          'PWA ',
-          clicks
-        ),
-        preact.h(
-          'button',
-          { onClick: clickState({ clicks: clicks + 1 }) },
-          '+'
-        ),
-        preact.h(
-          'a',
-          { href: urlFor('home') },
-          'Main App'
-        ),
-        '\xA0',
-        preact.h(
-          'a',
-          { href: urlFor('users') },
-          'Account App'
-        ),
-        '\xA0'
-      );
+var actions$2 = function actions(store) {
+  return {
+    increment: function increment(_ref) {
+      var clicks = _ref.clicks;
+      return { clicks: clicks + 1 };
     }
+  };
+};
+
+var Header = preact_1('clicks', actions$2)(function (_ref2) {
+  var clicks = _ref2.clicks,
+      increment = _ref2.increment;
+  return preact.h(
+    'header',
+    { 'class': 'layout-center' },
+    preact.h(
+      'h1',
+      null,
+      'PWA ',
+      clicks
+    ),
+    preact.h(
+      'button',
+      { onClick: increment },
+      '+'
+    ),
+    preact.h(
+      'a',
+      { href: urlFor('home') },
+      'Main App'
+    ),
+    '\xA0',
+    preact.h(
+      'a',
+      { href: urlFor('users') },
+      'Account App'
+    ),
+    '\xA0'
   );
 });
 
@@ -4511,12 +4510,21 @@ var Base = function Base() {
   );
 };
 
-var NotFound = (function (props) {
-  return !getState().route ? Base() : null;
+var NotFound = preact_1('currentRoute', {})(function (_ref) {
+  var currentRoute = _ref.currentRoute;
+  return !currentRoute ? Base() : null;
 });
 
+var initialState = _extends({
+  // In the browser, we initialize the currentPath prop, which is used
+  // by our [Router](/hoc/Router.html)
+  currentPath: typeof window !== 'undefined' ? window.location.pathname + window.location.search : '/',
+  // `pendingRequests` is used by the [WithRequest](/hoc/WithRequest.html) HoC.
+  pendingRequests: 0
+}, typeof window !== 'undefined' ? JSON.parse(window.__initial_store__ || '') : {});
+
 // Replacing our custom store with Redux-compatible `unistore`
-var store = createStore({});
+var store = createStore(initialState);
 
 // And, finally, our MainApp! This is the top-level Component to render
 // into the DOM, and kick-start our app!
@@ -4610,10 +4618,14 @@ if (typeof window !== 'undefined') {
 // Simple helper functions used throughout your project. These should not
 // be removed as they are all used by an included HoC or element.
 
+var setState = store.setState,
+    getState = store.getState;
+
+
 var renderReact = function renderReact(url) {
   return new Promise(function (resolve, reject) {
     setState({ currentPath: url });
-    p(preact.h(MainApp, null)); // Render, to register pendingRequests
+    c(preact.h(MainApp, null)); // Render, to register pendingRequests
 
     console.log('pendingRequests', getState().pendingRequests);
 
@@ -4626,8 +4638,8 @@ var renderReact = function renderReact(url) {
         clearInterval(id);
         var state = JSON.stringify(getState());
         // Rerender html again, now that pendingRequests are done
-        var html = p(preact.h(MainApp, null));
-        var head = p(preact.h(Helmet, rewind())).slice(5, -6);
+        var html = c(preact.h(MainApp, null));
+        var head = c(preact.h(Helmet, rewind())).slice(5, -6);
         resolve({ html: html, head: head, state: state });
       }
       count++;
@@ -4656,6 +4668,7 @@ var ssr = function ssr(req, res, next) {
   });
 };
 
-polka().use(compress, assets, ssr).listen(port).then(function () {
+polka().use(compress, assets, ssr).listen(port, function (err) {
+  if (err) throw err;
   console.log('> Ready on http://localhost:' + port);
 });

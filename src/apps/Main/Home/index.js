@@ -1,15 +1,14 @@
 import W from 'wasmuth'
 
+import Carousel from '@app-elements/carousel'
 import Dropdown from '@app-elements/dropdown'
 import Image from '@app-elements/image'
+import LoadingIndicator from '@app-elements/loading-indicator'
 import Tooltip from '@app-elements/tooltip'
 
-import Carousel from '/elements/Carousel'
-import LoadingIndicator from '/elements/LoadingIndicator'
+import {showNotification} from '@app-elements/notification'
 
-import {showNotification} from '/elements/Notification'
-
-import {setState} from '/store'
+import {store} from '/index'
 
 export default () =>
   <div style={{padding: '1em'}}>
@@ -18,7 +17,7 @@ export default () =>
     <LoadingIndicator />
 
     <Dropdown uid='home-example'>
-      <p><button onClick={ev => setState({modal: 'ExampleModal'})}>Open Example Modal</button></p>
+      <p><button onClick={ev => store.setState({modal: 'ExampleModal'})}>Open Example Modal</button></p>
       <p><button onClick={ev => showNotification({message: 'PIRATES!'})}>Pirates!</button></p>
       <p>Classy Penguin</p>
     </Dropdown>
