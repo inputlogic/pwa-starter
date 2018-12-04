@@ -8,10 +8,8 @@ import store from '/store'
 const {getState, setState} = store
 
 export const renderReact = (url) => new Promise((resolve, reject) => {
-  setState({...getState(), currentPath: url})
+  setState({currentPath: url})
   render(<RootApp />) // Render, to register pendingRequests
-
-  console.log('renderReact', getState())
 
   const maxTime = 6000
   const delay = 1

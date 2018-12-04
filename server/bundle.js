@@ -1425,27 +1425,18 @@ function makeRequest(_ref2) {
 var storeRef = void 0; // Will get populated if WithRequest receives `store` via context
 
 var OK_TIME = 30000;
-var CACHE = {}; // used if no store is provided in context
 
 // cache result of request by endpoint, either in store or local cache object
 var cache = function cache(endpoint, result) {
-  if (storeRef) {
-    storeRef.setState({
-      requests: _extends({}, storeRef.getState().requests || {}, defineProperty({}, endpoint, { result: result, timestamp: Date.now() }))
-    });
-  } else {
-    CACHE[endpoint] = { result: result, timestamp: Date.now() };
-  }
+  storeRef.setState({
+    requests: _extends({}, storeRef.getState().requests || {}, defineProperty({}, endpoint, { result: result, timestamp: Date.now() }))
+  });
 };
 
 // get timestamp of an endpoint from store or local cache object
 var getTimestamp = function getTimestamp(endpoint) {
-  if (storeRef) {
-    var reqs = storeRef.getState().requests || {};
-    return reqs[endpoint] && reqs[endpoint].timestamp;
-  } else {
-    return CACHE[endpoint] && CACHE[endpoint].timestamp;
-  }
+  var reqs = storeRef.getState().requests || {};
+  return reqs[endpoint] && reqs[endpoint].timestamp;
 };
 
 // check if last saved timestamp for endpoint is not expired
@@ -1516,7 +1507,10 @@ var WithRequest = function (_React$Component) {
           parse = _props$request.parse;
 
       if (validCache(endpoint)) {
-        this.setState({ result: CACHE[endpoint].result, isLoading: false });
+        this.setState({
+          result: storeRef.getState().requests[endpoint].result,
+          isLoading: false
+        });
       } else {
         this._performRequest(endpoint, parse);
       }
@@ -1558,27 +1552,102 @@ var WithRequest = function (_React$Component) {
   return WithRequest;
 }(preact.Component);
 
+var camelToConst = function camelToConst(str) {
+  var ret = '';
+  var prevLowercase = false;
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = str[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var s = _step.value;
+
+      var isUppercase = s.toUpperCase() === s;
+      if (isUppercase && prevLowercase) {
+        ret += '_';
+      }
+      ret += s;
+      prevLowercase = !isUppercase;
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator.return) {
+        _iterator.return();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
+  }
+
+  return ret.replace(/_+/g, '_').toUpperCase();
+};
+
+var constToCamel = function constToCamel(str) {
+  var ret = '';
+  var prevUnderscore = false;
+  var _iteratorNormalCompletion2 = true;
+  var _didIteratorError2 = false;
+  var _iteratorError2 = undefined;
+
+  try {
+    for (var _iterator2 = str[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+      var s = _step2.value;
+
+      var isUnderscore = s === '_';
+      if (isUnderscore) {
+        prevUnderscore = true;
+        continue;
+      }
+      if (!isUnderscore && prevUnderscore) {
+        ret += s;
+        prevUnderscore = false;
+      } else {
+        ret += s.toLowerCase();
+      }
+    }
+  } catch (err) {
+    _didIteratorError2 = true;
+    _iteratorError2 = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion2 && _iterator2.return) {
+        _iterator2.return();
+      }
+    } finally {
+      if (_didIteratorError2) {
+        throw _iteratorError2;
+      }
+    }
+  }
+
+  return ret;
+};
+
 var buildActionsAndReducer = function buildActionsAndReducer(withActions, store, componentName) {
-  var actionTypes = Object.keys(withActions).map(function (k) {
-    return k.toUpperCase();
-  });
+  var actionTypes = Object.keys(withActions).map(camelToConst);
   function reducer(action, state) {
     if (actionTypes.includes(action.type)) {
-      var lowerCaseType = action.type.toLowerCase();
       var args = action.payload.args || [];
-      return _extends({}, state, withActions[lowerCaseType].apply(null, [state].concat(toConsumableArray(args || []))));
+      var fnRef = constToCamel(action.type);
+      return _extends({}, state, withActions[fnRef].apply(null, [state].concat(toConsumableArray(args || []))));
     }
     return state;
   }
   var actions = {};
-  actionTypes.forEach(function (type) {
-    actions[type.toLowerCase()] = function () {
+  Object.keys(withActions).forEach(function (type) {
+    actions[type] = function () {
       for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
       }
 
       return store.dispatch({
-        type: type,
+        type: camelToConst(type),
         payload: { args: args },
         meta: { componentName: componentName }
       });
@@ -1811,7 +1880,7 @@ var Router = connect({
           args: routeArgs
         };
         if (!equal(newRoute, storeRef$1.getState().currentRoute)) {
-          storeRef$1.setState(_extends({}, storeRef$1.getState(), { currentRoute: newRoute }));
+          storeRef$1.setState({ currentRoute: newRoute });
         }
         var Component$$1 = routes[route].component;
         return preact.h(Component$$1, routeArgs);
@@ -1831,7 +1900,7 @@ if (typeof window !== 'undefined') {
       var currentPath = storeRef$1.getState().currentPath;
       if (currentPath !== url) {
         window.history['pushState'](null, null, url);
-        storeRef$1.setState(_extends({}, storeRef$1.getState(), { currentPath: url }));
+        storeRef$1.setState({ currentPath: url });
       }
     }
   });
@@ -1973,17 +2042,15 @@ var isOverlay = function isOverlay(el) {
   return el.classList && el.classList.contains('modal-container');
 };
 
-var actions = function actions(store) {
-  return {
-    onContainerClick: function onContainerClick(state, event) {
-      if (isOverlay(event.target)) {
-        return { modal: null };
-      }
-    },
-    closeModal: function closeModal(state) {
+var actions = {
+  onContainerClick: function onContainerClick(state, event) {
+    if (isOverlay(event.target)) {
       return { modal: null };
     }
-  };
+  },
+  closeModal: function closeModal() {
+    return { modal: null };
+  }
 };
 
 var Modal = connect({
@@ -2145,7 +2212,7 @@ var Router$1 = connect({
           args: routeArgs
         };
         if (!equal(newRoute, storeRef$2.getState().currentRoute)) {
-          storeRef$2.setState(_extends({}, storeRef$2.getState(), { currentRoute: newRoute }));
+          storeRef$2.setState({ currentRoute: newRoute });
         }
         var Component$$1 = routes[route].component;
         return preact.h(Component$$1, routeArgs);
@@ -2165,7 +2232,7 @@ if (typeof window !== 'undefined') {
       var currentPath = storeRef$2.getState().currentPath;
       if (currentPath !== url) {
         window.history['pushState'](null, null, url);
-        storeRef$2.setState(_extends({}, storeRef$2.getState(), { currentPath: url }));
+        storeRef$2.setState({ currentPath: url });
       }
     }
   });
@@ -2484,7 +2551,7 @@ var Image = function (_React$Component) {
         img.remove();
       }
 
-      if (this._imgs.includes(img)) {
+      if ((this._imgs || []).includes(img)) {
         this._imgs = this._imgs.filter(function (i) {
           return i !== img;
         });
@@ -2504,9 +2571,11 @@ var Image = function (_React$Component) {
     value: function componentWillUnmount() {
       var _this4 = this;
 
-      this._imgs.forEeach(function (img) {
-        return _this4._removeImage(img);
-      });
+      if (this._imgs && this._imgs.length) {
+        this._imgs.forEeach(function (img) {
+          return _this4._removeImage(img);
+        });
+      }
     }
   }, {
     key: 'render',
@@ -2631,8 +2700,9 @@ var atom = createCommonjsModule(function (module, exports) {
     }
 
     function setState (newState) {
-      if (!validState(newState)) return
-      state = newState;
+      if (validState(newState)) {
+        cb(Object.assign({}, state, newState));
+      }
     }
 
     // Private
@@ -3843,10 +3913,8 @@ var getState$1 = store.getState,
 
 var renderReact = function renderReact(url) {
   return new Promise(function (resolve, reject) {
-    setState$1(_extends({}, getState$1(), { currentPath: url }));
+    setState$1({ currentPath: url });
     c(preact.h(RootApp, null)); // Render, to register pendingRequests
-
-    console.log('renderReact', getState$1());
 
     var maxTime = 6000;
     var delay = 1;
