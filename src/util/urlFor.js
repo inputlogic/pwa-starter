@@ -13,7 +13,7 @@ const getAllRoutes = routes =>
       routes[r].hasOwnProperty('routes')
         ? {...acc, ...getAllRoutes(routes[r].routes)}
         : {...acc, [r]: routes[r]},
-      {})
+    {})
 
 const allRoutes = getAllRoutes(routes)
 
