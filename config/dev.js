@@ -43,7 +43,7 @@ export default {
       include: [
         'node_modules/preact/**',
         'node_modules/preact-portal/**',
-        'node_modules/unistore/**'
+        'node_modules/atom/**'
       ]
     }),
     resolve({
@@ -58,8 +58,7 @@ export default {
       react: pathResolve(
         __dirname,
         '../node_modules/preact/src/preact.js'
-      ),
-      'unistore/react': 'unistore/preact'
+      )
     })
   ]
 }

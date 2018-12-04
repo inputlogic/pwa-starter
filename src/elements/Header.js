@@ -1,11 +1,13 @@
-import {connect} from 'unistore/preact'
+import connect from '@app-elements/connect'
 import urlFor from '/util/urlFor'
 
-const actions = store => ({
-  increment: ({clicks}) => ({clicks: clicks + 1})
-})
-
-const Header = connect('clicks', actions)(({clicks, increment}) => (
+const Header = connect({
+  name: 'Header',
+  withActions: {
+    increment: ({clicks}) => ({clicks: (clicks || 0) + 1})
+  },
+  withState: ({clicks}) => ({clicks})
+})(({clicks, increment}) => (
   <header class='layout-center'>
     <h1>PWA {clicks}</h1>
     <button onClick={increment}>+</button>

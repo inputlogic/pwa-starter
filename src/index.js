@@ -6,10 +6,9 @@ import Preact from 'preact'
 // `src/index.js` contains your top-most Component that will be mounted to the DOM and
 // is the entry point for your entire app. Everything starts here!
 
-// We use [unistore](https://github.com/developit/unistore) for global state management.
+// We use [atom](https://github.com/staydecent/atom) for global state management.
 // It is a tiny alternative to Redux, yet maintains compatibility with Redux DevTools!
-import createStore from 'unistore'
-import {Provider} from 'unistore/preact'
+// import {Provider} from 'atom/preact'
 
 // [inputlogic/elements](https://github.com/inputlogic/elements) houses common Components
 // that many PWAs will end up needing. In this case, we are importing Helmet for managing
@@ -29,8 +28,8 @@ import NotFound from '/elements/NotFound'
 // Components.
 import routes from '/routes'
 
-// And our apps' initial state. Any defaults you want set when the app starts fresh.
-import initialState from '/initialState'
+// And our apps' global store.
+import store, {Provider} from '/store'
 
 // ### Styling
 
@@ -43,13 +42,10 @@ import initialState from '/initialState'
 import '/styles/variables.less'
 import '/styles/base.less'
 
-// Initializing our Redux-compatible `unistore`
-export let store = createStore(initialState)
-
 // And, finally, our RootApp! This is the top-level Component to render
 // into the DOM and kick-start our entire app!
 
-// First, our entire app is wrapped in the _unistore_ `Provider` component.
+// First, our entire app is wrapped in the _atom_ `Provider` component.
 // This adds the store to the React context, meaning any child can access our
 // store reference.
 // Then we include those Component's that we want to be rendered on *all* routes.

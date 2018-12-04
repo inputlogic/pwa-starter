@@ -1163,27 +1163,6 @@ var Helmet = function (_React$Component) {
   return Helmet;
 }(preact.Component);
 
-function n$2(n,t){for(var r in t)n[r]=t[r];return n}function createStore(t){var r=[];function u(n){for(var t=[],u=0;u<r.length;u++)r[u]===n?n=null:t.push(r[u]);r=t;}function e(u,e,f){t=e?u:n$2(n$2({},t),u);for(var i=r,o=0;o<i.length;o++)i[o](t,f);}return t=t||{},{action:function(n){function r(t){e(t,!1,n);}return function(){for(var u=arguments,e=[t],f=0;f<arguments.length;f++)e.push(u[f]);var i=n.apply(this,e);if(null!=i)return i.then?i.then(r):r(i)}},setState:e,subscribe:function(n){return r.push(n),function(){u(n);}},unsubscribe:u,getState:function(){return t}}}
-
-var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
-
-function createCommonjsModule(fn, module) {
-	return module = { exports: {} }, fn(module, module.exports), module.exports;
-}
-
-function getCjsExportFromNamespace (n) {
-	return n && n.default || n;
-}
-
-var require$$0 = getCjsExportFromNamespace(preact$1);
-
-var preact$2 = createCommonjsModule(function (module, exports) {
-var t=require$$0;function n(t,n){for(var r in n)t[r]=n[r];return t}function r(t){this.getChildContext=function(){return {store:t.store}};}r.prototype.render=function(t){return t.children[0]},exports.connect=function(r,e){var o;return "function"!=typeof r&&("string"==typeof(o=r||[])&&(o=o.split(/\s*,\s*/)),r=function(t){for(var n={},r=0;r<o.length;r++)n[o[r]]=t[o[r]];return n}),function(o){function i(i,u){var c=this,f=u.store,s=r(f?f.getState():{},i),a=e?function(t,n){"function"==typeof t&&(t=t(n));var r={};for(var e in t)r[e]=n.action(t[e]);return r}(e,f):{store:f},p=function(){var t=r(f?f.getState():{},c.props);for(var n in t)if(t[n]!==s[n])return s=t,c.setState(null);for(var e in s)if(!(e in t))return s=t,c.setState(null)};this.componentDidMount=function(){f.subscribe(p);},this.componentWillUnmount=function(){f.unsubscribe(p);},this.render=function(r){return t.h(o,n(n(n({},a),r),s))};}return (i.prototype=new t.Component).constructor=i}},exports.Provider=r;
-
-});
-var preact_1 = preact$2.connect;
-var preact_2 = preact$2.Provider;
-
 var ref = void 0;
 
 function showNotification(notification) {
@@ -1324,7 +1303,6 @@ var WithState = function (_React$Component) {
   createClass(WithState, [{
     key: '_update',
     value: function _update(state) {
-      console.log('_update', this.props);
       this.setState({ _mappedState: this.props.mapper(this._store.getState(), this.props) });
     }
   }, {
@@ -1366,61 +1344,385 @@ var WithState = function (_React$Component) {
   return WithState;
 }(preact.Component);
 
-var isArray$1 = Array.isArray;
-var keyList$1 = Object.keys;
-var hasProp$1 = Object.prototype.hasOwnProperty;
+var storage = null;
+var apiUrl = 'http://10.0.2.2:8000';
 
-function equal$1(a, b) {
-  if (a === b) return true;
+var safelyParse = function safelyParse(json, key) {
+  try {
+    var parsed = JSON.parse(json);
+    // console.log('safelyParse', parsed)
+    return key != null ? parsed[key] : parsed;
+  } catch (_) {
+    return json;
+  }
+};
 
-  if (a && b && (typeof a === 'undefined' ? 'undefined' : _typeof(a)) === 'object' && (typeof b === 'undefined' ? 'undefined' : _typeof(b)) === 'object') {
-    var arrA = isArray$1(a);
-    var arrB = isArray$1(b);
+var getAuthHeader = function getAuthHeader() {
+  var headers = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  var token = arguments[1];
 
-    var i = void 0;
-    var length = void 0;
-    var key = void 0;
+  if (token) {
+    headers.Authorization = 'Token ' + token;
+  }
+  return headers;
+};
 
-    if (arrA && arrB) {
-      length = a.length;
-      if (length !== b.length) return false;
-      for (i = length; i-- !== 0;) {
-        if (!equal$1(a[i], b[i])) return false;
-      }
-      return true;
-    }
+var makeErr = function makeErr(code, msg) {
+  var e = new Error(msg);
+  e.code = code;
+  if (code === 401) {
+    storage && storage.removeItem('token');
+  }
+  console.error('makeErr', { code: code, msg: msg });
+  return e;
+};
 
-    if (arrA !== arrB) return false;
+function makeRequest(_ref2) {
+  var endpoint = _ref2.endpoint,
+      url = _ref2.url,
+      _ref2$method = _ref2.method,
+      method = _ref2$method === undefined ? 'get' : _ref2$method,
+      data = _ref2.data,
+      headers = _ref2.headers,
+      _ref2$noAuth = _ref2.noAuth,
+      noAuth = _ref2$noAuth === undefined ? false : _ref2$noAuth;
 
-    var dateA = a instanceof Date;
-    var dateB = b instanceof Date;
-    if (dateA !== dateB) return false;
-    if (dateA && dateB) return a.getTime() === b.getTime();
-
-    var regexpA = a instanceof RegExp;
-    var regexpB = b instanceof RegExp;
-    if (regexpA !== regexpB) return false;
-    if (regexpA && regexpB) return a.toString() === b.toString();
-
-    var keys = keyList$1(a);
-    length = keys.length;
-
-    if (length !== keyList$1(b).length) return false;
-
-    for (i = length; i-- !== 0;) {
-      if (!hasProp$1.call(b, keys[i])) return false;
-    }
-
-    for (i = length; i-- !== 0;) {
-      key = keys[i];
-      if (!equal$1(a[key], b[key])) return false;
-    }
-
-    return true;
+  if (endpoint != null && endpoint.indexOf('http') === -1) {
+    url = apiUrl + '/' + endpoint;
   }
 
-  return false;
+  if (url == null) {
+    url = endpoint;
+  }
+
+  var xhr = new window.XMLHttpRequest();
+  var promise = new Promise(function (resolve, reject) {
+    xhr.open(method.toUpperCase(), url);
+
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState !== 4) return;
+      xhr.status >= 400 ? reject(makeErr(xhr.status, safelyParse(xhr.response, 'detail'))) : resolve(safelyParse(xhr.response));
+    };
+    xhr.onerror = function () {
+      return reject(xhr);
+    };
+    xhr.setRequestHeader('Content-Type', 'application/json');
+
+    headers = !noAuth ? getAuthHeader(headers) : {};
+    if (headers && W.toType(headers) === 'object') {
+      W.map(function (k, v) {
+        return xhr.setRequestHeader(k, v);
+      }, headers);
+    }
+
+    var dataType = W.toType(data);
+
+    xhr.send(dataType === 'object' || dataType === 'array' ? JSON.stringify(data) : data);
+  });
+  return { xhr: xhr, promise: promise };
 }
+
+var storeRef = void 0; // Will get populated if WithRequest receives `store` via context
+
+var OK_TIME = 30000;
+
+// cache result of request by endpoint, either in store or local cache object
+var cache = function cache(endpoint, result) {
+  storeRef.setState({
+    requests: _extends({}, storeRef.getState().requests || {}, defineProperty({}, endpoint, { result: result, timestamp: Date.now() }))
+  });
+};
+
+// get timestamp of an endpoint from store or local cache object
+var getTimestamp = function getTimestamp(endpoint) {
+  var reqs = storeRef.getState().requests || {};
+  return reqs[endpoint] && reqs[endpoint].timestamp;
+};
+
+// check if last saved timestamp for endpoint is not expired
+var validCache = function validCache(endpoint) {
+  var ts = getTimestamp(endpoint);
+  if (!ts) return false;
+  var diff = Date.now() - ts;
+  return diff < OK_TIME;
+};
+
+var WithRequest = function (_React$Component) {
+  inherits(WithRequest, _React$Component);
+
+  function WithRequest(props, _ref) {
+    var store = _ref.store;
+    classCallCheck(this, WithRequest);
+
+    var _this = possibleConstructorReturn(this, (WithRequest.__proto__ || Object.getPrototypeOf(WithRequest)).call(this, props));
+
+    storeRef = store;
+    _this._existing = null;
+    _this.state = _extends({}, _this.state || {}, { isLoading: true, result: null, error: null });
+    return _this;
+  }
+
+  createClass(WithRequest, [{
+    key: '_performRequest',
+    value: function _performRequest(endpoint, parse) {
+      var _this2 = this;
+
+      var token = this.context.store.getState().token;
+      var headers = {};
+      if (token) {
+        headers.Authorization = 'Token ' + token;
+      }
+
+      var _makeRequest = makeRequest({ endpoint: endpoint, headers: headers }),
+          xhr = _makeRequest.xhr,
+          promise = _makeRequest.promise;
+
+      this._existing = xhr;
+      this._existing._endpoint = endpoint;
+
+      promise.then(function (result) {
+        cache(endpoint, result);
+        if (_this2.props.mutateResult) {
+          _this2.setState({ result: _this2.props.mutateResult(result, _this2.state.result), isLoading: false });
+        } else {
+          _this2.setState({ result: result, isLoading: false });
+        }
+      }).catch(function (error) {
+        return console.log('_performRequest', { error: error }) || _this2.setState({ error: error, isLoading: false });
+      });
+    }
+  }, {
+    key: '_loadResult',
+    value: function _loadResult(props) {
+      if (!props.request || !props.request.endpoint) {
+        return;
+      }
+      if (this._existing && !this.state.error) {
+        this._existing.abort();
+        this._existing = null;
+      }
+
+      var _props$request = props.request,
+          endpoint = _props$request.endpoint,
+          parse = _props$request.parse;
+
+      if (validCache(endpoint)) {
+        this.setState({
+          result: storeRef.getState().requests[endpoint].result,
+          isLoading: false
+        });
+      } else {
+        this._performRequest(endpoint, parse);
+      }
+    }
+  }, {
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      this._loadResult(this.props);
+    }
+  }, {
+    key: 'shouldComponentUpdate',
+    value: function shouldComponentUpdate(nextProps, nextState) {
+      var nextEnpoint = (nextProps.request || {}).endpoint;
+      var currEnpoint = (this.props.request || {}).endpoint;
+      if (currEnpoint !== nextEnpoint) {
+        return true;
+      }
+      return !equal(nextState, this.state);
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate(prevProps, prevState, snapshot) {
+      if (!this._existing) return;
+      if ((this.props.request || {}).endpoint !== this._existing._endpoint) {
+        this._loadResult(this.props);
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render$$1() {
+      var child = this.children ? this.children[0] : this.props.children[0];
+      if (!child || typeof child !== 'function') {
+        console.log({ child: child });
+        throw new Error('WithRequest requires a function as its only child');
+      }
+      return child(this.state);
+    }
+  }]);
+  return WithRequest;
+}(preact.Component);
+
+var camelToConst = function camelToConst(str) {
+  var ret = '';
+  var prevLowercase = false;
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = str[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var s = _step.value;
+
+      var isUppercase = s.toUpperCase() === s;
+      if (isUppercase && prevLowercase) {
+        ret += '_';
+      }
+      ret += s;
+      prevLowercase = !isUppercase;
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator.return) {
+        _iterator.return();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
+  }
+
+  return ret.replace(/_+/g, '_').toUpperCase();
+};
+
+var constToCamel = function constToCamel(str) {
+  var ret = '';
+  var prevUnderscore = false;
+  var _iteratorNormalCompletion2 = true;
+  var _didIteratorError2 = false;
+  var _iteratorError2 = undefined;
+
+  try {
+    for (var _iterator2 = str[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+      var s = _step2.value;
+
+      var isUnderscore = s === '_';
+      if (isUnderscore) {
+        prevUnderscore = true;
+        continue;
+      }
+      if (!isUnderscore && prevUnderscore) {
+        ret += s;
+        prevUnderscore = false;
+      } else {
+        ret += s.toLowerCase();
+      }
+    }
+  } catch (err) {
+    _didIteratorError2 = true;
+    _iteratorError2 = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion2 && _iterator2.return) {
+        _iterator2.return();
+      }
+    } finally {
+      if (_didIteratorError2) {
+        throw _iteratorError2;
+      }
+    }
+  }
+
+  return ret;
+};
+
+var buildActionsAndReducer = function buildActionsAndReducer(withActions, store, componentName) {
+  var actionTypes = Object.keys(withActions).map(camelToConst);
+  function reducer(action, state) {
+    if (actionTypes.includes(action.type)) {
+      var args = action.payload.args || [];
+      var fnRef = constToCamel(action.type);
+      return _extends({}, state, withActions[fnRef].apply(null, [state].concat(toConsumableArray(args || []))));
+    }
+    return state;
+  }
+  var actions = {};
+  Object.keys(withActions).forEach(function (type) {
+    actions[type] = function () {
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      return store.dispatch({
+        type: camelToConst(type),
+        payload: { args: args },
+        meta: { componentName: componentName }
+      });
+    };
+  });
+  return {
+    reducer: reducer,
+    actions: actions
+  };
+};
+
+var connect = function connect(_ref) {
+  var _ref$name = _ref.name,
+      name = _ref$name === undefined ? 'Connect' : _ref$name,
+      withActions = _ref.withActions,
+      withState = _ref.withState,
+      withRequest = _ref.withRequest,
+      getStoreRef = _ref.getStoreRef,
+      rest = objectWithoutProperties(_ref, ['name', 'withActions', 'withState', 'withRequest', 'getStoreRef']);
+  return function (PassedComponent) {
+    var Base = withState != null ? WithState : preact.Component;
+
+    var Connect = function (_Base) {
+      inherits(Connect, _Base);
+
+      function Connect(props, context) {
+        classCallCheck(this, Connect);
+
+        var _this = possibleConstructorReturn(this, (Connect.__proto__ || Object.getPrototypeOf(Connect)).call(this, props, context));
+
+        if (context.store) {
+          if (withActions) {
+            var _buildActionsAndReduc = buildActionsAndReducer(withActions, context.store, name),
+                reducer = _buildActionsAndReduc.reducer,
+                actions = _buildActionsAndReduc.actions;
+
+            context.store.addReducer(reducer);
+            _this._actions = actions;
+          }
+          if (getStoreRef) {
+            getStoreRef(context.store);
+          }
+        }
+        _this.state = _extends({}, _this.state);
+        return _this;
+      }
+
+      createClass(Connect, [{
+        key: 'render',
+        value: function render$$1() {
+          var _this2 = this;
+
+          var mappedState = withState != null ? this.state._mappedState : {};
+          var allState = _extends({}, mappedState, this.state);
+          return withRequest != null ? preact.h(
+            WithRequest,
+            { request: withRequest(allState, this.props), connectState: mappedState },
+            function (_ref2) {
+              var isLoading = _ref2.isLoading,
+                  response = objectWithoutProperties(_ref2, ['isLoading']);
+              return isLoading ? null : preact.h(PassedComponent, _extends({}, allState, response, _this2.props, rest, _this2._actions));
+            }
+          ) : preact.h(PassedComponent, _extends({}, allState, this.props, rest, this._actions));
+        }
+      }]);
+      return Connect;
+    }(Base);
+
+    if (withState) {
+      Connect.defaultProps = { mapper: withState };
+    }
+
+    return Connect;
+  };
+};
 
 var has = Object.prototype.hasOwnProperty;
 
@@ -1494,7 +1796,7 @@ var qs = {
   parse: parse
 };
 
-var storeRef = void 0;
+var storeRef$1 = void 0;
 
 var segmentize = function segmentize(url) {
   return url.replace(/(^\/+|\/+$)/g, '').split('/');
@@ -1546,65 +1848,75 @@ var exec = function exec(url, route) {
   return matches;
 };
 
-var Router = (function (_ref) {
-  var routes = _ref.routes;
-  return preact.h(
-    WithState,
-    { mapper: function mapper(_ref2) {
-        var currentPath = _ref2.currentPath;
-        return { currentPath: currentPath };
-      } },
-    function (_ref3) {
-      var currentPath = _ref3.currentPath,
-          store = _ref3.store;
+var Router = connect({
+  name: 'Router',
+  withState: function withState(_ref) {
+    var currentPath = _ref.currentPath;
+    return { currentPath: currentPath };
+  },
+  getStoreRef: function getStoreRef(store) {
+    storeRef$1 = store;
+  }
+})(function (_ref2) {
+  var currentPath = _ref2.currentPath,
+      routes = _ref2.routes;
 
-      if (!storeRef) storeRef = store;
-      for (var route in routes) {
-        if (routes[route].hasOwnProperty('routes')) {
-          var shouldRender = Object.values(routes[route].routes).some(function (_ref4) {
-            var path = _ref4.path;
-            return path && exec(currentPath, path);
-          });
-          if (shouldRender) {
-            var App = routes[route].component;
-            return preact.h(App, null);
-          }
-        } else {
-          var routeArgs = exec(currentPath, routes[route].path);
-          if (routeArgs) {
-            var newRoute = {
-              name: route,
-              path: routes[route].path,
-              args: routeArgs
-            };
-            if (!equal$1(newRoute, store.getState().currentRoute)) {
-              store.setState({ currentRoute: newRoute });
-            }
-            var Component$$1 = routes[route].component;
-            return preact.h(Component$$1, routeArgs);
-          }
+  for (var route in routes) {
+    if (routes[route].hasOwnProperty('routes')) {
+      var shouldRender = Object.values(routes[route].routes).some(function (_ref3) {
+        var path = _ref3.path;
+        return path && exec(currentPath, path);
+      });
+      if (shouldRender) {
+        var App = routes[route].component;
+        return preact.h(App, null);
+      }
+    } else {
+      var routeArgs = exec(currentPath, routes[route].path);
+      if (routeArgs) {
+        var newRoute = {
+          name: route,
+          path: routes[route].path,
+          args: routeArgs
+        };
+        if (!equal(newRoute, storeRef$1.getState().currentRoute)) {
+          storeRef$1.setState({ currentRoute: newRoute });
         }
+        var Component$$1 = routes[route].component;
+        return preact.h(Component$$1, routeArgs);
       }
     }
-  );
+  }
 });
 
 if (typeof window !== 'undefined') {
   document.addEventListener('click', function (ev) {
-    if (ev.target.nodeName === 'A' && storeRef) {
+    if (ev.target.nodeName === 'A' && storeRef$1) {
       if (ev.metaKey) return;
       ev.preventDefault();
       ev.stopImmediatePropagation();
       window.scrollTo(0, 0);
       var url = ev.target.getAttribute('href');
-      var currentPath = storeRef.getState().currentPath;
+      var currentPath = storeRef$1.getState().currentPath;
       if (currentPath !== url) {
         window.history['pushState'](null, null, url);
-        storeRef.setState({ currentPath: url });
+        storeRef$1.setState({ currentPath: url });
       }
     }
   });
 }
+
+var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+
+function createCommonjsModule(fn, module) {
+	return module = { exports: {} }, fn(module, module.exports), module.exports;
+}
+
+function getCjsExportFromNamespace (n) {
+	return n && n.default || n;
+}
+
+var require$$0 = getCjsExportFromNamespace(preact$1);
 
 var preactPortal = createCommonjsModule(function (module, exports) {
 (function (global, factory) {
@@ -1730,20 +2042,21 @@ var isOverlay = function isOverlay(el) {
   return el.classList && el.classList.contains('modal-container');
 };
 
-var actions = function actions(store) {
-  return {
-    onContainerClick: function onContainerClick(state, event) {
-      if (isOverlay(event.target)) {
-        return { modal: null };
-      }
-    },
-    closeModal: function closeModal(state) {
+var actions = {
+  onContainerClick: function onContainerClick(state, event) {
+    if (isOverlay(event.target)) {
       return { modal: null };
     }
-  };
+  },
+  closeModal: function closeModal() {
+    return { modal: null };
+  }
 };
 
-var Modal = preact_1('', actions)(function (_ref) {
+var Modal = connect({
+  name: 'Modal',
+  withActions: actions
+})(function (_ref) {
   var onContainerClick = _ref.onContainerClick,
       closeModal = _ref.closeModal,
       _ref$className = _ref.className,
@@ -1781,11 +2094,20 @@ var Modal = preact_1('', actions)(function (_ref) {
 *   </Modals>
 */
 var prevState = {};
-var Modals = preact_1('currentRoute, modal', actions)(function (_ref2) {
-  var currentRoute = _ref2.currentRoute,
-      modal = _ref2.modal,
-      closeModal = _ref2.closeModal,
-      children = _ref2.children;
+
+var Modals = connect({
+  name: 'Modals',
+  withActions: actions,
+  withState: function withState(_ref2) {
+    var currentRoute = _ref2.currentRoute,
+        modal = _ref2.modal;
+    return { currentRoute: currentRoute, modal: modal };
+  }
+})(function (_ref3) {
+  var currentRoute = _ref3.currentRoute,
+      modal = _ref3.modal,
+      closeModal = _ref3.closeModal,
+      children = _ref3.children;
 
   var prevModal = prevState.modal;
   var prevRouteName = W.path('currentRoute.name', prevState);
@@ -1811,63 +2133,7 @@ var Modals = preact_1('currentRoute, modal', actions)(function (_ref2) {
   return child;
 });
 
-var isArray$2 = Array.isArray;
-var keyList$2 = Object.keys;
-var hasProp$2 = Object.prototype.hasOwnProperty;
-
-function equal$2(a, b) {
-  if (a === b) return true;
-
-  if (a && b && (typeof a === 'undefined' ? 'undefined' : _typeof(a)) === 'object' && (typeof b === 'undefined' ? 'undefined' : _typeof(b)) === 'object') {
-    var arrA = isArray$2(a);
-    var arrB = isArray$2(b);
-
-    var i = void 0;
-    var length = void 0;
-    var key = void 0;
-
-    if (arrA && arrB) {
-      length = a.length;
-      if (length !== b.length) return false;
-      for (i = length; i-- !== 0;) {
-        if (!equal$2(a[i], b[i])) return false;
-      }
-      return true;
-    }
-
-    if (arrA !== arrB) return false;
-
-    var dateA = a instanceof Date;
-    var dateB = b instanceof Date;
-    if (dateA !== dateB) return false;
-    if (dateA && dateB) return a.getTime() === b.getTime();
-
-    var regexpA = a instanceof RegExp;
-    var regexpB = b instanceof RegExp;
-    if (regexpA !== regexpB) return false;
-    if (regexpA && regexpB) return a.toString() === b.toString();
-
-    var keys = keyList$2(a);
-    length = keys.length;
-
-    if (length !== keyList$2(b).length) return false;
-
-    for (i = length; i-- !== 0;) {
-      if (!hasProp$2.call(b, keys[i])) return false;
-    }
-
-    for (i = length; i-- !== 0;) {
-      key = keys[i];
-      if (!equal$2(a[key], b[key])) return false;
-    }
-
-    return true;
-  }
-
-  return false;
-}
-
-var storeRef$1 = void 0;
+var storeRef$2 = void 0;
 
 var segmentize$1 = function segmentize(url) {
   return url.replace(/(^\/+|\/+$)/g, '').split('/');
@@ -1914,61 +2180,59 @@ var exec$1 = function exec(url, route) {
   return matches;
 };
 
-var Router$1 = (function (_ref) {
-  var routes = _ref.routes;
-  return preact.h(
-    WithState,
-    { mapper: function mapper(_ref2) {
-        var currentPath = _ref2.currentPath;
-        return { currentPath: currentPath };
-      } },
-    function (_ref3) {
-      var currentPath = _ref3.currentPath,
-          store = _ref3.store;
+var Router$1 = connect({
+  name: 'Router',
+  withState: function withState(_ref) {
+    var currentPath = _ref.currentPath;
+    return { currentPath: currentPath };
+  },
+  getStoreRef: function getStoreRef(store) {
+    storeRef$2 = store;
+  }
+})(function (_ref2) {
+  var currentPath = _ref2.currentPath,
+      routes = _ref2.routes;
 
-      if (!storeRef$1) storeRef$1 = store;
-      for (var route in routes) {
-        if (routes[route].hasOwnProperty('routes')) {
-          var shouldRender = Object.values(routes[route].routes).some(function (_ref4) {
-            var path = _ref4.path;
-            return path && exec$1(currentPath, path);
-          });
-          if (shouldRender) {
-            var App = routes[route].component;
-            return preact.h(App, null);
-          }
-        } else {
-          var routeArgs = exec$1(currentPath, routes[route].path);
-          if (routeArgs) {
-            var newRoute = {
-              name: route,
-              path: routes[route].path,
-              args: routeArgs
-            };
-            if (!equal$2(newRoute, store.getState().currentRoute)) {
-              store.setState({ currentRoute: newRoute });
-            }
-            var Component$$1 = routes[route].component;
-            return preact.h(Component$$1, routeArgs);
-          }
+  for (var route in routes) {
+    if (routes[route].hasOwnProperty('routes')) {
+      var shouldRender = Object.values(routes[route].routes).some(function (_ref3) {
+        var path = _ref3.path;
+        return path && exec$1(currentPath, path);
+      });
+      if (shouldRender) {
+        var App = routes[route].component;
+        return preact.h(App, null);
+      }
+    } else {
+      var routeArgs = exec$1(currentPath, routes[route].path);
+      if (routeArgs) {
+        var newRoute = {
+          name: route,
+          path: routes[route].path,
+          args: routeArgs
+        };
+        if (!equal(newRoute, storeRef$2.getState().currentRoute)) {
+          storeRef$2.setState({ currentRoute: newRoute });
         }
+        var Component$$1 = routes[route].component;
+        return preact.h(Component$$1, routeArgs);
       }
     }
-  );
+  }
 });
 
 if (typeof window !== 'undefined') {
   document.addEventListener('click', function (ev) {
-    if (ev.target.nodeName === 'A' && storeRef$1) {
+    if (ev.target.nodeName === 'A' && storeRef$2) {
       if (ev.metaKey) return;
       ev.preventDefault();
       ev.stopImmediatePropagation();
       window.scrollTo(0, 0);
       var url = ev.target.getAttribute('href');
-      var currentPath = storeRef$1.getState().currentPath;
+      var currentPath = storeRef$2.getState().currentPath;
       if (currentPath !== url) {
         window.history['pushState'](null, null, url);
-        storeRef$1.setState({ currentPath: url });
+        storeRef$2.setState({ currentPath: url });
       }
     }
   });
@@ -2156,1187 +2420,16 @@ var Carousel = function (_React$Component) {
   return Carousel;
 }(preact.Component);
 
-/**
- * Virtual DOM Node
- * @typedef VNode
- * @property {string | function} nodeName The string of the DOM node to create or Component constructor to render
- * @property {Array<VNode | string>} children The children of node
- * @property {string | number | undefined} key The key used to identify this VNode in a list
- * @property {object} attributes The properties of this VNode
- */
-const VNode$1 = function VNode() {};
+var storeRef$3 = void 0; // Will get populated by `getStoreReference`
 
-/**
- * @typedef {import('./component').Component} Component
- * @typedef {import('./vnode').VNode} VNode
- */
-
-/**
- * Global options
- * @public
- * @typedef Options
- * @property {boolean} [syncComponentUpdates] If `true`, `prop` changes trigger synchronous component updates. Defaults to true.
- * @property {(vnode: VNode) => void} [vnode] Processes all created VNodes.
- * @property {(component: Component) => void} [afterMount] Hook invoked after a component is mounted.
- * @property {(component: Component) => void} [afterUpdate] Hook invoked after the DOM is updated with a component's latest render.
- * @property {(component: Component) => void} [beforeUnmount] Hook invoked immediately before a component is unmounted.
- * @property {(rerender: function) => void} [debounceRendering] Hook invoked whenever a rerender is requested. Can be used to debounce rerenders.
- * @property {(event: Event) => Event | void} [event] Hook invoked before any Preact event listeners. The return value (if any) replaces the native browser event given to event listeners
- */
-
-/** @type {Options}  */
-const options$1 = {};
-
-const stack$1 = [];
-
-const EMPTY_CHILDREN$1 = [];
-
-/**
- * JSX/hyperscript reviver.
- * @see http://jasonformat.com/wtf-is-jsx
- * Benchmarks: https://esbench.com/bench/57ee8f8e330ab09900a1a1a0
- *
- * Note: this is exported as both `h()` and `createElement()` for compatibility
- * reasons.
- *
- * Creates a VNode (virtual DOM element). A tree of VNodes can be used as a
- * lightweight representation of the structure of a DOM tree. This structure can
- * be realized by recursively comparing it against the current _actual_ DOM
- * structure, and applying only the differences.
- *
- * `h()`/`createElement()` accepts an element name, a list of attributes/props,
- * and optionally children to append to the element.
- *
- * @example The following DOM tree
- *
- * `<div id="foo" name="bar">Hello!</div>`
- *
- * can be constructed using this function as:
- *
- * `h('div', { id: 'foo', name : 'bar' }, 'Hello!');`
- *
- * @param {string | function} nodeName An element name. Ex: `div`, `a`, `span`, etc.
- * @param {object | null} attributes Any attributes/props to set on the created element.
- * @param {VNode[]} [rest] Additional arguments are taken to be children to
- *  append. Can be infinitely nested Arrays.
- *
- * @public
- */
-function h$2(nodeName, attributes) {
-	let children=EMPTY_CHILDREN$1, lastSimple, child, simple, i;
-	for (i=arguments.length; i-- > 2; ) {
-		stack$1.push(arguments[i]);
-	}
-	if (attributes && attributes.children!=null) {
-		if (!stack$1.length) stack$1.push(attributes.children);
-		delete attributes.children;
-	}
-	while (stack$1.length) {
-		if ((child = stack$1.pop()) && child.pop!==undefined) {
-			for (i=child.length; i--; ) stack$1.push(child[i]);
-		}
-		else {
-			if (typeof child==='boolean') child = null;
-
-			if ((simple = typeof nodeName!=='function')) {
-				if (child==null) child = '';
-				else if (typeof child==='number') child = String(child);
-				else if (typeof child!=='string') simple = false;
-			}
-
-			if (simple && lastSimple) {
-				children[children.length-1] += child;
-			}
-			else if (children===EMPTY_CHILDREN$1) {
-				children = [child];
-			}
-			else {
-				children.push(child);
-			}
-
-			lastSimple = simple;
-		}
-	}
-
-	let p = new VNode$1();
-	p.nodeName = nodeName;
-	p.children = children;
-	p.attributes = attributes==null ? undefined : attributes;
-	p.key = attributes==null ? undefined : attributes.key;
-
-	// if a "vnode hook" is defined, pass every created VNode to it
-	if (options$1.vnode!==undefined) options$1.vnode(p);
-
-	return p;
-}
-
-/**
- * Copy all properties from `props` onto `obj`.
- * @param {object} obj Object onto which properties should be copied.
- * @param {object} props Object from which to copy properties.
- * @returns {object}
- * @private
- */
-function extend$1(obj, props) {
-	for (let i in props) obj[i] = props[i];
-	return obj;
-}
-
-/**
- * Call a function asynchronously, as soon as possible. Makes
- * use of HTML Promise to schedule the callback if available,
- * otherwise falling back to `setTimeout` (mainly for IE<11).
- * @type {(callback: function) => void}
- */
-const defer$1 = typeof Promise=='function' ? Promise.resolve().then.bind(Promise.resolve()) : setTimeout;
-
-/**
- * Clones the given VNode, optionally adding attributes/props and replacing its
- * children.
- * @param {import('./vnode').VNode} vnode The virtual DOM element to clone
- * @param {object} props Attributes/props to add when cloning
- * @param {Array<import('./vnode').VNode>} [rest] Any additional arguments will be used as replacement
- *  children.
- */
-function cloneElement$1(vnode, props) {
-	return h$2(
-		vnode.nodeName,
-		extend$1(extend$1({}, vnode.attributes), props),
-		arguments.length>2 ? [].slice.call(arguments, 2) : vnode.children
-	);
-}
-
-// render modes
-
-/** Do not re-render a component */
-const NO_RENDER = 0;
-/** Synchronously re-render a component and its children */
-const SYNC_RENDER = 1;
-/** Synchronously re-render a component, even if its lifecycle methods attempt to prevent it. */
-const FORCE_RENDER = 2;
-/** Queue asynchronous re-render of a component and it's children */
-const ASYNC_RENDER = 3;
-
-
-const ATTR_KEY = '__preactattr_';
-
-/** DOM properties that should NOT have "px" added when numeric */
-const IS_NON_DIMENSIONAL$1 = /acit|ex(?:s|g|n|p|$)|rph|ows|mnc|ntw|ine[ch]|zoo|^ord/i;
-
-/**
- * Managed queue of dirty components to be re-rendered
- * @type {Array<import('./component').Component>}
- */
-let items$1 = [];
-
-/**
- * Enqueue a rerender of a component
- * @param {import('./component').Component} component The component to rerender
- */
-function enqueueRender$1(component) {
-	if (!component._dirty && (component._dirty = true) && items$1.push(component)==1) {
-		(options$1.debounceRendering || defer$1)(rerender$1);
-	}
-}
-
-/** Rerender all enqueued dirty components */
-function rerender$1() {
-	let p, list = items$1;
-	items$1 = [];
-	while ( (p = list.pop()) ) {
-		if (p._dirty) renderComponent$1(p);
-	}
-}
-
-/**
- * Check if two nodes are equivalent.
- * @param {import('../dom').PreactElement} node DOM Node to compare
- * @param {import('../vnode').VNode} vnode Virtual DOM node to compare
- * @param {boolean} [hydrating=false] If true, ignores component constructors
- *  when comparing.
- * @private
- */
-function isSameNodeType$1(node, vnode, hydrating) {
-	if (typeof vnode==='string' || typeof vnode==='number') {
-		return node.splitText!==undefined;
-	}
-	if (typeof vnode.nodeName==='string') {
-		return !node._componentConstructor && isNamedNode$1(node, vnode.nodeName);
-	}
-	return hydrating || node._componentConstructor===vnode.nodeName;
-}
-
-
-/**
- * Check if an Element has a given nodeName, case-insensitively.
- * @param {import('../dom').PreactElement} node A DOM Element to inspect the name of.
- * @param {string} nodeName Unnormalized name to compare against.
- */
-function isNamedNode$1(node, nodeName) {
-	return node.normalizedNodeName===nodeName || node.nodeName.toLowerCase()===nodeName.toLowerCase();
-}
-
-
-/**
- * Reconstruct Component-style `props` from a VNode.
- * Ensures default/fallback values from `defaultProps`:
- * Own-properties of `defaultProps` not present in `vnode.attributes` are added.
- * @param {import('../vnode').VNode} vnode The VNode to get props for
- * @returns {object} The props to use for this VNode
- */
-function getNodeProps$1(vnode) {
-	let props = extend$1({}, vnode.attributes);
-	props.children = vnode.children;
-
-	let defaultProps = vnode.nodeName.defaultProps;
-	if (defaultProps!==undefined) {
-		for (let i in defaultProps) {
-			if (props[i]===undefined) {
-				props[i] = defaultProps[i];
-			}
-		}
-	}
-
-	return props;
-}
-
-/**
- * A DOM event listener
- * @typedef {(e: Event) => void} EventListner
- */
-
-/**
- * A mapping of event types to event listeners
- * @typedef {Object.<string, EventListener>} EventListenerMap
- */
-
-/**
- * Properties Preact adds to elements it creates
- * @typedef PreactElementExtensions
- * @property {string} [normalizedNodeName] A normalized node name to use in diffing
- * @property {EventListenerMap} [_listeners] A map of event listeners added by components to this DOM node
- * @property {import('../component').Component} [_component] The component that rendered this DOM node
- * @property {function} [_componentConstructor] The constructor of the component that rendered this DOM node
- */
-
-/**
- * A DOM element that has been extended with Preact properties
- * @typedef {Element & ElementCSSInlineStyle & PreactElementExtensions} PreactElement
- */
-
-/**
- * Create an element with the given nodeName.
- * @param {string} nodeName The DOM node to create
- * @param {boolean} [isSvg=false] If `true`, creates an element within the SVG
- *  namespace.
- * @returns {PreactElement} The created DOM node
- */
-function createNode$1(nodeName, isSvg) {
-	/** @type {PreactElement} */
-	let node = isSvg ? document.createElementNS('http://www.w3.org/2000/svg', nodeName) : document.createElement(nodeName);
-	node.normalizedNodeName = nodeName;
-	return node;
-}
-
-
-/**
- * Remove a child node from its parent if attached.
- * @param {Node} node The node to remove
- */
-function removeNode$1(node) {
-	let parentNode = node.parentNode;
-	if (parentNode) parentNode.removeChild(node);
-}
-
-
-/**
- * Set a named attribute on the given Node, with special behavior for some names
- * and event handlers. If `value` is `null`, the attribute/handler will be
- * removed.
- * @param {PreactElement} node An element to mutate
- * @param {string} name The name/key to set, such as an event or attribute name
- * @param {*} old The last value that was set for this name/node pair
- * @param {*} value An attribute value, such as a function to be used as an
- *  event handler
- * @param {boolean} isSvg Are we currently diffing inside an svg?
- * @private
- */
-function setAccessor$1(node, name, old, value, isSvg) {
-	if (name==='className') name = 'class';
-
-
-	if (name==='key') ;
-	else if (name==='ref') {
-		if (old) old(null);
-		if (value) value(node);
-	}
-	else if (name==='class' && !isSvg) {
-		node.className = value || '';
-	}
-	else if (name==='style') {
-		if (!value || typeof value==='string' || typeof old==='string') {
-			node.style.cssText = value || '';
-		}
-		if (value && typeof value==='object') {
-			if (typeof old!=='string') {
-				for (let i in old) if (!(i in value)) node.style[i] = '';
-			}
-			for (let i in value) {
-				node.style[i] = typeof value[i]==='number' && IS_NON_DIMENSIONAL$1.test(i)===false ? (value[i]+'px') : value[i];
-			}
-		}
-	}
-	else if (name==='dangerouslySetInnerHTML') {
-		if (value) node.innerHTML = value.__html || '';
-	}
-	else if (name[0]=='o' && name[1]=='n') {
-		let useCapture = name !== (name=name.replace(/Capture$/, ''));
-		name = name.toLowerCase().substring(2);
-		if (value) {
-			if (!old) node.addEventListener(name, eventProxy$1, useCapture);
-		}
-		else {
-			node.removeEventListener(name, eventProxy$1, useCapture);
-		}
-		(node._listeners || (node._listeners = {}))[name] = value;
-	}
-	else if (name!=='list' && name!=='type' && !isSvg && name in node) {
-		// Attempt to set a DOM property to the given value.
-		// IE & FF throw for certain property-value combinations.
-		try {
-			node[name] = value==null ? '' : value;
-		} catch (e) { }
-		if ((value==null || value===false) && name!='spellcheck') node.removeAttribute(name);
-	}
-	else {
-		let ns = isSvg && (name !== (name = name.replace(/^xlink:?/, '')));
-		// spellcheck is treated differently than all other boolean values and
-		// should not be removed when the value is `false`. See:
-		// https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attr-spellcheck
-		if (value==null || value===false) {
-			if (ns) node.removeAttributeNS('http://www.w3.org/1999/xlink', name.toLowerCase());
-			else node.removeAttribute(name);
-		}
-		else if (typeof value!=='function') {
-			if (ns) node.setAttributeNS('http://www.w3.org/1999/xlink', name.toLowerCase(), value);
-			else node.setAttribute(name, value);
-		}
-	}
-}
-
-
-/**
- * Proxy an event to hooked event handlers
- * @param {Event} e The event object from the browser
- * @private
- */
-function eventProxy$1(e) {
-	return this._listeners[e.type](e);
-}
-
-/**
- * Queue of components that have been mounted and are awaiting componentDidMount
- * @type {Array<import('../component').Component>}
- */
-const mounts$1 = [];
-
-/** Diff recursion count, used to track the end of the diff cycle. */
-let diffLevel$1 = 0;
-
-/** Global flag indicating if the diff is currently within an SVG */
-let isSvgMode$1 = false;
-
-/** Global flag indicating if the diff is performing hydration */
-let hydrating$1 = false;
-
-/** Invoke queued componentDidMount lifecycle methods */
-function flushMounts$1() {
-	let c;
-	while ((c=mounts$1.pop())) {
-		if (c.componentDidMount) c.componentDidMount();
-	}
-}
-
-
-/**
- * Apply differences in a given vnode (and it's deep children) to a real DOM Node.
- * @param {import('../dom').PreactElement} dom A DOM node to mutate into the shape of a `vnode`
- * @param {import('../vnode').VNode} vnode A VNode (with descendants forming a tree) representing
- *  the desired DOM structure
- * @param {object} context The current context
- * @param {boolean} mountAll Whether or not to immediately mount all components
- * @param {Element} parent ?
- * @param {boolean} componentRoot ?
- * @returns {import('../dom').PreactElement} The created/mutated element
- * @private
- */
-function diff$1(dom, vnode, context, mountAll, parent, componentRoot) {
-	// diffLevel having been 0 here indicates initial entry into the diff (not a subdiff)
-	if (!diffLevel$1++) {
-		// when first starting the diff, check if we're diffing an SVG or within an SVG
-		isSvgMode$1 = parent!=null && parent.ownerSVGElement!==undefined;
-
-		// hydration is indicated by the existing element to be diffed not having a prop cache
-		hydrating$1 = dom!=null && !(ATTR_KEY in dom);
-	}
-
-	let ret = idiff$1(dom, vnode, context, mountAll, componentRoot);
-
-	// append the element if its a new parent
-	if (parent && ret.parentNode!==parent) parent.appendChild(ret);
-
-	// diffLevel being reduced to 0 means we're exiting the diff
-	if (!--diffLevel$1) {
-		hydrating$1 = false;
-		// invoke queued componentDidMount lifecycle methods
-		if (!componentRoot) flushMounts$1();
-	}
-
-	return ret;
-}
-
-
-/**
- * Internals of `diff()`, separated to allow bypassing diffLevel / mount flushing.
- * @param {import('../dom').PreactElement} dom A DOM node to mutate into the shape of a `vnode`
- * @param {import('../vnode').VNode} vnode A VNode (with descendants forming a tree) representing the desired DOM structure
- * @param {object} context The current context
- * @param {boolean} mountAll Whether or not to immediately mount all components
- * @param {boolean} [componentRoot] ?
- * @private
- */
-function idiff$1(dom, vnode, context, mountAll, componentRoot) {
-	let out = dom,
-		prevSvgMode = isSvgMode$1;
-
-	// empty values (null, undefined, booleans) render as empty Text nodes
-	if (vnode==null || typeof vnode==='boolean') vnode = '';
-
-
-	// Fast case: Strings & Numbers create/update Text nodes.
-	if (typeof vnode==='string' || typeof vnode==='number') {
-
-		// update if it's already a Text node:
-		if (dom && dom.splitText!==undefined && dom.parentNode && (!dom._component || componentRoot)) {
-			/* istanbul ignore if */ /* Browser quirk that can't be covered: https://github.com/developit/preact/commit/fd4f21f5c45dfd75151bd27b4c217d8003aa5eb9 */
-			if (dom.nodeValue!=vnode) {
-				dom.nodeValue = vnode;
-			}
-		}
-		else {
-			// it wasn't a Text node: replace it with one and recycle the old Element
-			out = document.createTextNode(vnode);
-			if (dom) {
-				if (dom.parentNode) dom.parentNode.replaceChild(out, dom);
-				recollectNodeTree$1(dom, true);
-			}
-		}
-
-		out[ATTR_KEY] = true;
-
-		return out;
-	}
-
-
-	// If the VNode represents a Component, perform a component diff:
-	let vnodeName = vnode.nodeName;
-	if (typeof vnodeName==='function') {
-		return buildComponentFromVNode$1(dom, vnode, context, mountAll);
-	}
-
-
-	// Tracks entering and exiting SVG namespace when descending through the tree.
-	isSvgMode$1 = vnodeName==='svg' ? true : vnodeName==='foreignObject' ? false : isSvgMode$1;
-
-
-	// If there's no existing element or it's the wrong type, create a new one:
-	vnodeName = String(vnodeName);
-	if (!dom || !isNamedNode$1(dom, vnodeName)) {
-		out = createNode$1(vnodeName, isSvgMode$1);
-
-		if (dom) {
-			// move children into the replacement node
-			while (dom.firstChild) out.appendChild(dom.firstChild);
-
-			// if the previous Element was mounted into the DOM, replace it inline
-			if (dom.parentNode) dom.parentNode.replaceChild(out, dom);
-
-			// recycle the old element (skips non-Element node types)
-			recollectNodeTree$1(dom, true);
-		}
-	}
-
-
-	let fc = out.firstChild,
-		props = out[ATTR_KEY],
-		vchildren = vnode.children;
-
-	if (props==null) {
-		props = out[ATTR_KEY] = {};
-		for (let a=out.attributes, i=a.length; i--; ) props[a[i].name] = a[i].value;
-	}
-
-	// Optimization: fast-path for elements containing a single TextNode:
-	if (!hydrating$1 && vchildren && vchildren.length===1 && typeof vchildren[0]==='string' && fc!=null && fc.splitText!==undefined && fc.nextSibling==null) {
-		if (fc.nodeValue!=vchildren[0]) {
-			fc.nodeValue = vchildren[0];
-		}
-	}
-	// otherwise, if there are existing or new children, diff them:
-	else if (vchildren && vchildren.length || fc!=null) {
-		innerDiffNode$1(out, vchildren, context, mountAll, hydrating$1 || props.dangerouslySetInnerHTML!=null);
-	}
-
-
-	// Apply attributes/props from VNode to the DOM Element:
-	diffAttributes$1(out, vnode.attributes, props);
-
-
-	// restore previous SVG mode: (in case we're exiting an SVG namespace)
-	isSvgMode$1 = prevSvgMode;
-
-	return out;
-}
-
-
-/**
- * Apply child and attribute changes between a VNode and a DOM Node to the DOM.
- * @param {import('../dom').PreactElement} dom Element whose children should be compared & mutated
- * @param {Array<import('../vnode').VNode>} vchildren Array of VNodes to compare to `dom.childNodes`
- * @param {object} context Implicitly descendant context object (from most
- *  recent `getChildContext()`)
- * @param {boolean} mountAll Whether or not to immediately mount all components
- * @param {boolean} isHydrating if `true`, consumes externally created elements
- *  similar to hydration
- */
-function innerDiffNode$1(dom, vchildren, context, mountAll, isHydrating) {
-	let originalChildren = dom.childNodes,
-		children = [],
-		keyed = {},
-		keyedLen = 0,
-		min = 0,
-		len = originalChildren.length,
-		childrenLen = 0,
-		vlen = vchildren ? vchildren.length : 0,
-		j, c, f, vchild, child;
-
-	// Build up a map of keyed children and an Array of unkeyed children:
-	if (len!==0) {
-		for (let i=0; i<len; i++) {
-			let child = originalChildren[i],
-				props = child[ATTR_KEY],
-				key = vlen && props ? child._component ? child._component.__key : props.key : null;
-			if (key!=null) {
-				keyedLen++;
-				keyed[key] = child;
-			}
-			else if (props || (child.splitText!==undefined ? (isHydrating ? child.nodeValue.trim() : true) : isHydrating)) {
-				children[childrenLen++] = child;
-			}
-		}
-	}
-
-	if (vlen!==0) {
-		for (let i=0; i<vlen; i++) {
-			vchild = vchildren[i];
-			child = null;
-
-			// attempt to find a node based on key matching
-			let key = vchild.key;
-			if (key!=null) {
-				if (keyedLen && keyed[key]!==undefined) {
-					child = keyed[key];
-					keyed[key] = undefined;
-					keyedLen--;
-				}
-			}
-			// attempt to pluck a node of the same type from the existing children
-			else if (min<childrenLen) {
-				for (j=min; j<childrenLen; j++) {
-					if (children[j]!==undefined && isSameNodeType$1(c = children[j], vchild, isHydrating)) {
-						child = c;
-						children[j] = undefined;
-						if (j===childrenLen-1) childrenLen--;
-						if (j===min) min++;
-						break;
-					}
-				}
-			}
-
-			// morph the matched/found/created DOM child to match vchild (deep)
-			child = idiff$1(child, vchild, context, mountAll);
-
-			f = originalChildren[i];
-			if (child && child!==dom && child!==f) {
-				if (f==null) {
-					dom.appendChild(child);
-				}
-				else if (child===f.nextSibling) {
-					removeNode$1(f);
-				}
-				else {
-					dom.insertBefore(child, f);
-				}
-			}
-		}
-	}
-
-
-	// remove unused keyed children:
-	if (keyedLen) {
-		for (let i in keyed) if (keyed[i]!==undefined) recollectNodeTree$1(keyed[i], false);
-	}
-
-	// remove orphaned unkeyed children:
-	while (min<=childrenLen) {
-		if ((child = children[childrenLen--])!==undefined) recollectNodeTree$1(child, false);
-	}
-}
-
-
-
-/**
- * Recursively recycle (or just unmount) a node and its descendants.
- * @param {import('../dom').PreactElement} node DOM node to start
- *  unmount/removal from
- * @param {boolean} [unmountOnly=false] If `true`, only triggers unmount
- *  lifecycle, skips removal
- */
-function recollectNodeTree$1(node, unmountOnly) {
-	let component = node._component;
-	if (component) {
-		// if node is owned by a Component, unmount that component (ends up recursing back here)
-		unmountComponent$1(component);
-	}
-	else {
-		// If the node's VNode had a ref function, invoke it with null here.
-		// (this is part of the React spec, and smart for unsetting references)
-		if (node[ATTR_KEY]!=null && node[ATTR_KEY].ref) node[ATTR_KEY].ref(null);
-
-		if (unmountOnly===false || node[ATTR_KEY]==null) {
-			removeNode$1(node);
-		}
-
-		removeChildren$1(node);
-	}
-}
-
-
-/**
- * Recollect/unmount all children.
- *	- we use .lastChild here because it causes less reflow than .firstChild
- *	- it's also cheaper than accessing the .childNodes Live NodeList
- */
-function removeChildren$1(node) {
-	node = node.lastChild;
-	while (node) {
-		let next = node.previousSibling;
-		recollectNodeTree$1(node, true);
-		node = next;
-	}
-}
-
-
-/**
- * Apply differences in attributes from a VNode to the given DOM Element.
- * @param {import('../dom').PreactElement} dom Element with attributes to diff `attrs` against
- * @param {object} attrs The desired end-state key-value attribute pairs
- * @param {object} old Current/previous attributes (from previous VNode or
- *  element's prop cache)
- */
-function diffAttributes$1(dom, attrs, old) {
-	let name;
-
-	// remove attributes no longer present on the vnode by setting them to undefined
-	for (name in old) {
-		if (!(attrs && attrs[name]!=null) && old[name]!=null) {
-			setAccessor$1(dom, name, old[name], old[name] = undefined, isSvgMode$1);
-		}
-	}
-
-	// add new & update changed attributes
-	for (name in attrs) {
-		if (name!=='children' && name!=='innerHTML' && (!(name in old) || attrs[name]!==(name==='value' || name==='checked' ? dom[name] : old[name]))) {
-			setAccessor$1(dom, name, old[name], old[name] = attrs[name], isSvgMode$1);
-		}
-	}
-}
-
-/**
- * Retains a pool of Components for re-use.
- * @type {Component[]}
- * @private
- */
-const recyclerComponents$1 = [];
-
-
-/**
- * Create a component. Normalizes differences between PFC's and classful
- * Components.
- * @param {function} Ctor The constructor of the component to create
- * @param {object} props The initial props of the component
- * @param {object} context The initial context of the component
- * @returns {import('../component').Component}
- */
-function createComponent$1(Ctor, props, context) {
-	let inst, i = recyclerComponents$1.length;
-
-	if (Ctor.prototype && Ctor.prototype.render) {
-		inst = new Ctor(props, context);
-		Component$1.call(inst, props, context);
-	}
-	else {
-		inst = new Component$1(props, context);
-		inst.constructor = Ctor;
-		inst.render = doRender$1;
-	}
-
-
-	while (i--) {
-		if (recyclerComponents$1[i].constructor===Ctor) {
-			inst.nextBase = recyclerComponents$1[i].nextBase;
-			recyclerComponents$1.splice(i, 1);
-			return inst;
-		}
-	}
-
-	return inst;
-}
-
-
-/** The `.render()` method for a PFC backing instance. */
-function doRender$1(props, state, context) {
-	return this.constructor(props, context);
-}
-
-/**
- * Set a component's `props` and possibly re-render the component
- * @param {import('../component').Component} component The Component to set props on
- * @param {object} props The new props
- * @param {number} renderMode Render options - specifies how to re-render the component
- * @param {object} context The new context
- * @param {boolean} mountAll Whether or not to immediately mount all components
- */
-function setComponentProps$1(component, props, renderMode, context, mountAll) {
-	if (component._disable) return;
-	component._disable = true;
-
-	component.__ref = props.ref;
-	component.__key = props.key;
-	delete props.ref;
-	delete props.key;
-
-	if (typeof component.constructor.getDerivedStateFromProps === 'undefined') {
-		if (!component.base || mountAll) {
-			if (component.componentWillMount) component.componentWillMount();
-		}
-		else if (component.componentWillReceiveProps) {
-			component.componentWillReceiveProps(props, context);
-		}
-	}
-
-	if (context && context!==component.context) {
-		if (!component.prevContext) component.prevContext = component.context;
-		component.context = context;
-	}
-
-	if (!component.prevProps) component.prevProps = component.props;
-	component.props = props;
-
-	component._disable = false;
-
-	if (renderMode!==NO_RENDER) {
-		if (renderMode===SYNC_RENDER || options$1.syncComponentUpdates!==false || !component.base) {
-			renderComponent$1(component, SYNC_RENDER, mountAll);
-		}
-		else {
-			enqueueRender$1(component);
-		}
-	}
-
-	if (component.__ref) component.__ref(component);
-}
-
-
-
-/**
- * Render a Component, triggering necessary lifecycle events and taking
- * High-Order Components into account.
- * @param {import('../component').Component} component The component to render
- * @param {number} [renderMode] render mode, see constants.js for available options.
- * @param {boolean} [mountAll] Whether or not to immediately mount all components
- * @param {boolean} [isChild] ?
- * @private
- */
-function renderComponent$1(component, renderMode, mountAll, isChild) {
-	if (component._disable) return;
-
-	let props = component.props,
-		state = component.state,
-		context = component.context,
-		previousProps = component.prevProps || props,
-		previousState = component.prevState || state,
-		previousContext = component.prevContext || context,
-		isUpdate = component.base,
-		nextBase = component.nextBase,
-		initialBase = isUpdate || nextBase,
-		initialChildComponent = component._component,
-		skip = false,
-		snapshot = previousContext,
-		rendered, inst, cbase;
-
-	if (component.constructor.getDerivedStateFromProps) {
-		state = extend$1(extend$1({}, state), component.constructor.getDerivedStateFromProps(props, state));
-		component.state = state;
-	}
-
-	// if updating
-	if (isUpdate) {
-		component.props = previousProps;
-		component.state = previousState;
-		component.context = previousContext;
-		if (renderMode!==FORCE_RENDER
-			&& component.shouldComponentUpdate
-			&& component.shouldComponentUpdate(props, state, context) === false) {
-			skip = true;
-		}
-		else if (component.componentWillUpdate) {
-			component.componentWillUpdate(props, state, context);
-		}
-		component.props = props;
-		component.state = state;
-		component.context = context;
-	}
-
-	component.prevProps = component.prevState = component.prevContext = component.nextBase = null;
-	component._dirty = false;
-
-	if (!skip) {
-		rendered = component.render(props, state, context);
-
-		// context to pass to the child, can be updated via (grand-)parent component
-		if (component.getChildContext) {
-			context = extend$1(extend$1({}, context), component.getChildContext());
-		}
-
-		if (isUpdate && component.getSnapshotBeforeUpdate) {
-			snapshot = component.getSnapshotBeforeUpdate(previousProps, previousState);
-		}
-
-		let childComponent = rendered && rendered.nodeName,
-			toUnmount, base;
-
-		if (typeof childComponent==='function') {
-			// set up high order component link
-
-			let childProps = getNodeProps$1(rendered);
-			inst = initialChildComponent;
-
-			if (inst && inst.constructor===childComponent && childProps.key==inst.__key) {
-				setComponentProps$1(inst, childProps, SYNC_RENDER, context, false);
-			}
-			else {
-				toUnmount = inst;
-
-				component._component = inst = createComponent$1(childComponent, childProps, context);
-				inst.nextBase = inst.nextBase || nextBase;
-				inst._parentComponent = component;
-				setComponentProps$1(inst, childProps, NO_RENDER, context, false);
-				renderComponent$1(inst, SYNC_RENDER, mountAll, true);
-			}
-
-			base = inst.base;
-		}
-		else {
-			cbase = initialBase;
-
-			// destroy high order component link
-			toUnmount = initialChildComponent;
-			if (toUnmount) {
-				cbase = component._component = null;
-			}
-
-			if (initialBase || renderMode===SYNC_RENDER) {
-				if (cbase) cbase._component = null;
-				base = diff$1(cbase, rendered, context, mountAll || !isUpdate, initialBase && initialBase.parentNode, true);
-			}
-		}
-
-		if (initialBase && base!==initialBase && inst!==initialChildComponent) {
-			let baseParent = initialBase.parentNode;
-			if (baseParent && base!==baseParent) {
-				baseParent.replaceChild(base, initialBase);
-
-				if (!toUnmount) {
-					initialBase._component = null;
-					recollectNodeTree$1(initialBase, false);
-				}
-			}
-		}
-
-		if (toUnmount) {
-			unmountComponent$1(toUnmount);
-		}
-
-		component.base = base;
-		if (base && !isChild) {
-			let componentRef = component,
-				t = component;
-			while ((t=t._parentComponent)) {
-				(componentRef = t).base = base;
-			}
-			base._component = componentRef;
-			base._componentConstructor = componentRef.constructor;
-		}
-	}
-
-	if (!isUpdate || mountAll) {
-		mounts$1.unshift(component);
-	}
-	else if (!skip) {
-		// Ensure that pending componentDidMount() hooks of child components
-		// are called before the componentDidUpdate() hook in the parent.
-		// Note: disabled as it causes duplicate hooks, see https://github.com/developit/preact/issues/750
-		// flushMounts();
-
-		if (component.componentDidUpdate) {
-			component.componentDidUpdate(previousProps, previousState, snapshot);
-		}
-	}
-
-	while (component._renderCallbacks.length) component._renderCallbacks.pop().call(component);
-
-	if (!diffLevel$1 && !isChild) flushMounts$1();
-}
-
-
-
-/**
- * Apply the Component referenced by a VNode to the DOM.
- * @param {import('../dom').PreactElement} dom The DOM node to mutate
- * @param {import('../vnode').VNode} vnode A Component-referencing VNode
- * @param {object} context The current context
- * @param {boolean} mountAll Whether or not to immediately mount all components
- * @returns {import('../dom').PreactElement} The created/mutated element
- * @private
- */
-function buildComponentFromVNode$1(dom, vnode, context, mountAll) {
-	let c = dom && dom._component,
-		originalComponent = c,
-		oldDom = dom,
-		isDirectOwner = c && dom._componentConstructor===vnode.nodeName,
-		isOwner = isDirectOwner,
-		props = getNodeProps$1(vnode);
-	while (c && !isOwner && (c=c._parentComponent)) {
-		isOwner = c.constructor===vnode.nodeName;
-	}
-
-	if (c && isOwner && (!mountAll || c._component)) {
-		setComponentProps$1(c, props, ASYNC_RENDER, context, mountAll);
-		dom = c.base;
-	}
-	else {
-		if (originalComponent && !isDirectOwner) {
-			unmountComponent$1(originalComponent);
-			dom = oldDom = null;
-		}
-
-		c = createComponent$1(vnode.nodeName, props, context);
-		if (dom && !c.nextBase) {
-			c.nextBase = dom;
-			// passing dom/oldDom as nextBase will recycle it if unused, so bypass recycling on L229:
-			oldDom = null;
-		}
-		setComponentProps$1(c, props, SYNC_RENDER, context, mountAll);
-		dom = c.base;
-
-		if (oldDom && dom!==oldDom) {
-			oldDom._component = null;
-			recollectNodeTree$1(oldDom, false);
-		}
-	}
-
-	return dom;
-}
-
-
-
-/**
- * Remove a component from the DOM and recycle it.
- * @param {import('../component').Component} component The Component instance to unmount
- * @private
- */
-function unmountComponent$1(component) {
-
-	let base = component.base;
-
-	component._disable = true;
-
-	if (component.componentWillUnmount) component.componentWillUnmount();
-
-	component.base = null;
-
-	// recursively tear down & recollect high-order component children:
-	let inner = component._component;
-	if (inner) {
-		unmountComponent$1(inner);
-	}
-	else if (base) {
-		if (base[ATTR_KEY] && base[ATTR_KEY].ref) base[ATTR_KEY].ref(null);
-
-		component.nextBase = base;
-
-		removeNode$1(base);
-		recyclerComponents$1.push(component);
-
-		removeChildren$1(base);
-	}
-
-	if (component.__ref) component.__ref(null);
-}
-
-/**
- * Base Component class.
- * Provides `setState()` and `forceUpdate()`, which trigger rendering.
- * @typedef {object} Component
- * @param {object} props The initial component props
- * @param {object} context The initial context from parent components' getChildContext
- * @public
- *
- * @example
- * class MyFoo extends Component {
- *   render(props, state) {
- *     return <div />;
- *   }
- * }
- */
-function Component$1(props, context) {
-	this._dirty = true;
-
-	/**
-	 * @public
-	 * @type {object}
-	 */
-	this.context = context;
-
-	/**
-	 * @public
-	 * @type {object}
-	 */
-	this.props = props;
-
-	/**
-	 * @public
-	 * @type {object}
-	 */
-	this.state = this.state || {};
-
-	this._renderCallbacks = [];
-}
-
-
-extend$1(Component$1.prototype, {
-
-	/**
-	 * Update component state and schedule a re-render.
-	 * @param {object} state A dict of state properties to be shallowly merged
-	 * 	into the current state, or a function that will produce such a dict. The
-	 * 	function is called with the current state and props.
-	 * @param {() => void} callback A function to be called once component state is
-	 * 	updated
-	 */
-	setState(state, callback) {
-		if (!this.prevState) this.prevState = this.state;
-		this.state = extend$1(
-			extend$1({}, this.state),
-			typeof state === 'function' ? state(this.state, this.props) : state
-		);
-		if (callback) this._renderCallbacks.push(callback);
-		enqueueRender$1(this);
-	},
-
-
-	/**
-	 * Immediately perform a synchronous re-render of the component.
-	 * @param {() => void} callback A function to be called after component is
-	 * 	re-rendered.
-	 * @private
-	 */
-	forceUpdate(callback) {
-		if (callback) this._renderCallbacks.push(callback);
-		renderComponent$1(this, FORCE_RENDER);
-	},
-
-
-	/**
-	 * Accepts `props` and `state`, and returns a new Virtual DOM tree to build.
-	 * Virtual DOM is generally constructed via [JSX](http://jasonformat.com/wtf-is-jsx).
-	 * @param {object} props Props (eg: JSX attributes) received from parent
-	 * 	element/component
-	 * @param {object} state The component's current state
-	 * @param {object} context Context object, as returned by the nearest
-	 *  ancestor's `getChildContext()`
-	 * @returns {import('./vnode').VNode | void}
-	 */
-	render() {}
-
-});
-
-/**
- * Render JSX into a `parent` Element.
- * @param {import('./vnode').VNode} vnode A (JSX) VNode to render
- * @param {import('./dom').PreactElement} parent DOM element to render into
- * @param {import('./dom').PreactElement} [merge] Attempt to re-use an existing DOM tree rooted at
- *  `merge`
- * @public
- *
- * @example
- * // render a div into <body>:
- * render(<div id="hello">hello!</div>, document.body);
- *
- * @example
- * // render a "Thing" component into #foo:
- * const Thing = ({ name }) => <span>{ name }</span>;
- * render(<Thing name="one" />, document.querySelector('#foo'));
- */
-function render$1(vnode, parent, merge) {
-	return diff$1(merge, vnode, {}, false, parent, false);
-}
-
-var require$$0$1 = {
-	h: h$2,
-	createElement: h$2,
-	cloneElement: cloneElement$1,
-	Component: Component$1,
-	render: render$1,
-	rerender: rerender$1,
-	options: options$1
-};
-
-var react = createCommonjsModule(function (module, exports) {
-var t=require$$0$1;function r(t,r){for(var n in r)t[n]=r[n];return t}var n={store:function(){}};var o=function(r){function n(){r.apply(this,arguments);}return r&&(n.__proto__=r),(n.prototype=Object.create(r&&r.prototype)).constructor=n,n.prototype.getChildContext=function(){return {store:this.props.store}},n.prototype.render=function(){return t.Children.only(this.props.children)},n}(t.Component);o.childContextTypes=n,exports.connect=function(o,e){var i;return "function"!=typeof o&&("string"==typeof(i=o||[])&&(i=i.split(/\s*,\s*/)),o=function(t){for(var r={},n=0;n<i.length;n++)r[i[n]]=t[i[n]];return r}),function(i){function c(n,c){var p=this;t.Component.call(this,n,c);var u=c.store,s=o(u?u.getState():{},n),f=e?function(t,r){"function"==typeof t&&(t=t(r));var n={};for(var o in t)n[o]=r.action(t[o]);return n}(e,u):{store:u},a=function(){var t=o(u?u.getState():{},p.props);for(var r in t)if(t[r]!==s[r])return s=t,p.forceUpdate();for(var n in s)if(!(n in t))return s=t,p.forceUpdate()};this.componentDidMount=function(){u.subscribe(a);},this.componentWillUnmount=function(){u.unsubscribe(a);},this.render=function(){return t.createElement(i,r(r(r({},f),p.props),s))};}return c.contextTypes=n,(c.prototype=Object.create(t.Component.prototype)).constructor=c}},exports.Provider=o;
-
-});
-var react_1 = react.connect;
-var react_2 = react.Provider;
-
-var storeRef$2 = void 0; // Will get populated by `getStoreReference`
-
-var getStoreReference = function getStoreReference(actions) {
-  return function (store) {
-    storeRef$2 = store;
-    return actions;
-  };
-};
-
-var actions$1 = getStoreReference({
+var actions$1 = {
   toggle: function toggle(_ref, uid) {
     var dropdown = _ref.dropdown;
 
     var isOpen = dropdown === uid;
     return { dropdown: isOpen ? null : uid };
   }
-});
+};
 
 var mapper = function mapper(_ref2, _ref3) {
   var dropdown = _ref2.dropdown;
@@ -3348,7 +2441,14 @@ var mapper = function mapper(_ref2, _ref3) {
   return { isOpen: dropdown === uid };
 };
 
-var Dropdown = react_1(mapper, actions$1)(function (_ref4) {
+var Dropdown = connect({
+  name: 'Dropdown',
+  withActions: actions$1,
+  withState: mapper,
+  getStoreRef: function getStoreRef(store) {
+    storeRef$3 = store;
+  }
+})(function (_ref4) {
   var isOpen = _ref4.isOpen,
       toggle = _ref4.toggle,
       Trigger = _ref4.Trigger,
@@ -3392,8 +2492,8 @@ var isDropdown = function isDropdown(el) {
 
 try {
   document.body.addEventListener('click', function (ev) {
-    if (!storeRef$2) return;
-    var activeDropdown = W.path('dropdown', storeRef$2.getState());
+    if (!storeRef$3) return;
+    var activeDropdown = W.path('dropdown', storeRef$3.getState());
     if (!activeDropdown) {
       return;
     }
@@ -3403,31 +2503,9 @@ try {
       el = el.parentNode;
       if (isDropdown(el)) return;
     }
-    storeRef$2.setState({ dropdown: null });
+    storeRef$3.setState({ dropdown: null });
   });
 } catch (_) {}
-
-var isInViewport = function isInViewport(element) {
-  if (typeof document === 'undefined') {
-    return false;
-  }
-  var rect = element.getBoundingClientRect();
-  var html = document.documentElement;
-  return rect.bottom <= (window.innerHeight || html.clientHeight);
-};
-
-var imageComponents = [];
-
-if (typeof document !== 'undefined') {
-  document.addEventListener('scroll', function () {
-    if (!imageComponents.length) return;
-    imageComponents.forEach(function (i) {
-      if (isInViewport(i.base)) {
-        i.loadImage();
-      }
-    });
-  }, true);
-}
 
 var Image = function (_React$Component) {
   inherits(Image, _React$Component);
@@ -3438,80 +2516,85 @@ var Image = function (_React$Component) {
     var _this = possibleConstructorReturn(this, (Image.__proto__ || Object.getPrototypeOf(Image)).call(this, props));
 
     _this.state = {
-      loaded: false,
-      error: false
+      loaded: -1 // index of loaded src
     };
+    _this._imgs = [];
+    _this._loadImage = _this._loadImage.bind(_this);
     return _this;
   }
 
   createClass(Image, [{
-    key: 'loadImage',
-    value: function loadImage() {
+    key: '_loadImage',
+    value: function _loadImage(idx, src) {
       var _this2 = this;
 
       if (typeof document !== 'undefined') {
         var img = document.createElement('img');
+        this._imgs.push(img);
         img.onload = function () {
-          _this2.setState({ loaded: true });
-          _this2.removeSelf(img);
+          if (_this2.state.loaded < idx) {
+            _this2.setState({ loaded: idx });
+          }
+          _this2._removeImage(img);
         };
         img.onerror = function () {
-          _this2.setState({ error: true });
-          _this2.removeSelf(img);
+          console.warn('Failed to load srcs[' + idx + '] => ' + src);
+          _this2._removeImage(img);
         };
-        img.src = this.props.src;
+        img.src = src;
       }
     }
   }, {
-    key: 'removeSelf',
-    value: function removeSelf(img) {
-      var _this3 = this;
-
+    key: '_removeImage',
+    value: function _removeImage(img) {
       if (img) {
         img.remove();
       }
 
-      if (imageComponents.includes(this)) {
-        imageComponents = W.reject(function (i) {
-          return i === _this3;
-        }, imageComponents);
+      if ((this._imgs || []).includes(img)) {
+        this._imgs = this._imgs.filter(function (i) {
+          return i !== img;
+        });
       }
     }
   }, {
     key: 'componentDidMount',
     value: function componentDidMount() {
-      imageComponents.push(this);
+      var _this3 = this;
 
-      if (isInViewport(this.base)) {
-        this.loadImage();
-      }
+      this.props.srcs.forEach(function (src, idx) {
+        return _this3._loadImage(idx, src);
+      });
     }
   }, {
     key: 'componentWillUnmount',
     value: function componentWillUnmount() {
-      this.removeSelf();
+      var _this4 = this;
+
+      if (this._imgs && this._imgs.length) {
+        this._imgs.forEeach(function (img) {
+          return _this4._removeImage(img);
+        });
+      }
     }
   }, {
     key: 'render',
     value: function render$$1() {
       var _props = this.props,
-          src = _props.src,
+          srcs = _props.srcs,
           _props$unloadedSrc = _props.unloadedSrc,
           unloadedSrc = _props$unloadedSrc === undefined ? '/images/blank-poster.gif' : _props$unloadedSrc,
           className = _props.className,
-          props = objectWithoutProperties(_props, ['src', 'unloadedSrc', 'className']);
-      var _state = this.state,
-          error = _state.error,
-          loaded = _state.loaded;
+          props = objectWithoutProperties(_props, ['srcs', 'unloadedSrc', 'className']);
+      var loaded = this.state.loaded;
 
-
-      if (error) {
-        return preact.h('img', _extends({ src: unloadedSrc, className: className }, props));
-      } else if (!loaded) {
-        return preact.h('img', _extends({ src: unloadedSrc, className: className + ' image-loading' }, props));
-      } else {
-        return preact.h('img', _extends({ src: src, className: className + ' image-ready' }, props));
-      }
+      return loaded === -1 ? preact.h('img', _extends({
+        src: unloadedSrc,
+        className: className + ' image-loading'
+      }, props)) : preact.h('img', _extends({
+        src: srcs[loaded],
+        className: className + ' image-ready'
+      }, props));
     }
   }]);
   return Image;
@@ -3552,6 +2635,428 @@ function Tooltip(_ref) {
   );
 }
 
+var atom = createCommonjsModule(function (module, exports) {
+/* globals define */
+(function (root, factory) {
+  {
+    module.exports = factory();
+  }
+}(commonjsGlobal, function () {
+
+  return function (reducers, initialState) {
+    if (typeof reducers === 'function') {
+      reducers = [reducers];
+    }
+    var listeners = [];
+    var state = initialState;
+
+    return {
+      addReducer: addReducer,
+      dispatch: dispatch,
+      subscribe: subscribe,
+      unsubscribe: unsubscribe,
+      getState: getState,
+      setState: setState
+    }
+
+    function addReducer (reducer) {
+      if (typeof reducer !== 'function') {
+        throw new E('reducer must be a function')
+      }
+      reducers.push(reducer);
+    }
+
+    function dispatch (/* action[, action1, action2, ...] */) {
+      var len = arguments.length;
+      var newState = getState();
+      for (var x = 0; x < len; x++) {
+        newState = callReducers(reducers, arguments[x], newState);
+      }
+      if (validState(newState)) {
+        cb(newState);
+      }
+    }
+
+    function subscribe (listener) {
+      if (typeof listener !== 'function') {
+        throw new E('listener must be a function')
+      }
+      listeners.push(listener);
+      return function () { unsubscribe(listener); }
+    }
+
+    function unsubscribe (listener) {
+      if (!listener) return
+      const idx = listeners.findIndex(l => l === listener);
+      idx > -1 && listeners.splice(idx, 1);
+    }
+
+    function getState () {
+      return typeof state === 'object'
+        ? Object.hasOwnProperty('assign')
+          ? Object.assign({}, state)
+          : JSON.parse(JSON.stringify(state))
+        : state
+    }
+
+    function setState (newState) {
+      if (validState(newState)) {
+        cb(Object.assign({}, state, newState));
+      }
+    }
+
+    // Private
+
+    function callReducers (fns, action, state) {
+      var newState = state;
+      var len = reducers.length;
+      var ret;
+      for (var x = 0; x < len; x++) {
+        ret = fns[x](action, newState);
+        if (validState(ret)) {
+          newState = ret;
+        }
+      }
+      return newState
+    }
+
+    function cb (newState) {
+      state = newState;
+      for (var x = 0; x < listeners.length; x++) {
+        listeners[x]();
+      }
+    }
+
+    function validState (newState) {
+      if (newState === undefined) {
+        throw new E('Reducer must return a value.')
+      } else if (typeof newState.then === 'function') {
+        throw new E('Reducer cannot return a Promise.')
+      } else if (typeof newState === 'function') {
+        newState(dispatch);
+      } else {
+        return true
+      }
+    }
+
+    function E (message) {
+      this.message = message;
+      this.name = 'AtomException';
+      this.toString = function () {
+        return this.name + ': ' + this.message
+      };
+    }
+  }
+}));
+});
+
+var devtools = function atomDevTools (store) {
+  var extension = window.__REDUX_DEVTOOLS_EXTENSION__ || window.top.__REDUX_DEVTOOLS_EXTENSION__;
+  var ignoreState = false;
+
+  if (!extension) {
+    console.warn('Please install/enable Redux devtools extension');
+    store.devtools = null;
+    return store
+  }
+
+  if (!store.devtools) {
+    store.devtools = extension.connect();
+
+    store.devtools.subscribe(function (message) {
+      if (message.type === 'DISPATCH' && message.state) {
+        ignoreState = (message.payload.type === 'JUMP_TO_ACTION' || message.payload.type === 'JUMP_TO_STATE');
+        store.setState(JSON.parse(message.state));
+      }
+    });
+
+    store.devtools.init(store.getState());
+
+    store.addReducer(function devtoolsReducer (action, state) {
+      if (!ignoreState) {
+        store.devtools.send(action, state);
+      } else {
+        ignoreState = false;
+      }
+      return state
+    });
+  }
+
+  return store
+};
+
+function partial (fn, args) {
+  args = [fn].concat(Array.prototype.slice.call(args));
+  return fn.bind.apply(fn, args)
+}
+
+function path (paths, obj) {
+  if (arguments.length < 2) return partial(path, arguments)
+  r$1(arguments, [['array', 'string'], ['array', 'object', 'window', 'global']]);
+  if (r$1.prototype.toType(paths) === 'string') paths = paths.split('.');
+  let val = obj;
+  for (let x = 0; x < paths.length; x++) {
+    if (val == null) {
+      return
+    }
+    val = val[paths[x]];
+  }
+  return val
+}
+
+function deepClone (obj) {
+  r$1(arguments, [['object', 'array']]);
+  return JSON.parse(JSON.stringify(obj))
+}
+
+const toType = r$1.prototype.toType;
+
+/**
+ * Merge all given objects into a new object.
+ * @return {Object}
+ */
+function merge (/* objects */) {
+  const len = arguments.length;
+  const out = {};
+  for (let x = 0; x < len; x++) {
+    if (toType(arguments[x]) !== 'object') {
+      throw new TypeError('All arguments must be objects!')
+    }
+    let obj = arguments[x];
+    let keys = Object.keys(obj);
+    let keysLen = keys.length;
+    for (let z = 0; z < keysLen; z++) {
+      let key = keys[z];
+      let type = toType(obj[key]);
+      if (type === 'object') {
+        out[key] = merge(obj[key]);
+      } else if (type === 'array') {
+        out[key] = obj[key].slice(0);
+      } else {
+        out[key] = obj[key];
+      }
+    }
+  }
+  return out
+}
+
+function partial$1 (fn, args) {
+  args = [fn].concat(Array.prototype.slice.call(args));
+  return fn.bind.apply(fn, args)
+}
+
+function partial$2 (fn, args) {
+  args = [fn].concat(Array.prototype.slice.call(args));
+  return fn.bind.apply(fn, args)
+}
+
+function reduce (fn, initVal, ls) {
+  if (arguments.length < 3) return partial$2(reduce, arguments)
+  r$1(arguments, ['function', '-any', 'array']);
+  return Array.prototype.reduce.call(ls, fn, initVal)
+}
+
+function pathSet (paths, valToSet, object) {
+  if (arguments.length < 3) return partial$1(pathSet, arguments)
+  r$1(arguments, [['array', 'string'], '-any', ['object', 'array']]);
+  if (r$1.prototype.toType(paths) === 'string') paths = paths.split('.');
+  const copy = r$1.prototype.toType(paths) === 'object' ? merge({}, object) : deepClone(object);
+  reduce(
+    (obj, prop, idx) => {
+      obj[prop] = obj[prop] || {};
+      if (paths.length === (idx + 1)) {
+        obj[prop] = valToSet;
+      }
+      return obj[prop]
+    },
+    copy,
+    paths
+  );
+  return copy
+}
+
+const toType$1 = r$1.prototype.toType;
+
+/**
+ * Functional, curryable wrapper around native Array.filter implementation
+ * @param  {Function} fn
+ * @param  {Array}    ls
+ * @return {Array}
+ */
+function filter (fn, ls) {
+  if (arguments.length < 2) return partial$1(filter, arguments)
+  r$1(arguments, ['function', ['array', 'object']]);
+  return toType$1(ls) === 'array'
+    ? Array.prototype.filter.call(ls, fn)
+    : objFilter(fn, ls)
+}
+
+function objFilter (fn, obj) {
+  const keys = Object.keys(obj);
+  const len = keys.length;
+  const result = {};
+  for (let x = 0; x < len; x++) {
+    if (fn(obj[keys[x]], keys[x])) {
+      result[keys[x]] = obj[keys[x]];
+    }
+  }
+  return result
+}
+
+/**
+ * Return a new object with only the specified keys included.
+ * @param  {Array} keys
+ * @param  {Object} obj
+ * @return {Object}
+ */
+function pick (keys, obj) {
+  if (arguments.length < 2) return partial$1(pick, arguments)
+  r$1(arguments, ['array', 'object']);
+  const result = {};
+  for (let x = 0; x < keys.length; x++) {
+    let k = keys[x];
+    result[k] = obj[k];
+  }
+  return result
+}
+
+function partial$3 (fn, args) {
+  args = [fn].concat(Array.prototype.slice.call(args));
+  return fn.bind.apply(fn, args)
+}
+
+const toType$2 = r$1.prototype.toType;
+
+/**
+ * Return a new object without any of the specified keys included.
+ * @param  {Array} keys
+ * @param  {Object} obj
+ * @return {Object}
+ */
+function without (keys, obj) {
+  if (arguments.length < 2) return partial$3(without, arguments)
+  r$1(arguments, [['string', 'array'], 'object']);
+  if (toType$2(keys) === 'string') {
+    keys = [keys];
+  }
+  const keep = filter((k) => keys.indexOf(k) === -1, Object.keys(obj));
+  return pick(keep, obj)
+}
+
+function last (ls) {
+  r$1([arguments[0]], ['array']);
+  const n = ls.length ? ls.length - 1 : 0;
+  return ls[n]
+}
+
+const toType$3 = r$1.prototype.toType;
+
+function pathUpdate (path$$1, payload, state) {
+  let {value} = payload;
+  const currentValue = path(path$$1, state);
+  const newType = toType$3(value);
+
+  if (newType === toType$3(currentValue)) {
+    if (newType === 'array') {
+      return pathSet(path$$1, currentValue.concat(value), state)
+    } else if (newType === 'object') {
+      return pathSet(path$$1, merge(currentValue, value), state)
+    }
+  }
+  return pathSet(path$$1, value, state)
+}
+
+function pathRemove (path$$1, payload, state) {
+  const parent = path(path$$1.slice(0, -1), state);
+  const parentType = toType$3(parent);
+  if (parentType === 'object') {
+    return path$$1.length > 1
+      ? pathSet(
+        path$$1.slice(0, -1),
+        without(path$$1.slice(-1), parent),
+        state
+      )
+      : without(path$$1, state)
+  } else if (parentType === 'array') {
+    const idx = last(path$$1);
+    if (toType$3(idx) === 'number') {
+      parent.splice(idx, 1);
+      return pathSet(path$$1.slice(0, -1), parent, state)
+    }
+  }
+  return pathSet(path$$1, null, state)
+}
+
+function batch (payload, state) {
+  const {actions} = payload;
+  if (!actions || !actions.length) {
+    return state
+  }
+  const len = actions.length;
+  let newState = state;
+  for (let x = 0; x < len; x++) {
+    newState = pathReducer(newState, actions[x]);
+  }
+  return newState
+}
+
+function pathReducer (action, state) {
+  const {type, payload} = action;
+  const path$$1 = path('path', payload || {});
+  switch (type) {
+    case 'PATH_SET':
+      return pathSet(path$$1, payload.value, state)
+
+    case 'PATH_UPDATE':
+      return pathUpdate(path$$1, payload, state)
+
+    case 'PATH_REMOVE':
+      return pathRemove(path$$1, payload, state)
+
+    case 'PATH_BATCH':
+      return batch(payload, state)
+
+    default:
+      return state
+  }
+}
+
+var DEBUG = typeof window !== 'undefined' ? window.location.hostname.indexOf('local') > -1 : "development";
+
+var WEB_URL = function () {
+  if (typeof window === 'undefined') {
+    return 'https://cool-app.com';
+  }
+  return window.location.href.replace(window.location.pathname, '');
+}();
+
+var initialState = _extends({
+  clicks: 0,
+  // In the browser, we initialize the currentPath prop, which is used
+  // by our [Router](/hoc/Router.html)
+  currentPath: typeof window !== 'undefined' ? window.location.pathname + window.location.search : '/',
+  // `pendingRequests` is used by the [WithRequest](/hoc/WithRequest.html) HoC.
+  pendingRequests: 0
+}, typeof window !== 'undefined' ? JSON.parse(window.__initial_store__ || '') : {});
+
+// You can either define your reducers here, or add them later with:
+// `store.addReducer(reducer)`
+var reducers = [pathReducer];
+
+var store = typeof window !== 'undefined' && DEBUG ? devtools(atom(reducers, initialState)) : atom(reducers, initialState);
+
+var getState = store.getState;
+var setState = store.setState;
+
+function Provider(props) {
+  this.getChildContext = function () {
+    return { store: props.store };
+  };
+}
+Provider.prototype.render = function (props) {
+  return props.children[0];
+};
+
 var Home = (function () {
   return preact.h(
     'div',
@@ -3575,7 +3080,7 @@ var Home = (function () {
         preact.h(
           'button',
           { onClick: function onClick(ev) {
-              return store.setState({ modal: 'ExampleModal' });
+              return setState({ modal: 'ExampleModal' });
             } },
           'Open Example Modal'
         )
@@ -3602,8 +3107,7 @@ var Home = (function () {
       { withDots: true },
       W.map(function (hex) {
         return preact.h(Image, {
-          src: 'http://www.placehold.it/400x300/' + hex + '/f44?text=' + hex,
-          unloadedSrc: 'http://www.placehold.it/400x300/eee/eee?text=Loading',
+          srcs: ['http://www.placehold.it/400x300/eee/eee?text=Loading', 'http://www.placehold.it/400x300/' + hex + '/f44?text=' + hex],
           style: 'width: 100%'
         });
       }, ['fff', 'a7c', '09d', '411', '111'])
@@ -3759,209 +3263,23 @@ var Pagination = function (_React$Component) {
   return Pagination;
 }(preact.Component);
 
-var storage = null;
-var apiUrl = 'http://10.0.2.2:8000';
-
-var safelyParse = function safelyParse(json, key) {
-  try {
-    var parsed = JSON.parse(json);
-    // console.log('safelyParse', parsed)
-    return key != null ? parsed[key] : parsed;
-  } catch (_) {
-    return json;
-  }
-};
-
-var getAuthHeader = function getAuthHeader() {
-  var headers = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-  var token = arguments[1];
-
-  if (token) {
-    headers.Authorization = 'Token ' + token;
-  }
-  return headers;
-};
-
-var makeErr = function makeErr(code, msg) {
-  var e = new Error(msg);
-  e.code = code;
-  if (code === 401) {
-    storage && storage.removeItem('token');
-  }
-  console.error('makeErr', { code: code, msg: msg });
-  return e;
-};
-
-function makeRequest(_ref2) {
-  var endpoint = _ref2.endpoint,
-      url = _ref2.url,
-      _ref2$method = _ref2.method,
-      method = _ref2$method === undefined ? 'get' : _ref2$method,
-      data = _ref2.data,
-      headers = _ref2.headers,
-      _ref2$noAuth = _ref2.noAuth,
-      noAuth = _ref2$noAuth === undefined ? false : _ref2$noAuth;
-
-  if (endpoint != null && endpoint.indexOf('http') === -1) {
-    url = apiUrl + '/' + endpoint;
-  }
-
-  if (url == null) {
-    url = endpoint;
-  }
-
-  var xhr = new window.XMLHttpRequest();
-  var promise = new Promise(function (resolve, reject) {
-    xhr.open(method.toUpperCase(), url);
-
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState !== 4) return;
-      xhr.status >= 400 ? reject(makeErr(xhr.status, safelyParse(xhr.response, 'detail'))) : resolve(safelyParse(xhr.response));
-    };
-    xhr.onerror = function () {
-      return reject(xhr);
-    };
-    xhr.setRequestHeader('Content-Type', 'application/json');
-
-    headers = !noAuth ? getAuthHeader(headers) : {};
-    if (headers && W.toType(headers) === 'object') {
-      W.map(function (k, v) {
-        return xhr.setRequestHeader(k, v);
-      }, headers);
-    }
-
-    var dataType = W.toType(data);
-
-    xhr.send(dataType === 'object' || dataType === 'array' ? JSON.stringify(data) : data);
-  });
-  return { xhr: xhr, promise: promise };
-}
-
-var OK_TIME = 30000;
-var CACHE = {};
-
-var cache = function cache(endpoint, result) {
-  CACHE[endpoint] = { result: result, timestamp: Date.now() };
-};
-
-var validCache = function validCache(endpoint) {
-  var ts = CACHE[endpoint] && CACHE[endpoint].timestamp;
-  if (!ts) return false;
-  var diff = Date.now() - ts;
-  return diff < OK_TIME;
-};
-
-var WithRequest = function (_React$Component) {
-  inherits(WithRequest, _React$Component);
-
-  function WithRequest(props) {
-    classCallCheck(this, WithRequest);
-
-    var _this = possibleConstructorReturn(this, (WithRequest.__proto__ || Object.getPrototypeOf(WithRequest)).call(this, props));
-
-    _this.state = _extends({}, _this.state || {}, { isLoading: true, result: null, error: null });
-    _this._existing = null;
-    return _this;
-  }
-
-  createClass(WithRequest, [{
-    key: '_performRequest',
-    value: function _performRequest(endpoint, parse) {
-      var _this2 = this;
-
-      var token = this.context.store.getState().token;
-      var headers = {};
-      if (token) {
-        headers.Authorization = 'Token ' + token;
-      }
-
-      var _makeRequest = makeRequest({ endpoint: endpoint, headers: headers }),
-          xhr = _makeRequest.xhr,
-          promise = _makeRequest.promise;
-
-      this._existing = xhr;
-      this._existing._endpoint = endpoint;
-
-      promise.then(function (result) {
-        cache(endpoint, result);
-        if (_this2.props.mutateResult) {
-          _this2.setState({ result: _this2.props.mutateResult(result, _this2.state.result), isLoading: false });
-        } else {
-          _this2.setState({ result: result, isLoading: false });
-        }
-      }).catch(function (error) {
-        return console.log('_performRequest', { error: error }) || _this2.setState({ error: error, isLoading: false });
-      });
-    }
-  }, {
-    key: '_loadResult',
-    value: function _loadResult(props) {
-      if (!props.request || !props.request.endpoint) {
-        return;
-      }
-      if (this._existing && !this.state.error) {
-        this._existing.abort();
-        this._existing = null;
-      }
-
-      var _props$request = props.request,
-          endpoint = _props$request.endpoint,
-          parse = _props$request.parse;
-
-      if (validCache(endpoint)) {
-        this.setState({ result: CACHE[endpoint].result, isLoading: false });
-      } else {
-        this._performRequest(endpoint, parse);
-      }
-    }
-  }, {
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      this._loadResult(this.props);
-    }
-  }, {
-    key: 'shouldComponentUpdate',
-    value: function shouldComponentUpdate(nextProps, nextState) {
-      var nextEnpoint = (nextProps.request || {}).endpoint;
-      var currEnpoint = (this.props.request || {}).endpoint;
-      if (currEnpoint !== nextEnpoint) {
-        return true;
-      }
-      return !equal$1(nextState, this.state);
-    }
-  }, {
-    key: 'componentDidUpdate',
-    value: function componentDidUpdate(prevProps, prevState, snapshot) {
-      if (!this._existing) return;
-      if ((this.props.request || {}).endpoint !== this._existing._endpoint) {
-        this._loadResult(this.props);
-      }
-    }
-  }, {
-    key: 'render',
-    value: function render$$1() {
-      var child = this.children ? this.children[0] : this.props.children[0];
-      if (!child || typeof child !== 'function') {
-        console.log({ child: child });
-        throw new Error('WithRequest requires a function as its only child');
-      }
-      return child(this.state);
-    }
-  }]);
-  return WithRequest;
-}(preact.Component);
-
 var OK_TYPES = ['function', 'object'];
 
 // We subscribe to `currentPath` to rerender on route change
-var ListResource = react_1('currentPath', {})(function (_ref) {
-  var endpoint = _ref.endpoint,
-      limit = _ref.limit,
-      _ref$list = _ref.list,
-      list = _ref$list === undefined ? true : _ref$list,
-      _ref$pagination = _ref.pagination,
-      pagination = _ref$pagination === undefined ? false : _ref$pagination,
-      children = _ref.children;
+var ListResource = connect({
+  name: 'ListResource',
+  withState: function withState(_ref) {
+    var currentPath = _ref.currentPath;
+    return { currentPath: currentPath };
+  }
+})(function (_ref2) {
+  var endpoint = _ref2.endpoint,
+      limit = _ref2.limit,
+      _ref2$list = _ref2.list,
+      list = _ref2$list === undefined ? true : _ref2$list,
+      _ref2$pagination = _ref2.pagination,
+      pagination = _ref2$pagination === undefined ? false : _ref2$pagination,
+      children = _ref2.children;
 
   var Child = children[0];
   var type = typeof Child === 'undefined' ? 'undefined' : _typeof(Child);
@@ -3983,9 +3301,9 @@ var ListResource = react_1('currentPath', {})(function (_ref) {
   return preact.h(
     WithRequest,
     { request: request },
-    function (_ref2) {
-      var result = _ref2.result,
-          isLoading = _ref2.isLoading;
+    function (_ref3) {
+      var result = _ref3.result,
+          isLoading = _ref3.isLoading;
       return isLoading ? preact.h(
         'p',
         null,
@@ -4000,9 +3318,9 @@ var ListResource = react_1('currentPath', {})(function (_ref) {
   );
 });
 
-var Resource = function Resource(_ref3) {
-  var endpoint = _ref3.endpoint,
-      props = objectWithoutProperties(_ref3, ['endpoint']);
+var Resource = function Resource(_ref4) {
+  var endpoint = _ref4.endpoint,
+      props = objectWithoutProperties(_ref4, ['endpoint']);
   return preact.h(ListResource, _extends({ key: 'resource-' + endpoint, list: false, endpoint: endpoint }, props));
 };
 
@@ -4082,15 +3400,6 @@ var Users = (function () {
     }
   );
 });
-
-var DEBUG = typeof window !== 'undefined' ? window.location.hostname.indexOf('local') > -1 : "development";
-
-var WEB_URL = function () {
-  if (typeof window === 'undefined') {
-    return 'https://cool-app.com';
-  }
-  return window.location.href.replace(window.location.pathname, '');
-}();
 
 var url = 'https://jsonplaceholder.typicode.com/users/';
 
@@ -4461,18 +3770,21 @@ var urlFor = function urlFor(name) {
   return '' + replaced + (!hasQueries ? '' : '?' + qs.stringify(queries));
 };
 
-var actions$2 = function actions(store) {
-  return {
+var Header = connect({
+  name: 'Header',
+  withActions: {
     increment: function increment(_ref) {
       var clicks = _ref.clicks;
-      return { clicks: clicks + 1 };
+      return { clicks: (clicks || 0) + 1 };
     }
-  };
-};
-
-var Header = preact_1('clicks', actions$2)(function (_ref2) {
-  var clicks = _ref2.clicks,
-      increment = _ref2.increment;
+  },
+  withState: function withState(_ref2) {
+    var clicks = _ref2.clicks;
+    return { clicks: clicks };
+  }
+})(function (_ref3) {
+  var clicks = _ref3.clicks,
+      increment = _ref3.increment;
   return preact.h(
     'header',
     { 'class': 'layout-center' },
@@ -4510,27 +3822,26 @@ var Base = function Base() {
   );
 };
 
-var NotFound = preact_1('currentRoute', {})(function (_ref) {
-  var currentRoute = _ref.currentRoute;
+var NotFound = connect({
+  withState: function withState(_ref) {
+    var currentRoute = _ref.currentRoute;
+    return { currentRoute: currentRoute };
+  }
+})(function (_ref2) {
+  var currentRoute = _ref2.currentRoute;
   return !currentRoute ? Base() : null;
 });
 
-var initialState = _extends({
-  // In the browser, we initialize the currentPath prop, which is used
-  // by our [Router](/hoc/Router.html)
-  currentPath: typeof window !== 'undefined' ? window.location.pathname + window.location.search : '/',
-  // `pendingRequests` is used by the [WithRequest](/hoc/WithRequest.html) HoC.
-  pendingRequests: 0
-}, typeof window !== 'undefined' ? JSON.parse(window.__initial_store__ || '') : {});
+// And, finally, our RootApp! This is the top-level Component to render
+// into the DOM and kick-start our entire app!
 
-// Replacing our custom store with Redux-compatible `unistore`
-var store = createStore(initialState);
-
-// And, finally, our MainApp! This is the top-level Component to render
-// into the DOM, and kick-start our app!
-var MainApp = function MainApp() {
+// First, our entire app is wrapped in the _atom_ `Provider` component.
+// This adds the store to the React context, meaning any child can access our
+// store reference.
+// Then we include those Component's that we want to be rendered on *all* routes.
+var RootApp = function RootApp() {
   return preact.h(
-    preact_2,
+    Provider,
     { store: store },
     preact.h(
       'div',
@@ -4551,7 +3862,7 @@ var MainApp = function MainApp() {
 // Only render if we are in the browser, server-side rendering will be
 // handled by the `server` (which is not covered here).
 if (typeof window !== 'undefined') {
-  preact.render(preact.h(MainApp, null), document.body, document.body.children[0]);
+  preact.render(preact.h(RootApp, null), document.body, document.body.children[0]);
 }
 
 // Contents
@@ -4561,7 +3872,7 @@ if (typeof window !== 'undefined') {
 
 // - [consts.js](/consts.html)
 // - [routes.js](/routes.html)
-// - [store.js](/store.html)
+// - [initialState.js](/initialState.html)
 
 // **apps/**
 
@@ -4577,36 +3888,15 @@ if (typeof window !== 'undefined') {
 // Elements are reusable Components that render some JSX. These are generic
 // and are common to use throughout all apps.
 
-// - [Carousel.js](/elements/Carousel)
-// - [Dropdown.js](/elements/Dropdown)
-// - [Image.js](/elements/Image)
-// - [Level.js](/elements/Level)
-// - [LoadingIndicator.js](/elements/LoadingIndicator)
-// - [Modal.js](/elements/Modal)
-// - [Notification.js](/elements/Notification)
-// - [Pagination.js](/elements/Pagination)
-// - [Tooltip.js](/elements/Tooltip)
-// - [Form.js](/elements/Form)
 // - [Header.js](/elements/Header)
 // - [NotFound.js](/elements/NotFound)
-
-// **hoc/**
-
-// Higher order Components, which abstract away logic, and generally
-// don't render any JSX of their own.
-
-// - [Apps.js](/hoc/Apps)
-// - [Helmet.js](/hoc/Helmet)
-// - [ListResource.js](/hoc/ListResource)
-// - [Resource.js](/hoc/Resource)
-// - [Router.js](/hoc/Router)
-// - [WithRequest.js](/hoc/WithRequest)
-// - [WithState.js](/hoc/WithState)
 
 // **modals/**
 
 // Any global (cross-app) modals can go here. These should all use the
-// [Modal](/elements/Modal) element in their `render` method.
+// [Modal](https://github.com/inputlogic/elements/tree/master/packages/Modal) element in their `render` method.
+
+// - [ExampleModal.js](/modals/ExampleModal)
 
 // **styles/**
 
@@ -4615,30 +3905,27 @@ if (typeof window !== 'undefined') {
 
 // **util/**
 
-// Simple helper functions used throughout your project. These should not
-// be removed as they are all used by an included HoC or element.
+// Simple helper functions used throughout your project.
 
-var setState = store.setState,
-    getState = store.getState;
+var getState$1 = store.getState,
+    setState$1 = store.setState;
 
 
 var renderReact = function renderReact(url) {
   return new Promise(function (resolve, reject) {
-    setState({ currentPath: url });
-    c(preact.h(MainApp, null)); // Render, to register pendingRequests
-
-    console.log('pendingRequests', getState().pendingRequests);
+    setState$1({ currentPath: url });
+    c(preact.h(RootApp, null)); // Render, to register pendingRequests
 
     var maxTime = 6000;
     var delay = 1;
     var count = 0;
     var id = setInterval(function () {
-      var pending = getState().pendingRequests;
+      var pending = getState$1().pendingRequests;
       if (!pending || count * delay >= maxTime) {
         clearInterval(id);
-        var state = JSON.stringify(getState());
+        var state = JSON.stringify(getState$1());
         // Rerender html again, now that pendingRequests are done
-        var html = c(preact.h(MainApp, null));
+        var html = c(preact.h(RootApp, null));
         var head = c(preact.h(Helmet, rewind())).slice(5, -6);
         resolve({ html: html, head: head, state: state });
       }
