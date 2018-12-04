@@ -1163,6 +1163,71 @@ var Helmet = function (_React$Component) {
   return Helmet;
 }(preact.Component);
 
+var ref = void 0;
+
+function showNotification(notification) {
+  ref && ref.setState(_extends({}, ref.state, notification, { open: true }));
+}
+
+/**
+ * Display a notification when `showNotification` is called.
+ *
+ * @TODO: Update to use store/global state.
+ */
+
+var Notification = function (_React$Component) {
+  inherits(Notification, _React$Component);
+
+  function Notification(props) {
+    classCallCheck(this, Notification);
+
+    var _this = possibleConstructorReturn(this, (Notification.__proto__ || Object.getPrototypeOf(Notification)).call(this, props));
+
+    _this.state = { open: false, message: null, type: 'error', length: 3000 };
+    return _this;
+  }
+
+  createClass(Notification, [{
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      var _this2 = this;
+
+      if (this.state.message) {
+        this.timeout && clearTimeout(this.timeout);
+        this.timeout = setTimeout(function () {
+          return _this2.timeout && _this2.setState({ open: false });
+        }, this.state.length);
+      }
+    }
+  }, {
+    key: 'componentWillUnmount',
+    value: function componentWillUnmount() {
+      this.timeout && clearTimeout(this.timeout);
+    }
+  }, {
+    key: 'render',
+    value: function render$$1(_, _ref) {
+      var open = _ref.open,
+          message = _ref.message,
+          type = _ref.type;
+
+      if (!ref) ref = this;
+      if (!message) return null;
+      return preact.h(
+        'div',
+        { className: 'notification-bar ' + type + ' ' + (open ? 'open' : 'close') },
+        preact.h(
+          'span',
+          { className: 'text' },
+          message
+        ),
+        preact.h('div', { className: 'close-icon', onClick: this.onClose })
+      );
+    }
+  }]);
+  return Notification;
+}(preact.Component);
+
 var isArray = Array.isArray;
 var keyList = Object.keys;
 var hasProp = Object.prototype.hasOwnProperty;
@@ -1662,6 +1727,116 @@ var qs = {
   parse: parse
 };
 
+var storeRef$1 = void 0;
+
+var segmentize = function segmentize(url) {
+  return url.replace(/(^\/+|\/+$)/g, '').split('/');
+};
+
+function updateQuery(queries) {
+  var existingParams = qs.parse(window.location.search);
+  return window.location.pathname + ('?' + qs.stringify(_extends({}, existingParams, queries)));
+}
+
+// route matching logic, taken from preact-router
+var exec = function exec(url, route) {
+  var reg = /(?:\?([^#]*))?(#.*)?$/;
+  var c = url.match(reg);
+  var matches = {};
+  var ret = void 0;
+  if (c && c[1]) {
+    var p = c[1].split('&');
+    for (var i = 0; i < p.length; i++) {
+      var r = p[i].split('=');
+      matches[decodeURIComponent(r[0])] = decodeURIComponent(r.slice(1).join('='));
+    }
+  }
+  url = segmentize(url.replace(reg, ''));
+  route = segmentize(route || '');
+  var max = Math.max(url.length, route.length);
+  for (var _i = 0; _i < max; _i++) {
+    if (route[_i] && route[_i].charAt(0) === ':') {
+      var param = route[_i].replace(/(^:|[+*?]+$)/g, '');
+      var flags = (route[_i].match(/[+*?]+$/) || {})[0] || '';
+      var plus = ~flags.indexOf('+');
+      var star = ~flags.indexOf('*');
+      var val = url[_i] || '';
+      if (!val && !star && (flags.indexOf('?') < 0 || plus)) {
+        ret = false;
+        break;
+      }
+      matches[param] = decodeURIComponent(val);
+      if (plus || star) {
+        matches[param] = url.slice(_i).map(decodeURIComponent).join('/');
+        break;
+      }
+    } else if (route[_i] !== url[_i]) {
+      ret = false;
+      break;
+    }
+  }
+  if (ret === false) return false;
+  return matches;
+};
+
+var Router = connect({
+  name: 'Router',
+  withState: function withState(_ref) {
+    var currentPath = _ref.currentPath;
+    return { currentPath: currentPath };
+  },
+  getStoreRef: function getStoreRef(store) {
+    storeRef$1 = store;
+  }
+})(function (_ref2) {
+  var currentPath = _ref2.currentPath,
+      routes = _ref2.routes;
+
+  for (var route in routes) {
+    if (routes[route].hasOwnProperty('routes')) {
+      var shouldRender = Object.values(routes[route].routes).some(function (_ref3) {
+        var path = _ref3.path;
+        return path && exec(currentPath, path);
+      });
+      if (shouldRender) {
+        var App = routes[route].component;
+        return preact.h(App, null);
+      }
+    } else {
+      var routeArgs = exec(currentPath, routes[route].path);
+      if (routeArgs) {
+        var newRoute = {
+          name: route,
+          path: routes[route].path,
+          args: routeArgs
+        };
+        if (!equal(newRoute, storeRef$1.getState().currentRoute)) {
+          storeRef$1.setState(_extends({}, storeRef$1.getState(), { currentRoute: newRoute }));
+        }
+        var Component$$1 = routes[route].component;
+        return preact.h(Component$$1, routeArgs);
+      }
+    }
+  }
+});
+
+if (typeof window !== 'undefined') {
+  document.addEventListener('click', function (ev) {
+    if (ev.target.nodeName === 'A' && storeRef$1) {
+      if (ev.metaKey) return;
+      ev.preventDefault();
+      ev.stopImmediatePropagation();
+      window.scrollTo(0, 0);
+      var url = ev.target.getAttribute('href');
+      var currentPath = storeRef$1.getState().currentPath;
+      if (currentPath !== url) {
+        window.history['pushState'](null, null, url);
+        storeRef$1.setState(_extends({}, storeRef$1.getState(), { currentPath: url }));
+      }
+    }
+  });
+}
+
 var commonjsGlobal = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
 function createCommonjsModule(fn, module) {
@@ -1891,14 +2066,14 @@ var Modals = connect({
   return child;
 });
 
-var storeRef$1 = void 0;
+var storeRef$2 = void 0;
 
-var segmentize = function segmentize(url) {
+var segmentize$1 = function segmentize(url) {
   return url.replace(/(^\/+|\/+$)/g, '').split('/');
 };
 
 // route matching logic, taken from preact-router
-var exec = function exec(url, route) {
+var exec$1 = function exec(url, route) {
   var reg = /(?:\?([^#]*))?(#.*)?$/;
   var c = url.match(reg);
   var matches = {};
@@ -1910,8 +2085,8 @@ var exec = function exec(url, route) {
       matches[decodeURIComponent(r[0])] = decodeURIComponent(r.slice(1).join('='));
     }
   }
-  url = segmentize(url.replace(reg, ''));
-  route = segmentize(route || '');
+  url = segmentize$1(url.replace(reg, ''));
+  route = segmentize$1(route || '');
   var max = Math.max(url.length, route.length);
   for (var _i = 0; _i < max; _i++) {
     if (route[_i] && route[_i].charAt(0) === ':') {
@@ -1938,61 +2113,59 @@ var exec = function exec(url, route) {
   return matches;
 };
 
-var Router = (function (_ref) {
-  var routes = _ref.routes;
-  return preact.h(
-    WithState,
-    { mapper: function mapper(_ref2) {
-        var currentPath = _ref2.currentPath;
-        return { currentPath: currentPath };
-      } },
-    function (_ref3) {
-      var currentPath = _ref3.currentPath,
-          store = _ref3.store;
+var Router$1 = connect({
+  name: 'Router',
+  withState: function withState(_ref) {
+    var currentPath = _ref.currentPath;
+    return { currentPath: currentPath };
+  },
+  getStoreRef: function getStoreRef(store) {
+    storeRef$2 = store;
+  }
+})(function (_ref2) {
+  var currentPath = _ref2.currentPath,
+      routes = _ref2.routes;
 
-      if (!storeRef$1) storeRef$1 = store;
-      for (var route in routes) {
-        if (routes[route].hasOwnProperty('routes')) {
-          var shouldRender = Object.values(routes[route].routes).some(function (_ref4) {
-            var path = _ref4.path;
-            return path && exec(currentPath, path);
-          });
-          if (shouldRender) {
-            var App = routes[route].component;
-            return preact.h(App, null);
-          }
-        } else {
-          var routeArgs = exec(currentPath, routes[route].path);
-          if (routeArgs) {
-            var newRoute = {
-              name: route,
-              path: routes[route].path,
-              args: routeArgs
-            };
-            if (!equal(newRoute, store.getState().currentRoute)) {
-              store.setState({ currentRoute: newRoute });
-            }
-            var Component$$1 = routes[route].component;
-            return preact.h(Component$$1, routeArgs);
-          }
+  for (var route in routes) {
+    if (routes[route].hasOwnProperty('routes')) {
+      var shouldRender = Object.values(routes[route].routes).some(function (_ref3) {
+        var path = _ref3.path;
+        return path && exec$1(currentPath, path);
+      });
+      if (shouldRender) {
+        var App = routes[route].component;
+        return preact.h(App, null);
+      }
+    } else {
+      var routeArgs = exec$1(currentPath, routes[route].path);
+      if (routeArgs) {
+        var newRoute = {
+          name: route,
+          path: routes[route].path,
+          args: routeArgs
+        };
+        if (!equal(newRoute, storeRef$2.getState().currentRoute)) {
+          storeRef$2.setState(_extends({}, storeRef$2.getState(), { currentRoute: newRoute }));
         }
+        var Component$$1 = routes[route].component;
+        return preact.h(Component$$1, routeArgs);
       }
     }
-  );
+  }
 });
 
 if (typeof window !== 'undefined') {
   document.addEventListener('click', function (ev) {
-    if (ev.target.nodeName === 'A' && storeRef$1) {
+    if (ev.target.nodeName === 'A' && storeRef$2) {
       if (ev.metaKey) return;
       ev.preventDefault();
       ev.stopImmediatePropagation();
       window.scrollTo(0, 0);
       var url = ev.target.getAttribute('href');
-      var currentPath = storeRef$1.getState().currentPath;
+      var currentPath = storeRef$2.getState().currentPath;
       if (currentPath !== url) {
         window.history['pushState'](null, null, url);
-        storeRef$1.setState({ currentPath: url });
+        storeRef$2.setState(_extends({}, storeRef$2.getState(), { currentPath: url }));
       }
     }
   });
@@ -2180,7 +2353,7 @@ var Carousel = function (_React$Component) {
   return Carousel;
 }(preact.Component);
 
-var storeRef$2 = void 0; // Will get populated by `getStoreReference`
+var storeRef$3 = void 0; // Will get populated by `getStoreReference`
 
 var actions$1 = {
   toggle: function toggle(_ref, uid) {
@@ -2206,7 +2379,7 @@ var Dropdown = connect({
   withActions: actions$1,
   withState: mapper,
   getStoreRef: function getStoreRef(store) {
-    storeRef$2 = store;
+    storeRef$3 = store;
   }
 })(function (_ref4) {
   var isOpen = _ref4.isOpen,
@@ -2252,8 +2425,8 @@ var isDropdown = function isDropdown(el) {
 
 try {
   document.body.addEventListener('click', function (ev) {
-    if (!storeRef$2) return;
-    var activeDropdown = W.path('dropdown', storeRef$2.getState());
+    if (!storeRef$3) return;
+    var activeDropdown = W.path('dropdown', storeRef$3.getState());
     if (!activeDropdown) {
       return;
     }
@@ -2263,7 +2436,7 @@ try {
       el = el.parentNode;
       if (isDropdown(el)) return;
     }
-    storeRef$2.setState({ dropdown: null });
+    storeRef$3.setState({ dropdown: null });
   });
 } catch (_) {}
 
@@ -2392,71 +2565,6 @@ function Tooltip(_ref) {
     children
   );
 }
-
-var ref = void 0;
-
-function showNotification(notification) {
-  ref && ref.setState(_extends({}, ref.state, notification, { open: true }));
-}
-
-/**
- * Display a notification when `showNotification` is called.
- *
- * @TODO: Update to use store/global state.
- */
-
-var Notification = function (_React$Component) {
-  inherits(Notification, _React$Component);
-
-  function Notification(props) {
-    classCallCheck(this, Notification);
-
-    var _this = possibleConstructorReturn(this, (Notification.__proto__ || Object.getPrototypeOf(Notification)).call(this, props));
-
-    _this.state = { open: false, message: null, type: 'error', length: 3000 };
-    return _this;
-  }
-
-  createClass(Notification, [{
-    key: 'componentDidUpdate',
-    value: function componentDidUpdate() {
-      var _this2 = this;
-
-      if (this.state.message) {
-        this.timeout && clearTimeout(this.timeout);
-        this.timeout = setTimeout(function () {
-          return _this2.timeout && _this2.setState({ open: false });
-        }, this.state.length);
-      }
-    }
-  }, {
-    key: 'componentWillUnmount',
-    value: function componentWillUnmount() {
-      this.timeout && clearTimeout(this.timeout);
-    }
-  }, {
-    key: 'render',
-    value: function render$$1(_, _ref) {
-      var open = _ref.open,
-          message = _ref.message,
-          type = _ref.type;
-
-      if (!ref) ref = this;
-      if (!message) return null;
-      return preact.h(
-        'div',
-        { className: 'notification-bar ' + type + ' ' + (open ? 'open' : 'close') },
-        preact.h(
-          'span',
-          { className: 'text' },
-          message
-        ),
-        preact.h('div', { className: 'close-icon', onClick: this.onClose })
-      );
-    }
-  }]);
-  return Notification;
-}(preact.Component);
 
 var atom = createCommonjsModule(function (module, exports) {
 /* globals define */
@@ -2929,38 +3037,13 @@ var Home = (function () {
       { withDots: true },
       W.map(function (hex) {
         return preact.h(Image, {
-          src: 'http://www.placehold.it/400x300/' + hex + '/f44?text=' + hex,
-          unloadedSrc: 'http://www.placehold.it/400x300/eee/eee?text=Loading',
+          srcs: ['http://www.placehold.it/400x300/eee/eee?text=Loading', 'http://www.placehold.it/400x300/' + hex + '/f44?text=' + hex],
           style: 'width: 100%'
         });
       }, ['fff', 'a7c', '09d', '411', '111'])
     )
   );
 });
-
-var storeRef$3 = void 0;
-
-function updateQuery$1(queries) {
-  var existingParams = qs.parse(window.location.search);
-  return window.location.pathname + ('?' + qs.stringify(_extends({}, existingParams, queries)));
-}
-
-if (typeof window !== 'undefined') {
-  document.addEventListener('click', function (ev) {
-    if (ev.target.nodeName === 'A' && storeRef$3) {
-      if (ev.metaKey) return;
-      ev.preventDefault();
-      ev.stopImmediatePropagation();
-      window.scrollTo(0, 0);
-      var url = ev.target.getAttribute('href');
-      var currentPath = storeRef$3.getState().currentPath;
-      if (currentPath !== url) {
-        window.history['pushState'](null, null, url);
-        storeRef$3.setState({ currentPath: url });
-      }
-    }
-  });
-}
 
 function paginationRange(current, numPages) {
   var delta = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
@@ -3031,7 +3114,7 @@ function paginationRange(current, numPages) {
 }
 
 var pageBuilder = function pageBuilder(page) {
-  return updateQuery$1({ page: page });
+  return updateQuery({ page: page });
 };
 
 var Pagination = function (_React$Component) {
@@ -3077,7 +3160,7 @@ var Pagination = function (_React$Component) {
         preact.h(
           'ul',
           null,
-          W.map(function (page, index$$1) {
+          W.map(function (page, index) {
             return page ? preact.h(
               'li',
               { key: 'page-' + page },
@@ -3088,7 +3171,7 @@ var Pagination = function (_React$Component) {
               )
             ) : preact.h(
               'li',
-              { key: 'break-' + index$$1 },
+              { key: 'break-' + index },
               '\u2026'
             );
           }, pages)
@@ -3207,7 +3290,7 @@ var Main = (function () {
   return preact.h(
     'div',
     null,
-    preact.h(Router, { routes: routes }),
+    preact.h(Router$1, { routes: routes }),
     preact.h(
       Modals,
       null,
@@ -3538,7 +3621,7 @@ var Account = (function () {
     'div',
     { id: 'account-layout' },
     preact.h(AccountHeader, null),
-    preact.h(Router, { routes: routes$1 })
+    preact.h(Router$1, { routes: routes$1 })
   );
 });
 
@@ -3620,20 +3703,18 @@ var urlFor = function urlFor(name) {
 var Header = connect({
   name: 'Header',
   withActions: {
-    increment: function increment(state) {
-      console.log('increment', JSON.stringify(state));
-      return {
-        clicks: (state.clicks || 0) + 1
-      };
+    increment: function increment(_ref) {
+      var clicks = _ref.clicks;
+      return { clicks: (clicks || 0) + 1 };
     }
   },
-  withState: function withState(_ref) {
-    var clicks = _ref.clicks;
+  withState: function withState(_ref2) {
+    var clicks = _ref2.clicks;
     return { clicks: clicks };
   }
-})(function (_ref2) {
-  var clicks = _ref2.clicks,
-      increment = _ref2.increment;
+})(function (_ref3) {
+  var clicks = _ref3.clicks,
+      increment = _ref3.increment;
   return preact.h(
     'header',
     { 'class': 'layout-center' },
@@ -3663,6 +3744,24 @@ var Header = connect({
   );
 });
 
+var Base = function Base() {
+  return preact.h(
+    'div',
+    null,
+    'Not Found :('
+  );
+};
+
+var NotFound = connect({
+  withState: function withState(_ref) {
+    var currentRoute = _ref.currentRoute;
+    return { currentRoute: currentRoute };
+  }
+})(function (_ref2) {
+  var currentRoute = _ref2.currentRoute;
+  return !currentRoute ? Base() : null;
+});
+
 // And, finally, our RootApp! This is the top-level Component to render
 // into the DOM and kick-start our entire app!
 
@@ -3677,7 +3776,15 @@ var RootApp = function RootApp() {
     preact.h(
       'div',
       { className: 'main-app-container' },
-      preact.h(Header, null)
+      preact.h(Helmet, {
+        title: 'Welcome',
+        titleTemplate: 'PWA Starter | %s',
+        defaultTitle: 'Welcome'
+      }),
+      preact.h(Header, null),
+      preact.h(Notification, null),
+      preact.h(Router, { routes: routes$2 }),
+      preact.h(NotFound, null)
     )
   );
 };
@@ -3730,16 +3837,16 @@ if (typeof window !== 'undefined') {
 
 // Simple helper functions used throughout your project.
 
-var setState$1 = store.setState,
-    getState$1 = store.getState;
+var getState$1 = store.getState,
+    setState$1 = store.setState;
 
 
 var renderReact = function renderReact(url) {
   return new Promise(function (resolve, reject) {
-    setState$1({ currentPath: url });
+    setState$1(_extends({}, getState$1(), { currentPath: url }));
     c(preact.h(RootApp, null)); // Render, to register pendingRequests
 
-    console.log('pendingRequests', getState$1().pendingRequests);
+    console.log('renderReact', getState$1());
 
     var maxTime = 6000;
     var delay = 1;

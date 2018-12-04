@@ -5,13 +5,13 @@ import Helmet, {rewind} from '@app-elements/helmet'
 import {RootApp} from '/index'
 import store from '/store'
 
-const {setState, getState} = store
+const {getState, setState} = store
 
 export const renderReact = (url) => new Promise((resolve, reject) => {
-  setState({currentPath: url})
+  setState({...getState(), currentPath: url})
   render(<RootApp />) // Render, to register pendingRequests
 
-  console.log('pendingRequests', getState().pendingRequests)
+  console.log('renderReact', getState())
 
   const maxTime = 6000
   const delay = 1
