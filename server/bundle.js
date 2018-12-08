@@ -288,6 +288,12 @@ function extend(obj, props) {
   }return obj;
 }
 
+function applyRef(ref, value) {
+  if (ref != null) {
+    if (typeof ref == 'function') ref(value);else ref.current = value;
+  }
+}
+
 var defer = typeof Promise == 'function' ? Promise.resolve().then.bind(Promise.resolve()) : setTimeout;
 
 function cloneElement(vnode, props) {
@@ -305,10 +311,8 @@ function enqueueRender(component) {
 }
 
 function rerender() {
-	var p,
-	    list = items;
-	items = [];
-	while (p = list.pop()) {
+	var p;
+	while (p = items.pop()) {
 		if (p._dirty) renderComponent(p);
 	}
 }
@@ -358,8 +362,8 @@ function setAccessor(node, name, old, value, isSvg) {
 	if (name === 'className') name = 'class';
 
 	if (name === 'key') ; else if (name === 'ref') {
-		if (old) old(null);
-		if (value) value(node);
+		applyRef(old, null);
+		applyRef(value, node);
 	} else if (name === 'class' && !isSvg) {
 		node.className = value || '';
 	} else if (name === 'style') {
@@ -417,7 +421,7 @@ var hydrating = false;
 
 function flushMounts() {
 	var c;
-	while (c = mounts.pop()) {
+	while (c = mounts.shift()) {
 		if (options.afterMount) options.afterMount(c);
 		if (c.componentDidMount) c.componentDidMount();
 	}
@@ -598,7 +602,7 @@ function recollectNodeTree(node, unmountOnly) {
 	if (component) {
 		unmountComponent(component);
 	} else {
-		if (node['__preactattr_'] != null && node['__preactattr_'].ref) node['__preactattr_'].ref(null);
+		if (node['__preactattr_'] != null) applyRef(node['__preactattr_'].ref, null);
 
 		if (unmountOnly === false || node['__preactattr_'] == null) {
 			removeNode(node);
@@ -698,7 +702,7 @@ function setComponentProps(component, props, renderMode, context, mountAll) {
 		}
 	}
 
-	if (component.__ref) component.__ref(component);
+	applyRef(component.__ref, component);
 }
 
 function renderComponent(component, renderMode, mountAll, isChild) {
@@ -818,7 +822,7 @@ function renderComponent(component, renderMode, mountAll, isChild) {
 	}
 
 	if (!isUpdate || mountAll) {
-		mounts.unshift(component);
+		mounts.push(component);
 	} else if (!skip) {
 
 		if (component.componentDidUpdate) {
@@ -885,7 +889,7 @@ function unmountComponent(component) {
 	if (inner) {
 		unmountComponent(inner);
 	} else if (base) {
-		if (base['__preactattr_'] && base['__preactattr_'].ref) base['__preactattr_'].ref(null);
+		if (base['__preactattr_'] != null) applyRef(base['__preactattr_'].ref, null);
 
 		component.nextBase = base;
 
@@ -895,7 +899,7 @@ function unmountComponent(component) {
 		removeChildren(base);
 	}
 
-	if (component.__ref) component.__ref(null);
+	applyRef(component.__ref, null);
 }
 
 function Component(props, context) {
@@ -928,10 +932,15 @@ function render(vnode, parent, merge) {
   return diff(merge, vnode, {}, false, parent, false);
 }
 
+function createRef() {
+	return {};
+}
+
 var preact = {
 	h: h,
 	createElement: h,
 	cloneElement: cloneElement,
+	createRef: createRef,
 	Component: Component,
 	render: render,
 	rerender: rerender,
@@ -943,6 +952,7 @@ var preact$1 = /*#__PURE__*/Object.freeze({
             h: h,
             createElement: h,
             cloneElement: cloneElement,
+            createRef: createRef,
             Component: Component,
             render: render,
             rerender: rerender,
@@ -1552,89 +1562,47 @@ var WithRequest = function (_React$Component) {
   return WithRequest;
 }(preact.Component);
 
-var camelToConst = function camelToConst(str) {
-  var ret = '';
-  var prevLowercase = false;
-  var _iteratorNormalCompletion = true;
-  var _didIteratorError = false;
-  var _iteratorError = undefined;
-
-  try {
-    for (var _iterator = str[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-      var s = _step.value;
-
-      var isUppercase = s.toUpperCase() === s;
-      if (isUppercase && prevLowercase) {
-        ret += '_';
-      }
+function cosntToCamel (str) {
+  let ret = '';
+  let prevUnderscore = false;
+  for (let s of str) {
+    const isUnderscore = s === '_';
+    if (isUnderscore) {
+      prevUnderscore = true;
+      continue
+    }
+    if (!isUnderscore && prevUnderscore) {
       ret += s;
-      prevLowercase = !isUppercase;
-    }
-  } catch (err) {
-    _didIteratorError = true;
-    _iteratorError = err;
-  } finally {
-    try {
-      if (!_iteratorNormalCompletion && _iterator.return) {
-        _iterator.return();
-      }
-    } finally {
-      if (_didIteratorError) {
-        throw _iteratorError;
-      }
+      prevUnderscore = false;
+    } else {
+      ret += s.toLowerCase();
     }
   }
+  return ret
+}
 
-  return ret.replace(/_+/g, '_').toUpperCase();
-};
-
-var constToCamel = function constToCamel(str) {
-  var ret = '';
-  var prevUnderscore = false;
-  var _iteratorNormalCompletion2 = true;
-  var _didIteratorError2 = false;
-  var _iteratorError2 = undefined;
-
-  try {
-    for (var _iterator2 = str[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-      var s = _step2.value;
-
-      var isUnderscore = s === '_';
-      if (isUnderscore) {
-        prevUnderscore = true;
-        continue;
-      }
-      if (!isUnderscore && prevUnderscore) {
-        ret += s;
-        prevUnderscore = false;
-      } else {
-        ret += s.toLowerCase();
-      }
+function camelToConst (str) {
+  let ret = '';
+  let prevLowercase = false;
+  for (let s of str) {
+    const isUppercase = s.toUpperCase() === s;
+    if (isUppercase && prevLowercase) {
+      ret += '_';
     }
-  } catch (err) {
-    _didIteratorError2 = true;
-    _iteratorError2 = err;
-  } finally {
-    try {
-      if (!_iteratorNormalCompletion2 && _iterator2.return) {
-        _iterator2.return();
-      }
-    } finally {
-      if (_didIteratorError2) {
-        throw _iteratorError2;
-      }
-    }
+    ret += s;
+    prevLowercase = !isUppercase;
   }
+  return ret.replace(/_+/g, '_').toUpperCase()
+}
 
-  return ret;
-};
+var CALLED = {};
 
 var buildActionsAndReducer = function buildActionsAndReducer(withActions, store, componentName) {
   var actionTypes = Object.keys(withActions).map(camelToConst);
   function reducer(action, state) {
     if (actionTypes.includes(action.type)) {
       var args = action.payload.args || [];
-      var fnRef = constToCamel(action.type);
+      var fnRef = cosntToCamel(action.type);
       return _extends({}, state, withActions[fnRef].apply(null, [state].concat(toConsumableArray(args || []))));
     }
     return state;
@@ -1680,12 +1648,17 @@ var connect = function connect(_ref) {
 
         if (context.store) {
           if (withActions) {
-            var _buildActionsAndReduc = buildActionsAndReducer(withActions, context.store, name),
-                reducer = _buildActionsAndReduc.reducer,
-                actions = _buildActionsAndReduc.actions;
+            if (!CALLED[name]) {
+              var _buildActionsAndReduc = buildActionsAndReducer(withActions, context.store, name),
+                  reducer = _buildActionsAndReduc.reducer,
+                  actions = _buildActionsAndReduc.actions;
 
-            context.store.addReducer(reducer);
-            _this._actions = actions;
+              context.store.addReducer(reducer);
+              _this._actions = actions;
+              CALLED[name] = actions;
+            } else {
+              _this._actions = CALLED[name];
+            }
           }
           if (getStoreRef) {
             getStoreRef(context.store);
@@ -2042,15 +2015,17 @@ var isOverlay = function isOverlay(el) {
   return el.classList && el.classList.contains('modal-container');
 };
 
-var actions = {
-  onContainerClick: function onContainerClick(state, event) {
-    if (isOverlay(event.target)) {
+var actions = function actions(store) {
+  return {
+    onContainerClick: function onContainerClick(state, event) {
+      if (isOverlay(event.target)) {
+        return { modal: null };
+      }
+    },
+    closeModal: function closeModal(state) {
       return { modal: null };
     }
-  },
-  closeModal: function closeModal() {
-    return { modal: null };
-  }
+  };
 };
 
 var Modal = connect({
@@ -2650,6 +2625,12 @@ var atom = createCommonjsModule(function (module, exports) {
     var listeners = [];
     var state = initialState;
 
+    reducers.push(function setStateReducer (action, state) {
+      return action && action.type === '__ATOM_SET_STATE__'
+        ? Object.assign(state, action.payload)
+        : state
+    });
+
     return {
       addReducer: addReducer,
       dispatch: dispatch,
@@ -2693,16 +2674,12 @@ var atom = createCommonjsModule(function (module, exports) {
 
     function getState () {
       return typeof state === 'object'
-        ? Object.hasOwnProperty('assign')
-          ? Object.assign({}, state)
-          : JSON.parse(JSON.stringify(state))
+        ? Object.assign({}, state)
         : state
     }
 
     function setState (newState) {
-      if (validState(newState)) {
-        cb(Object.assign({}, state, newState));
-      }
+      dispatch({type: '__ATOM_SET_STATE__', payload: newState});
     }
 
     // Private
@@ -2845,13 +2822,8 @@ function partial$1 (fn, args) {
   return fn.bind.apply(fn, args)
 }
 
-function partial$2 (fn, args) {
-  args = [fn].concat(Array.prototype.slice.call(args));
-  return fn.bind.apply(fn, args)
-}
-
 function reduce (fn, initVal, ls) {
-  if (arguments.length < 3) return partial$2(reduce, arguments)
+  if (arguments.length < 3) return partial(reduce, arguments)
   r$1(arguments, ['function', '-any', 'array']);
   return Array.prototype.reduce.call(ls, fn, initVal)
 }
@@ -2884,7 +2856,7 @@ const toType$1 = r$1.prototype.toType;
  * @return {Array}
  */
 function filter (fn, ls) {
-  if (arguments.length < 2) return partial$1(filter, arguments)
+  if (arguments.length < 2) return partial(filter, arguments)
   r$1(arguments, ['function', ['array', 'object']]);
   return toType$1(ls) === 'array'
     ? Array.prototype.filter.call(ls, fn)
@@ -2910,7 +2882,7 @@ function objFilter (fn, obj) {
  * @return {Object}
  */
 function pick (keys, obj) {
-  if (arguments.length < 2) return partial$1(pick, arguments)
+  if (arguments.length < 2) return partial(pick, arguments)
   r$1(arguments, ['array', 'object']);
   const result = {};
   for (let x = 0; x < keys.length; x++) {
@@ -2918,11 +2890,6 @@ function pick (keys, obj) {
     result[k] = obj[k];
   }
   return result
-}
-
-function partial$3 (fn, args) {
-  args = [fn].concat(Array.prototype.slice.call(args));
-  return fn.bind.apply(fn, args)
 }
 
 const toType$2 = r$1.prototype.toType;
@@ -2934,7 +2901,7 @@ const toType$2 = r$1.prototype.toType;
  * @return {Object}
  */
 function without (keys, obj) {
-  if (arguments.length < 2) return partial$3(without, arguments)
+  if (arguments.length < 2) return partial(without, arguments)
   r$1(arguments, [['string', 'array'], 'object']);
   if (toType$2(keys) === 'string') {
     keys = [keys];
