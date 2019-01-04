@@ -9,7 +9,7 @@ import Videos from './Videos'
 export const routes = {
   home: {
     path: '/',
-    component: Home
+    component: Home,
   },
   videos: {
     path: '/videos',

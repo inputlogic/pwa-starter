@@ -1,3 +1,3 @@
 #!/bin/sh
 
-npm run lint
+node_modules/.bin/standard --fix
