@@ -13,7 +13,7 @@ export const routes = {
   },
   videos: {
     path: '/videos',
-    component: Videos
+    component: Videos,
   }
 }
 
