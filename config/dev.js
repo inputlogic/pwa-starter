@@ -8,6 +8,7 @@ import babel from 'rollup-plugin-babel'
 import cjs from 'rollup-plugin-commonjs'
 import css from 'rollup-plugin-css-only'
 import globals from 'rollup-plugin-node-globals'
+import livereload from 'rollup-plugin-livereload'
 import replace from 'rollup-plugin-replace'
 import resolve from 'rollup-plugin-node-resolve'
 
@@ -33,6 +34,7 @@ export default {
           error => console.log({error}))
       }
     }),
+    livereload('public'),
     babel({
       include: ['src/**', 'server/**', 'node_modules/@app-elements/**']
     }),
@@ -47,7 +49,7 @@ export default {
       ]
     }),
     resolve({
-      browser: false,
+      browser: true,
       modulesOnly: false // Default: false
     }),
     globals(),
