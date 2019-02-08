@@ -2015,17 +2015,15 @@ var isOverlay = function isOverlay(el) {
   return el.classList && el.classList.contains('modal-container');
 };
 
-var actions = function actions(store) {
-  return {
-    onContainerClick: function onContainerClick(state, event) {
-      if (isOverlay(event.target)) {
-        return { modal: null };
-      }
-    },
-    closeModal: function closeModal(state) {
+var actions = {
+  onContainerClick: function onContainerClick(state, event) {
+    if (isOverlay(event.target)) {
       return { modal: null };
     }
-  };
+  },
+  closeModal: function closeModal() {
+    return { modal: null };
+  }
 };
 
 var Modal = connect({
@@ -2633,6 +2631,7 @@ var atom = createCommonjsModule(function (module, exports) {
 
     return {
       addReducer: addReducer,
+      removeReducer: removeReducer,
       dispatch: dispatch,
       subscribe: subscribe,
       unsubscribe: unsubscribe,
@@ -2645,6 +2644,13 @@ var atom = createCommonjsModule(function (module, exports) {
         throw new E('reducer must be a function')
       }
       reducers.push(reducer);
+    }
+
+    function removeReducer (reducer) {
+      console.log('removeReducer', {reducer});
+      if (!reducer) return
+      const idx = reducers.findIndex(l => l === reducer);
+      idx > -1 && reducers.splice(idx, 1);
     }
 
     function dispatch (/* action[, action1, action2, ...] */) {
