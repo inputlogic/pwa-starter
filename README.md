@@ -25,17 +25,6 @@ HoC, only manages one request. It could be modified in order to handle
 multiple requests, but you're encouraged to build Components that handle
 one resource.
 
-Another example, is embracing HoC to be used within your JSX, rather
-than utility functions:
-
-This:
-
-`<WithRequest request={{...}}>...</WithRequest>`
-
-Rather than this:
-
-`withRequest({...})(Child)`
-
 Documentation
 -------------
 
