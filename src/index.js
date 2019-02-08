@@ -82,7 +82,7 @@ if (typeof window !== 'undefined') {
 
 // - [consts.js](/consts.html)
 // - [routes.js](/routes.html)
-// - [initialState.js](/initialState.html)
+// - [store.js](/store.html)
 
 // **apps/**
 

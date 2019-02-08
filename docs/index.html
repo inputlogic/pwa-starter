@@ -30,22 +30,15 @@
               
                 
                 <li>
-                  <a class="source" href="elements/Form.html">
-                    elements/Form.js
+                  <a class="source" href="elements/global-header.html">
+                    elements/global-header.js
                   </a>
                 </li>
               
                 
                 <li>
-                  <a class="source" href="elements/Header.html">
-                    elements/Header.js
-                  </a>
-                </li>
-              
-                
-                <li>
-                  <a class="source" href="elements/NotFound.html">
-                    elements/NotFound.js
+                  <a class="source" href="elements/not-found.html">
+                    elements/not-found.js
                   </a>
                 </li>
               
@@ -58,15 +51,8 @@
               
                 
                 <li>
-                  <a class="source" href="initialState.html">
-                    initialState.js
-                  </a>
-                </li>
-              
-                
-                <li>
-                  <a class="source" href="modals/ExampleModal.html">
-                    modals/ExampleModal.js
+                  <a class="source" href="modals/example-modal.html">
+                    modals/example-modal.js
                   </a>
                 </li>
               
@@ -74,6 +60,13 @@
                 <li>
                   <a class="source" href="routes.html">
                     routes.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="store.html">
+                    store.js
                   </a>
                 </li>
               
@@ -133,12 +126,9 @@ is the entry point for your entire app. Everything starts here!</p>
         
       
         
-        <p>We use <a href="https://github.com/developit/unistore">unistore</a> for global state management.
+        <p>We use <a href="https://github.com/staydecent/atom">atom</a> for global state management.
 It is a tiny alternative to Redux, yet maintains compatibility with Redux DevTools!</p>
 
-        
-          <div class='highlight'><pre><span class="hljs-keyword">import</span> createStore <span class="hljs-keyword">from</span> <span class="hljs-string">'unistore'</span>
-<span class="hljs-keyword">import</span> {Provider} <span class="hljs-keyword">from</span> <span class="hljs-string">'unistore/preact'</span></pre></div>
         
       
         
@@ -155,12 +145,12 @@ the most important Component of all.</p>
       
         
         <p>Here, we import Components we want to render on <em>all</em> routes. For example,
-we include a global Header, and a <em>NotFound</em> component which renders when no route is
+we include a GlobalHeader, and a <em>NotFound</em> component which renders when no route is
 matched. (If your app does not need these global elements, you can of course remove them.)</p>
 
         
-          <div class='highlight'><pre><span class="hljs-keyword">import</span> Header <span class="hljs-keyword">from</span> <span class="hljs-string">'/elements/Header'</span>
-<span class="hljs-keyword">import</span> NotFound <span class="hljs-keyword">from</span> <span class="hljs-string">'/elements/NotFound'</span></pre></div>
+          <div class='highlight'><pre><span class="hljs-keyword">import</span> GlobalHeader <span class="hljs-keyword">from</span> <span class="hljs-string">'/elements/global-header'</span>
+<span class="hljs-keyword">import</span> NotFound <span class="hljs-keyword">from</span> <span class="hljs-string">'/elements/not-found'</span></pre></div>
         
       
         
@@ -172,10 +162,10 @@ Components.</p>
         
       
         
-        <p>And out apps’ initial state. Any defaults you want set when the app starts fresh.</p>
+        <p>And our apps’ global store.</p>
 
         
-          <div class='highlight'><pre><span class="hljs-keyword">import</span> initialState <span class="hljs-keyword">from</span> <span class="hljs-string">'/initialState'</span></pre></div>
+          <div class='highlight'><pre><span class="hljs-keyword">import</span> store, { Provider } <span class="hljs-keyword">from</span> <span class="hljs-string">'/store'</span></pre></div>
         
       
         
@@ -200,20 +190,13 @@ changing the way we write CSS.</p>
         
       
         
-        <p>Initializing our Redux-compatible <code>unistore</code></p>
-
-        
-          <div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">let</span> store = createStore(initialState)</pre></div>
-        
-      
-        
         <p>And, finally, our RootApp! This is the top-level Component to render
 into the DOM and kick-start our entire app!</p>
 
         
       
         
-        <p>First, our entire app is wrapped in the <em>unistore</em> <code>Provider</code> component.
+        <p>First, our entire app is wrapped in the <em>atom</em> <code>Provider</code> component.
 This adds the store to the React context, meaning any child can access our
 store reference.
 Then we include those Component’s that we want to be rendered on <em>all</em> routes.</p>
@@ -221,14 +204,14 @@ Then we include those Component’s that we want to be rendered on <em>all</em> 
         
           <div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> RootApp = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span>
   &lt;Provider store={store}&gt;
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">'main-app-container'</span> &gt;</span>
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">'main-app-container'</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-name">Helmet</span>
         <span class="hljs-attr">title</span>=<span class="hljs-string">'Welcome'</span>
         <span class="hljs-attr">titleTemplate</span>=<span class="hljs-string">'PWA Starter | %s'</span>
         <span class="hljs-attr">defaultTitle</span>=<span class="hljs-string">'Welcome'</span>
       /&gt;</span>
 
-      <span class="hljs-tag">&lt;<span class="hljs-name">Header</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">GlobalHeader</span> /&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-name">Notification</span> /&gt;</span>
 
       <span class="hljs-tag">&lt;<span class="hljs-name">Router</span> <span class="hljs-attr">routes</span>=<span class="hljs-string">{routes}</span> /&gt;</span>
@@ -273,7 +256,7 @@ handled by the <code>server</code> (which is not covered here).</p>
         <ul>
 <li><a href="/consts.html">consts.js</a></li>
 <li><a href="/routes.html">routes.js</a></li>
-<li><a href="/initialState.html">initialState.js</a></li>
+<li><a href="/store.html">store.js</a></li>
 </ul>
 
         
@@ -312,8 +295,8 @@ and are common to use throughout all apps.</p>
       
         
         <ul>
-<li><a href="/elements/Header">Header.js</a></li>
-<li><a href="/elements/NotFound">NotFound.js</a></li>
+<li><a href="/elements/global-header">global-header.js</a></li>
+<li><a href="/elements/not-found">not-found.js</a></li>
 </ul>
 
         
@@ -331,7 +314,7 @@ and are common to use throughout all apps.</p>
       
         
         <ul>
-<li><a href="/modals/ExampleModal">ExampleModal.js</a></li>
+<li><a href="/modals/example-modal">example-modal.js</a></li>
 </ul>
 
         

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>store.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          <h1>store.js</h1>
+        
+
+        
+          <div class="toc">
+            <h3>Table of Contents</h3>
+            <ol>
+              
+                
+                <li>
+                  <a class="source" href="consts.html">
+                    consts.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="elements/global-header.html">
+                    elements/global-header.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="elements/not-found.html">
+                    elements/not-found.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="index.html">
+                    index.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="modals/example-modal.html">
+                    modals/example-modal.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="routes.html">
+                    routes.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="store.html">
+                    store.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="util/equal.html">
+                    util/equal.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="util/loadImage.html">
+                    util/loadImage.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="util/urlFor.html">
+                    util/urlFor.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="util/workerize.html">
+                    util/workerize.js
+                  </a>
+                </li>
+              
+            </ol>
+          </div>
+        
+      </div>
+
+      
+        
+        
+        
+          <div class='highlight'><pre><span class="hljs-keyword">import</span> createStore <span class="hljs-keyword">from</span> <span class="hljs-string">'atom'</span>
+<span class="hljs-keyword">import</span> devtools <span class="hljs-keyword">from</span> <span class="hljs-string">'atom/devtools'</span>
+
+<span class="hljs-keyword">import</span> pathReducer <span class="hljs-keyword">from</span> <span class="hljs-string">'@wasmuth/path-reducer'</span>
+
+<span class="hljs-keyword">import</span> { DEBUG } <span class="hljs-keyword">from</span> <span class="hljs-string">'/consts'</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> initialState = {
+  <span class="hljs-attr">clicks</span>: <span class="hljs-number">0</span>,</pre></div>
+        
+      
+        
+        <p>In the browser, we initialize the currentPath prop, which is set
+by <a href="https://github.com/inputlogic/elements/tree/master/components/router">Router</a></p>
+
+        
+          <div class='highlight'><pre>  currentPath: <span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> !== <span class="hljs-string">'undefined'</span>
+    ? <span class="hljs-built_in">window</span>.location.pathname + <span class="hljs-built_in">window</span>.location.search
+    : <span class="hljs-string">'/'</span>,</pre></div>
+        
+      
+        
+        <p><code>pendingRequests</code> is used by the <a href="https://github.com/inputlogic/elements/tree/master/components/with-request">WithRequest</a> HoC.</p>
+
+        
+          <div class='highlight'><pre>  pendingRequests: <span class="hljs-number">0</span>,</pre></div>
+        
+      
+        
+        <p>Server-side rendering will have already computed some
+values for global state, and should be initialized on the client.
+This avoids redoing initial logic that was just computed on the server.</p>
+
+        
+          <div class='highlight'><pre>  ...(<span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> !== <span class="hljs-string">'undefined'</span>
+    ? <span class="hljs-built_in">JSON</span>.parse(<span class="hljs-built_in">window</span>.__initial_store__ || <span class="hljs-string">''</span>)
+    : {})
+}</pre></div>
+        
+      
+        
+        <p>You can either define your reducers here, or add them later with:
+<code>store.addReducer(reducer)</code></p>
+
+        
+          <div class='highlight'><pre><span class="hljs-keyword">const</span> reducers = [
+  pathReducer
+]
+
+<span class="hljs-keyword">const</span> store = <span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> !== <span class="hljs-string">'undefined'</span> &amp;&amp; DEBUG
+  ? devtools(createStore(reducers, initialState))
+  : createStore(reducers, initialState)
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> store
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> getState = store.getState
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> setState = store.setState
+
+<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Provider</span> (<span class="hljs-params">props</span>) </span>{
+  <span class="hljs-keyword">this</span>.getChildContext = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> ({ <span class="hljs-attr">store</span>: props.store })
+}
+Provider.prototype.render = <span class="hljs-function"><span class="hljs-params">props</span> =&gt;</span> props.children[<span class="hljs-number">0</span>]</pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>

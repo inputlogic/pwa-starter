@@ -30,22 +30,15 @@
               
                 
                 <li>
-                  <a class="source" href="../elements/Form.html">
-                    elements/Form.js
+                  <a class="source" href="../elements/global-header.html">
+                    elements/global-header.js
                   </a>
                 </li>
               
                 
                 <li>
-                  <a class="source" href="../elements/Header.html">
-                    elements/Header.js
-                  </a>
-                </li>
-              
-                
-                <li>
-                  <a class="source" href="../elements/NotFound.html">
-                    elements/NotFound.js
+                  <a class="source" href="../elements/not-found.html">
+                    elements/not-found.js
                   </a>
                 </li>
               
@@ -58,15 +51,8 @@
               
                 
                 <li>
-                  <a class="source" href="../initialState.html">
-                    initialState.js
-                  </a>
-                </li>
-              
-                
-                <li>
-                  <a class="source" href="../modals/ExampleModal.html">
-                    modals/ExampleModal.js
+                  <a class="source" href="../modals/example-modal.html">
+                    modals/example-modal.js
                   </a>
                 </li>
               
@@ -74,6 +60,13 @@
                 <li>
                   <a class="source" href="../routes.html">
                     routes.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="../store.html">
+                    store.js
                   </a>
                 </li>
               
@@ -144,9 +137,9 @@ URL.revokeObjectURL( blobURL );</p>
   <span class="hljs-keyword">const</span> worker = <span class="hljs-keyword">new</span> <span class="hljs-built_in">window</span>.Worker(<span class="hljs-string">`workers/<span class="hljs-subst">${name}</span>.js`</span>)
   <span class="hljs-keyword">const</span> promise = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
     worker.onmessage = <span class="hljs-function"><span class="hljs-params">ev</span> =&gt;</span> resolve(ev.data)
-    worker.postMessage({args})
+    worker.postMessage({ args })
   })
-  <span class="hljs-keyword">return</span> {worker, promise}
+  <span class="hljs-keyword">return</span> { worker, promise }
 }</pre></div>
         
       

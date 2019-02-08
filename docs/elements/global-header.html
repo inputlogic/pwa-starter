@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>Header.js</title>
+  <title>global-header.js</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
   <link rel="stylesheet" media="all" href="../docco.css" />
@@ -13,7 +13,7 @@
 
       <div class="header">
         
-          <h1>Header.js</h1>
+          <h1>global-header.js</h1>
         
 
         
@@ -30,22 +30,15 @@
               
                 
                 <li>
-                  <a class="source" href="Form.html">
-                    elements/Form.js
+                  <a class="source" href="global-header.html">
+                    elements/global-header.js
                   </a>
                 </li>
               
                 
                 <li>
-                  <a class="source" href="Header.html">
-                    elements/Header.js
-                  </a>
-                </li>
-              
-                
-                <li>
-                  <a class="source" href="NotFound.html">
-                    elements/NotFound.js
+                  <a class="source" href="not-found.html">
+                    elements/not-found.js
                   </a>
                 </li>
               
@@ -58,15 +51,8 @@
               
                 
                 <li>
-                  <a class="source" href="../initialState.html">
-                    initialState.js
-                  </a>
-                </li>
-              
-                
-                <li>
-                  <a class="source" href="../modals/ExampleModal.html">
-                    modals/ExampleModal.js
+                  <a class="source" href="../modals/example-modal.html">
+                    modals/example-modal.js
                   </a>
                 </li>
               
@@ -74,6 +60,13 @@
                 <li>
                   <a class="source" href="../routes.html">
                     routes.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="../store.html">
+                    store.js
                   </a>
                 </li>
               
@@ -114,14 +107,16 @@
         
         
         
-          <div class='highlight'><pre><span class="hljs-keyword">import</span> {connect} <span class="hljs-keyword">from</span> <span class="hljs-string">'unistore/preact'</span>
+          <div class='highlight'><pre><span class="hljs-keyword">import</span> connect <span class="hljs-keyword">from</span> <span class="hljs-string">'@app-elements/connect'</span>
 <span class="hljs-keyword">import</span> urlFor <span class="hljs-keyword">from</span> <span class="hljs-string">'/util/urlFor'</span>
 
-<span class="hljs-keyword">const</span> actions = <span class="hljs-function"><span class="hljs-params">store</span> =&gt;</span> ({
-  <span class="hljs-attr">increment</span>: <span class="hljs-function">(<span class="hljs-params">{clicks}</span>) =&gt;</span> ({<span class="hljs-attr">clicks</span>: clicks + <span class="hljs-number">1</span>})
-})
-
-<span class="hljs-keyword">const</span> Header = connect(<span class="hljs-string">'clicks'</span>, actions)(<span class="hljs-function">(<span class="hljs-params">{clicks, increment}</span>) =&gt;</span> (
+<span class="hljs-keyword">const</span> GlobalHeader = connect({
+  <span class="hljs-attr">name</span>: <span class="hljs-string">'GlobalHeader'</span>,
+  <span class="hljs-attr">withActions</span>: {
+    <span class="hljs-attr">increment</span>: <span class="hljs-function">(<span class="hljs-params">{ clicks }</span>) =&gt;</span> ({ <span class="hljs-attr">clicks</span>: (clicks || <span class="hljs-number">0</span>) + <span class="hljs-number">1</span> })
+  },
+  <span class="hljs-attr">withState</span>: <span class="hljs-function">(<span class="hljs-params">{ clicks }</span>) =&gt;</span> ({ clicks })
+})(<span class="hljs-function">(<span class="hljs-params">{ clicks, increment }</span>) =&gt;</span> (
   <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">header</span> <span class="hljs-attr">class</span>=<span class="hljs-string">'layout-center'</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>PWA {clicks}<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{increment}</span>&gt;</span>+<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
@@ -130,7 +125,7 @@
   <span class="hljs-tag">&lt;/<span class="hljs-name">header</span>&gt;</span></span>
 ))
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> Header</pre></div>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> GlobalHeader</pre></div>
         
       
       <div class="fleur">h</div>

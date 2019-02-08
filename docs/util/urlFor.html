@@ -30,22 +30,15 @@
               
                 
                 <li>
-                  <a class="source" href="../elements/Form.html">
-                    elements/Form.js
+                  <a class="source" href="../elements/global-header.html">
+                    elements/global-header.js
                   </a>
                 </li>
               
                 
                 <li>
-                  <a class="source" href="../elements/Header.html">
-                    elements/Header.js
-                  </a>
-                </li>
-              
-                
-                <li>
-                  <a class="source" href="../elements/NotFound.html">
-                    elements/NotFound.js
+                  <a class="source" href="../elements/not-found.html">
+                    elements/not-found.js
                   </a>
                 </li>
               
@@ -58,15 +51,8 @@
               
                 
                 <li>
-                  <a class="source" href="../initialState.html">
-                    initialState.js
-                  </a>
-                </li>
-              
-                
-                <li>
-                  <a class="source" href="../modals/ExampleModal.html">
-                    modals/ExampleModal.js
+                  <a class="source" href="../modals/example-modal.html">
+                    modals/example-modal.js
                   </a>
                 </li>
               
@@ -74,6 +60,13 @@
                 <li>
                   <a class="source" href="../routes.html">
                     routes.js
+                  </a>
+                </li>
+              
+                
+                <li>
+                  <a class="source" href="../store.html">
+                    store.js
                   </a>
                 </li>
               
@@ -131,9 +124,9 @@ for a given name.</p>
     .keys(routes || {})
     .reduce(<span class="hljs-function">(<span class="hljs-params">acc, r</span>) =&gt;</span>
       routes[r].hasOwnProperty(<span class="hljs-string">'routes'</span>)
-        ? {...acc, ...getAllRoutes(routes[r].routes)}
-        : {...acc, [r]: routes[r]},
-      {})
+        ? { ...acc, ...getAllRoutes(routes[r].routes) }
+        : { ...acc, [r]: routes[r] },
+    {})
 
 <span class="hljs-keyword">const</span> allRoutes = getAllRoutes(routes)</pre></div>
         
@@ -155,7 +148,7 @@ urlFor(<span class="hljs-string">'myRoute'</span>, {
 &gt; <span class="hljs-string">'/some/12/r2d2?search=hi'</span></code></pre>
         
           <div class='highlight'><pre>
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> urlFor = <span class="hljs-function">(<span class="hljs-params">name, {args = {}, queries = {}} = {}</span>) =&gt;</span> {
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> urlFor = <span class="hljs-function">(<span class="hljs-params">name, { args = {}, queries = {} } = {}</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> rule = allRoutes[name]
   <span class="hljs-keyword">if</span> (!rule) {
     <span class="hljs-built_in">console</span>.warn(<span class="hljs-string">'No route found for name: '</span> + name)
