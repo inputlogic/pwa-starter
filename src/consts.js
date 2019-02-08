@@ -1,6 +1,6 @@
 export const DEBUG = typeof window !== 'undefined'
   ? window.location.hostname.indexOf('local') > -1
-  : process.env.NODE_ENV
+  : process.env.NODE_ENV !== 'production'
 
 export const WEB_URL = (function () {
   if (typeof window === 'undefined') {
