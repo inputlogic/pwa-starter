@@ -6,8 +6,9 @@ const Base = () =>
   </div>
 
 const NotFound = connect({
-  withState: ({currentRoute}) => ({currentRoute})
-})(({currentRoute}) =>
+  name: 'NotFound',
+  withState: ({ currentRoute }) => ({ currentRoute })
+})(({ currentRoute }) =>
   !currentRoute ? Base() : null
 )
 

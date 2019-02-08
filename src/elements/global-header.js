@@ -1,13 +1,13 @@
 import connect from '@app-elements/connect'
 import urlFor from '/util/urlFor'
 
-const Header = connect({
-  name: 'Header',
+const GlobalHeader = connect({
+  name: 'GlobalHeader',
   withActions: {
-    increment: ({clicks}) => ({clicks: (clicks || 0) + 1})
+    increment: ({ clicks }) => ({ clicks: (clicks || 0) + 1 })
   },
-  withState: ({clicks}) => ({clicks})
-})(({clicks, increment}) => (
+  withState: ({ clicks }) => ({ clicks })
+})(({ clicks, increment }) => (
   <header class='layout-center'>
     <h1>PWA {clicks}</h1>
     <button onClick={increment}>+</button>
@@ -16,4 +16,4 @@ const Header = connect({
   </header>
 ))
 
-export default Header
+export default GlobalHeader

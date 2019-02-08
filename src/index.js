@@ -8,7 +8,6 @@ import Preact from 'preact'
 
 // We use [atom](https://github.com/staydecent/atom) for global state management.
 // It is a tiny alternative to Redux, yet maintains compatibility with Redux DevTools!
-// import {Provider} from 'atom/preact'
 
 // [inputlogic/elements](https://github.com/inputlogic/elements) houses common Components
 // that many PWAs will end up needing. In this case, we are importing Helmet for managing
@@ -19,17 +18,17 @@ import Notification from '@app-elements/notification'
 import Router from '@app-elements/router'
 
 // Here, we import Components we want to render on *all* routes. For example,
-// we include a global Header, and a *NotFound* component which renders when no route is
+// we include a GlobalHeader, and a *NotFound* component which renders when no route is
 // matched. (If your app does not need these global elements, you can of course remove them.)
-import Header from '/elements/Header'
-import NotFound from '/elements/NotFound'
+import GlobalHeader from '/elements/global-header'
+import NotFound from '/elements/not-found'
 
 // The main [routes](/routes.html) file defines the top-level routes and their respective
 // Components.
 import routes from '/routes'
 
 // And our apps' global store.
-import store, {Provider} from '/store'
+import store, { Provider } from '/store'
 
 // ### Styling
 
@@ -51,14 +50,14 @@ import '/styles/base.less'
 // Then we include those Component's that we want to be rendered on *all* routes.
 export const RootApp = () =>
   <Provider store={store}>
-    <div className='main-app-container' >
+    <div className='main-app-container'>
       <Helmet
         title='Welcome'
         titleTemplate='PWA Starter | %s'
         defaultTitle='Welcome'
       />
 
-      <Header />
+      <GlobalHeader />
       <Notification />
 
       <Router routes={routes} />
@@ -99,15 +98,15 @@ if (typeof window !== 'undefined') {
 // Elements are reusable Components that render some JSX. These are generic
 // and are common to use throughout all apps.
 
-// - [Header.js](/elements/Header)
-// - [NotFound.js](/elements/NotFound)
+// - [global-header.js](/elements/global-header)
+// - [not-found.js](/elements/not-found)
 
 // **modals/**
 
 // Any global (cross-app) modals can go here. These should all use the
 // [Modal](https://github.com/inputlogic/elements/tree/master/packages/Modal) element in their `render` method.
 
-// - [ExampleModal.js](/modals/ExampleModal)
+// - [example-modal.js](/modals/example-modal)
 
 // **styles/**
 

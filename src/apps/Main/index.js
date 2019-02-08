@@ -1,26 +1,23 @@
-import {Modals} from '@app-elements/modal'
-import Router from '@app-elements/Router'
+import { Modals } from '@app-elements/modal'
+import Router from '@app-elements/router'
 
-import ExampleModal from '/modals/ExampleModal'
+import ExampleModal from '/modals/example-modal'
 
-import Home from './Home'
-import Videos from './Videos'
+import Home from './home'
 
 export const routes = {
   home: {
     path: '/',
     component: Home
-  },
-  videos: {
-    path: '/videos',
-    component: Videos
   }
 }
 
-export default () =>
+const MainApp = () =>
   <div>
     <Router routes={routes} />
     <Modals>
       <ExampleModal />
     </Modals>
   </div>
+
+export default MainApp

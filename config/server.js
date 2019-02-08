@@ -1,4 +1,4 @@
-import {resolve as pathResolve} from 'path'
+import { resolve as pathResolve } from 'path'
 
 import alias from 'rollup-plugin-alias'
 import babel from 'rollup-plugin-babel'

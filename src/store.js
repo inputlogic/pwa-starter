@@ -3,16 +3,16 @@ import devtools from 'atom/devtools'
 
 import pathReducer from '@wasmuth/path-reducer'
 
-import {DEBUG} from '/consts'
+import { DEBUG } from '/consts'
 
 export const initialState = {
   clicks: 0,
-  // In the browser, we initialize the currentPath prop, which is used
-  // by our [Router](/hoc/Router.html)
+  // In the browser, we initialize the currentPath prop, which is set
+  // by [Router](https://github.com/inputlogic/elements/tree/master/components/router)
   currentPath: typeof window !== 'undefined'
     ? window.location.pathname + window.location.search
     : '/',
-  // `pendingRequests` is used by the [WithRequest](/hoc/WithRequest.html) HoC.
+  // `pendingRequests` is used by the [WithRequest](https://github.com/inputlogic/elements/tree/master/components/with-request) HoC.
   pendingRequests: 0,
   // Server-side rendering will have already computed some
   // values for global state, and should be initialized on the client.
@@ -38,6 +38,6 @@ export const getState = store.getState
 export const setState = store.setState
 
 export function Provider (props) {
-  this.getChildContext = () => ({store: props.store})
+  this.getChildContext = () => ({ store: props.store })
 }
 Provider.prototype.render = props => props.children[0]

@@ -1,10 +1,10 @@
-import Router from '@app-elements/Router'
+import Router from '@app-elements/router'
 
 import urlFor from '/util/urlFor'
 
-import Users from './Users'
-import User from './User'
-import Login from './Login'
+import Users from './users'
+import User from './user'
+import Login from './login'
 
 export const routes = {
   users: {
@@ -27,8 +27,10 @@ const AccountHeader = () =>
     <a href={urlFor('login')}>Login</a>
   </header>
 
-export default () =>
+const AccountApp = () =>
   <div id='account-layout'>
     <AccountHeader />
     <Router routes={routes} />
   </div>
+
+export default AccountApp

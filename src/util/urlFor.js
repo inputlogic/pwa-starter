@@ -11,8 +11,8 @@ const getAllRoutes = routes =>
     .keys(routes || {})
     .reduce((acc, r) =>
       routes[r].hasOwnProperty('routes')
-        ? {...acc, ...getAllRoutes(routes[r].routes)}
-        : {...acc, [r]: routes[r]},
+        ? { ...acc, ...getAllRoutes(routes[r].routes) }
+        : { ...acc, [r]: routes[r] },
     {})
 
 const allRoutes = getAllRoutes(routes)
@@ -31,7 +31,7 @@ const allRoutes = getAllRoutes(routes)
 // > '/some/12/r2d2?search=hi'
 // ```
 
-export const urlFor = (name, {args = {}, queries = {}} = {}) => {
+export const urlFor = (name, { args = {}, queries = {} } = {}) => {
   const rule = allRoutes[name]
   if (!rule) {
     console.warn('No route found for name: ' + name)

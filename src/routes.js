@@ -14,8 +14,8 @@
 // folder within `src/apps` should have an `index.js` that exports a Component as
 // `default` and a `routes` const.
 
-import Main, {routes as mainRoutes} from '/apps/Main'
-import Account, {routes as accountRoutes} from '/apps/Account'
+import Main, { routes as mainRoutes } from '/apps/main'
+import Account, { routes as accountRoutes } from '/apps/account'
 
 // These app routes need to be defined here (outside of a Component's render function)
 // so that our [urlFor](/util/urlFor.html) function works without mounting any React

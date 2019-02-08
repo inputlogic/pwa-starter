@@ -1628,8 +1628,7 @@ var buildActionsAndReducer = function buildActionsAndReducer(withActions, store,
 };
 
 var connect = function connect(_ref) {
-  var _ref$name = _ref.name,
-      name = _ref$name === undefined ? 'Connect' : _ref$name,
+  var name = _ref.name,
       withActions = _ref.withActions,
       withState = _ref.withState,
       withRequest = _ref.withRequest,
@@ -1677,7 +1676,10 @@ var connect = function connect(_ref) {
           var allState = _extends({}, mappedState, this.state);
           return withRequest != null ? preact.h(
             WithRequest,
-            { request: withRequest(allState, this.props), connectState: mappedState },
+            {
+              request: withRequest(allState, this.props),
+              connectState: mappedState
+            },
             function (_ref2) {
               var isLoading = _ref2.isLoading,
                   response = objectWithoutProperties(_ref2, ['isLoading']);
@@ -1692,6 +1694,9 @@ var connect = function connect(_ref) {
     if (withState) {
       Connect.defaultProps = { mapper: withState };
     }
+
+    var passedComponentName = PassedComponent.displayName || PassedComponent.name || name || 'PassedComponent';
+    Connect.displayName = 'connect(' + passedComponentName + ')';
 
     return Connect;
   };
@@ -1774,11 +1779,6 @@ var storeRef$1 = void 0;
 var segmentize = function segmentize(url) {
   return url.replace(/(^\/+|\/+$)/g, '').split('/');
 };
-
-function updateQuery(queries) {
-  var existingParams = qs.parse(window.location.search);
-  return window.location.pathname + ('?' + qs.stringify(_extends({}, existingParams, queries)));
-}
 
 // route matching logic, taken from preact-router
 var exec = function exec(url, route) {
@@ -2021,7 +2021,7 @@ var actions = {
       return { modal: null };
     }
   },
-  closeModal: function closeModal() {
+  closeModal: function closeModal(state) {
     return { modal: null };
   }
 };
@@ -2105,111 +2105,6 @@ var Modals = connect({
   }, children);
   return child;
 });
-
-var storeRef$2 = void 0;
-
-var segmentize$1 = function segmentize(url) {
-  return url.replace(/(^\/+|\/+$)/g, '').split('/');
-};
-
-// route matching logic, taken from preact-router
-var exec$1 = function exec(url, route) {
-  var reg = /(?:\?([^#]*))?(#.*)?$/;
-  var c = url.match(reg);
-  var matches = {};
-  var ret = void 0;
-  if (c && c[1]) {
-    var p = c[1].split('&');
-    for (var i = 0; i < p.length; i++) {
-      var r = p[i].split('=');
-      matches[decodeURIComponent(r[0])] = decodeURIComponent(r.slice(1).join('='));
-    }
-  }
-  url = segmentize$1(url.replace(reg, ''));
-  route = segmentize$1(route || '');
-  var max = Math.max(url.length, route.length);
-  for (var _i = 0; _i < max; _i++) {
-    if (route[_i] && route[_i].charAt(0) === ':') {
-      var param = route[_i].replace(/(^:|[+*?]+$)/g, '');
-      var flags = (route[_i].match(/[+*?]+$/) || {})[0] || '';
-      var plus = ~flags.indexOf('+');
-      var star = ~flags.indexOf('*');
-      var val = url[_i] || '';
-      if (!val && !star && (flags.indexOf('?') < 0 || plus)) {
-        ret = false;
-        break;
-      }
-      matches[param] = decodeURIComponent(val);
-      if (plus || star) {
-        matches[param] = url.slice(_i).map(decodeURIComponent).join('/');
-        break;
-      }
-    } else if (route[_i] !== url[_i]) {
-      ret = false;
-      break;
-    }
-  }
-  if (ret === false) return false;
-  return matches;
-};
-
-var Router$1 = connect({
-  name: 'Router',
-  withState: function withState(_ref) {
-    var currentPath = _ref.currentPath;
-    return { currentPath: currentPath };
-  },
-  getStoreRef: function getStoreRef(store) {
-    storeRef$2 = store;
-  }
-})(function (_ref2) {
-  var currentPath = _ref2.currentPath,
-      routes = _ref2.routes;
-
-  for (var route in routes) {
-    if (routes[route].hasOwnProperty('routes')) {
-      var shouldRender = Object.values(routes[route].routes).some(function (_ref3) {
-        var path = _ref3.path;
-        return path && exec$1(currentPath, path);
-      });
-      if (shouldRender) {
-        var App = routes[route].component;
-        return preact.h(App, null);
-      }
-    } else {
-      var routeArgs = exec$1(currentPath, routes[route].path);
-      if (routeArgs) {
-        var newRoute = {
-          name: route,
-          path: routes[route].path,
-          args: routeArgs
-        };
-        if (!equal(newRoute, storeRef$2.getState().currentRoute)) {
-          storeRef$2.setState({ currentRoute: newRoute });
-        }
-        var Component$$1 = routes[route].component;
-        return preact.h(Component$$1, routeArgs);
-      }
-    }
-  }
-});
-
-if (typeof window !== 'undefined') {
-  document.addEventListener('click', function (ev) {
-    if (ev.target.nodeName === 'A' && storeRef$2) {
-      if (ev.metaKey) return;
-      ev.preventDefault();
-      ev.stopImmediatePropagation();
-      window.scrollTo(0, 0);
-      var url = ev.target.getAttribute('href');
-      var currentPath = storeRef$2.getState().currentPath;
-      if (currentPath !== url) {
-        window.history['pushState'](null, null, url);
-        storeRef$2.setState({ currentPath: url });
-      }
-    }
-  });
-}
 
 function ExampleModal() {
   return preact.h(
@@ -2393,7 +2288,7 @@ var Carousel = function (_React$Component) {
   return Carousel;
 }(preact.Component);
 
-var storeRef$3 = void 0; // Will get populated by `getStoreReference`
+var storeRef$2 = void 0; // Will get populated by `getStoreReference`
 
 var actions$1 = {
   toggle: function toggle(_ref, uid) {
@@ -2419,7 +2314,7 @@ var Dropdown = connect({
   withActions: actions$1,
   withState: mapper,
   getStoreRef: function getStoreRef(store) {
-    storeRef$3 = store;
+    storeRef$2 = store;
   }
 })(function (_ref4) {
   var isOpen = _ref4.isOpen,
@@ -2465,8 +2360,8 @@ var isDropdown = function isDropdown(el) {
 
 try {
   document.body.addEventListener('click', function (ev) {
-    if (!storeRef$3) return;
-    var activeDropdown = W.path('dropdown', storeRef$3.getState());
+    if (!storeRef$2) return;
+    var activeDropdown = W.path('dropdown', storeRef$2.getState());
     if (!activeDropdown) {
       return;
     }
@@ -2476,7 +2371,7 @@ try {
       el = el.parentNode;
       if (isDropdown(el)) return;
     }
-    storeRef$3.setState({ dropdown: null });
+    storeRef$2.setState({ dropdown: null });
   });
 } catch (_) {}
 
@@ -2647,7 +2542,6 @@ var atom = createCommonjsModule(function (module, exports) {
     }
 
     function removeReducer (reducer) {
-      console.log('removeReducer', {reducer});
       if (!reducer) return
       const idx = reducers.findIndex(l => l === reducer);
       idx > -1 && reducers.splice(idx, 1);
@@ -3005,10 +2899,10 @@ var WEB_URL = function () {
 
 var initialState = _extends({
   clicks: 0,
-  // In the browser, we initialize the currentPath prop, which is used
-  // by our [Router](/hoc/Router.html)
+  // In the browser, we initialize the currentPath prop, which is set
+  // by [Router](https://github.com/inputlogic/elements/tree/master/components/router)
   currentPath: typeof window !== 'undefined' ? window.location.pathname + window.location.search : '/',
-  // `pendingRequests` is used by the [WithRequest](/hoc/WithRequest.html) HoC.
+  // `pendingRequests` is used by the [WithRequest](https://github.com/inputlogic/elements/tree/master/components/with-request) HoC.
   pendingRequests: 0
 }, typeof window !== 'undefined' ? JSON.parse(window.__initial_store__ || '') : {});
 
@@ -3030,7 +2924,7 @@ Provider.prototype.render = function (props) {
   return props.children[0];
 };
 
-var Home = (function () {
+var Home = function Home() {
   return preact.h(
     'div',
     { style: { padding: '1em' } },
@@ -3086,7 +2980,209 @@ var Home = (function () {
       }, ['fff', 'a7c', '09d', '411', '111'])
     )
   );
+};
+
+var routes = {
+  home: {
+    path: '/',
+    component: Home
+  }
+};
+
+var MainApp = function MainApp() {
+  return preact.h(
+    'div',
+    null,
+    preact.h(Router, { routes: routes }),
+    preact.h(
+      Modals,
+      null,
+      preact.h(ExampleModal, null)
+    )
+  );
+};
+
+var has$1 = Object.prototype.hasOwnProperty;
+
+/**
+ * Decode a URI encoded string.
+ *
+ * @param {String} input The URI encoded string.
+ * @returns {String} The decoded string.
+ * @api private
+ */
+var decode$1 = function decode(input) {
+  return decodeURIComponent(input.replace(/\+/g, ' '));
+};
+
+/**
+ * Simple query string parser.
+ *
+ * @param {String} query The query string that needs to be parsed.
+ * @returns {Object}
+ * @api public
+ */
+function parse$1(query) {
+  var parser = /([^=?&]+)=?([^&]*)/g;
+  var result = {};
+  var part = void 0;
+
+  while ((part = parser.exec(query)) != null) {
+    var key = decode$1(part[1]);
+
+    //
+    // Prevent overriding of existing properties. This ensures that build-in
+    // methods like `toString` or __proto__ are not overriden by malicious
+    // querystrings.
+    //
+    if (key in result) continue;
+    result[key] = decode$1(part[2]);
+  }
+
+  return result;
+}
+
+/**
+ * Transform a query string to an object.
+ *
+ * @param {Object} obj Object that should be transformed.
+ * @param {String} prefix Optional prefix.
+ * @returns {String}
+ * @api public
+ */
+function stringify$1(obj) {
+  var prefix = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+
+  var pairs = [];
+
+  //
+  // Optionally prefix with a '?' if needed
+  //
+  if (typeof prefix !== 'string') prefix = '?';
+
+  for (var key in obj) {
+    if (has$1.call(obj, key)) {
+      pairs.push(encodeURIComponent(key) + '=' + encodeURIComponent(obj[key]));
+    }
+  }
+
+  return pairs.length ? prefix + pairs.join('&') : '';
+}
+
+var qs$1 = {
+  stringify: stringify$1,
+  parse: parse$1
+};
+
+var storeRef$3 = void 0;
+
+var segmentize$1 = function segmentize(url) {
+  return url.replace(/(^\/+|\/+$)/g, '').split('/');
+};
+
+function updateQuery$1(queries) {
+  var existingParams = qs$1.parse(window.location.search);
+  return window.location.pathname + ('?' + qs$1.stringify(_extends({}, existingParams, queries)));
+}
+
+// route matching logic, taken from preact-router
+var exec$1 = function exec(url, route) {
+  var reg = /(?:\?([^#]*))?(#.*)?$/;
+  var c = url.match(reg);
+  var matches = {};
+  var ret = void 0;
+  if (c && c[1]) {
+    var p = c[1].split('&');
+    for (var i = 0; i < p.length; i++) {
+      var r = p[i].split('=');
+      matches[decodeURIComponent(r[0])] = decodeURIComponent(r.slice(1).join('='));
+    }
+  }
+  url = segmentize$1(url.replace(reg, ''));
+  route = segmentize$1(route || '');
+  var max = Math.max(url.length, route.length);
+  for (var _i = 0; _i < max; _i++) {
+    if (route[_i] && route[_i].charAt(0) === ':') {
+      var param = route[_i].replace(/(^:|[+*?]+$)/g, '');
+      var flags = (route[_i].match(/[+*?]+$/) || {})[0] || '';
+      var plus = ~flags.indexOf('+');
+      var star = ~flags.indexOf('*');
+      var val = url[_i] || '';
+      if (!val && !star && (flags.indexOf('?') < 0 || plus)) {
+        ret = false;
+        break;
+      }
+      matches[param] = decodeURIComponent(val);
+      if (plus || star) {
+        matches[param] = url.slice(_i).map(decodeURIComponent).join('/');
+        break;
+      }
+    } else if (route[_i] !== url[_i]) {
+      ret = false;
+      break;
+    }
+  }
+  if (ret === false) return false;
+  return matches;
+};
+
+var Router$1 = connect({
+  name: 'Router',
+  withState: function withState(_ref) {
+    var currentPath = _ref.currentPath;
+    return { currentPath: currentPath };
+  },
+  getStoreRef: function getStoreRef(store) {
+    storeRef$3 = store;
+  }
+})(function (_ref2) {
+  var currentPath = _ref2.currentPath,
+      routes = _ref2.routes;
+
+  for (var route in routes) {
+    if (routes[route].hasOwnProperty('routes')) {
+      var shouldRender = Object.values(routes[route].routes).some(function (_ref3) {
+        var path = _ref3.path;
+        return path && exec$1(currentPath, path);
+      });
+      if (shouldRender) {
+        var App = routes[route].component;
+        return preact.h(App, null);
+      }
+    } else {
+      var routeArgs = exec$1(currentPath, routes[route].path);
+      if (routeArgs) {
+        var newRoute = {
+          name: route,
+          path: routes[route].path,
+          args: routeArgs
+        };
+        if (!equal(newRoute, storeRef$3.getState().currentRoute)) {
+          storeRef$3.setState({ currentRoute: newRoute });
+        }
+        var Component$$1 = routes[route].component;
+        return preact.h(Component$$1, routeArgs);
+      }
+    }
+  }
 });
+
+if (typeof window !== 'undefined') {
+  document.addEventListener('click', function (ev) {
+    if (ev.target.nodeName === 'A' && storeRef$3) {
+      if (ev.metaKey) return;
+      ev.preventDefault();
+      ev.stopImmediatePropagation();
+      window.scrollTo(0, 0);
+      var url = ev.target.getAttribute('href');
+      var currentPath = storeRef$3.getState().currentPath;
+      if (currentPath !== url) {
+        window.history['pushState'](null, null, url);
+        storeRef$3.setState({ currentPath: url });
+      }
+    }
+  });
+}
 
 function paginationRange(current, numPages) {
   var delta = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1;
@@ -3157,7 +3253,7 @@ function paginationRange(current, numPages) {
 }
 
 var pageBuilder = function pageBuilder(page) {
-  return updateQuery({ page: page });
+  return updateQuery$1({ page: page });
 };
 
 var Pagination = function (_React$Component) {
@@ -3265,7 +3361,7 @@ var ListResource = connect({
 
   // @TODO: Needs to access search params on SSR
   var search = typeof window !== 'undefined' ? window.location.search : '';
-  var args = qs.parse(search);
+  var args = qs$1.parse(search);
   var activePage = args.page ? parseInt(args.page, 10) : 1;
 
   var request = {
@@ -3297,57 +3393,12 @@ var Resource = function Resource(_ref4) {
   return preact.h(ListResource, _extends({ key: 'resource-' + endpoint, list: false, endpoint: endpoint }, props));
 };
 
-var endpoint = 'https://input-qee-prod.herokuapp.com/videos';
+var endpoint = 'https://jsonplaceholder.typicode.com/users';
 
-var Videos = (function () {
+var Users = function Users() {
   return preact.h(
     ListResource,
-    { endpoint: endpoint, limit: 5, pagination: true },
-    function (_ref) {
-      var title = _ref.title;
-      return preact.h(
-        'div',
-        null,
-        preact.h(
-          'h2',
-          null,
-          title
-        )
-      );
-    }
-  );
-});
-
-var routes = {
-  home: {
-    path: '/',
-    component: Home
-  },
-  videos: {
-    path: '/videos',
-    component: Videos
-  }
-};
-
-var Main = (function () {
-  return preact.h(
-    'div',
-    null,
-    preact.h(Router$1, { routes: routes }),
-    preact.h(
-      Modals,
-      null,
-      preact.h(ExampleModal, null)
-    )
-  );
-});
-
-var endpoint$1 = 'https://jsonplaceholder.typicode.com/users';
-
-var Users = (function () {
-  return preact.h(
-    ListResource,
-    { endpoint: endpoint$1 },
+    { endpoint: endpoint },
     function (_ref) {
       var id = _ref.id,
           name = _ref.name,
@@ -3372,11 +3423,11 @@ var Users = (function () {
       );
     }
   );
-});
+};
 
 var url = 'https://jsonplaceholder.typicode.com/users/';
 
-var User = (function (_ref) {
+var User = function User(_ref) {
   var id = _ref.id;
   return preact.h(
     'div',
@@ -3422,7 +3473,9 @@ var User = (function (_ref) {
       'Next'
     )
   );
-});
+};
+
+var storeRef$4 = void 0; // Will get populated if we receive `store` via context
 
 var isReactNative = typeof window !== 'undefined' && window.navigator.product === 'ReactNative';
 
@@ -3442,8 +3495,11 @@ var compatIsValid = preact.isValidElement ? preact.isValidElement : function (ch
 // @TODO: This should be props passed into <Form />
 var formFieldNames = [
 // Our ReactNative 'form' components
-'InputIcon', 'InputText'];
+'InputIcon', 'InputText', 'InputLocation', 'Checkbox', 'Question', 'WhatTimesQuestion', 'WhenDoneQuestion', 'Slider', 'CategoryPillFilter'];
 
+// `displayName` is lost in Release builds. It must be explicitly set
+// on each of the above `formFieldNames` Component classes.
+// See: https://github.com/facebook/react-native/issues/19106
 var getNodeName = function getNodeName(child) {
   return child.type ? child.type.displayName : child.nodeName.name;
 };
@@ -3456,43 +3512,34 @@ var getProps = function getProps(child) {
 // prop set. We can't sync state if the component doesn't have
 // have a `name` prop set.
 var isFormField = function isFormField(child) {
-  return formFieldNames.includes(getNodeName(child)) && getProps(child).name != null;
+  var name = getNodeName(child);
+  if (!formFieldNames.includes(name)) {
+    return false;
+  } else if (getProps(child).name) {
+    return true;
+  } else {
+    console.warn('Found Component \'' + name + '\' missing \'name\' prop!');
+    return false;
+  }
 };
 
-/**
- * Our Form Component
- *
- * Required Props:
- *
- *  name: A unique String identifer for your Form
- *
- * Optional Props:
- *
- *  initialData: An Object whose keys match formFieldNames and whose values will
- *  be set as defaults.
- *
- *  onSubmit: When the Form is submitted, this will be called with
- *  `{hasError, errors, data}`
- *
- * If you do not specify an `onSubmit` prop, you should specify a `action` and
- * optional `method` prop.
- *
- *  action: The URL to send the form data to.
- *  method: The HTTP method to use, defaults to POST.
- */
+// Our actual Form component
 
 var Form = function (_React$Component) {
   inherits(Form, _React$Component);
 
-  function Form(props) {
+  function Form(props, _ref) {
+    var store = _ref.store;
     classCallCheck(this, Form);
 
     var _this = possibleConstructorReturn(this, (Form.__proto__ || Object.getPrototypeOf(Form)).call(this, props));
 
+    storeRef$4 = store;
     if (!_this.props.name) throw new Error('<Form /> Components needs a `name` prop.');
     _this.state = {
       values: _this.props.initialData || {},
-      errors: {}
+      errors: {},
+      submitting: false
     };
     _this._fields = {};
     return _this;
@@ -3520,6 +3567,7 @@ var Form = function (_React$Component) {
           var newProps = {
             formName: formName,
             text: _this2.state.values[child.props.name],
+            value: _this2.state.values[child.props.name],
             syncState: function syncState(state) {
               return _this2.setState({ values: _extends({}, _this2.state.values, defineProperty({}, childProps.name, state.value || state.text)) });
             }
@@ -3549,6 +3597,13 @@ var Form = function (_React$Component) {
       var _this3 = this;
 
       ev && ev.preventDefault();
+
+      if (this.state.submitting) {
+        return;
+      }
+
+      this.setState({ submitting: true });
+
       var fieldNames = Object.keys(this._fields);
 
       // @TODO: More validations, allow props to set them, etc.
@@ -3567,23 +3622,45 @@ var Form = function (_React$Component) {
         this.props.onSubmit({
           hasError: hasError,
           errors: errors,
-          data: this.state.values
+          data: this.state.values,
+          state: this.state,
+          clearValues: function clearValues() {
+            return _this3.setState({
+              values: _this3.props.initialData || {},
+              errors: {}
+            });
+          }
         });
       } else {
-        var _makeRequest = makeRequest({
-          endpoint: this.props.action,
-          method: this.props.method || 'post',
-          data: this.state.values
-        }),
-            xhr = _makeRequest.xhr,
-            promise = _makeRequest.promise;
+        if (!hasError) {
+          var _makeRequest = makeRequest({
+            endpoint: this.props.action,
+            method: this.props.method,
+            data: this.state.values,
+            noAuth: this.props.noAuth || false,
+            invalidate: this.props.invalidate
+          }),
+              xhr = _makeRequest.xhr,
+              promise = _makeRequest.promise;
 
-        console.log('makeRequest', this.state.values);
-        promise.then(function (r) {
-          return _this3.props.onSuccess && _this3.props.onSuccess(r);
-        }).catch(function (_) {
-          return _this3.props.onFailure && _this3.props.onFailure(xhr);
-        });
+          promise.then(function (r) {
+            _this3.setState({ submitting: false });
+            _this3.props.onSuccess && _this3.props.onSuccess(r);
+          }).catch(function (_) {
+            _this3.setState({ submitting: false });
+            _this3.props.onFailure && _this3.props.onFailure(xhr);
+          });
+        } else {
+          this.setState({ submitting: false });
+          storeRef$4.setState({ notification: { status: 'failure', message: 'Please complete all form fields!' } });
+        }
+      }
+    }
+  }, {
+    key: 'componentDidUpdate',
+    value: function componentDidUpdate() {
+      if (!equal(this.state, storeRef$4.getState()[this.props.name])) {
+        storeRef$4.setState(defineProperty({}, this.props.name, this.state));
       }
     }
   }, {
@@ -3609,7 +3686,7 @@ var TextInput = function TextInput(_ref) {
   return preact.h('input', _extends({ type: 'text' }, props));
 };
 
-var Login = (function () {
+var Login = function Login() {
   return preact.h(
     Form,
     { name: 'Login', onSubmit: function onSubmit(form) {
@@ -3624,7 +3701,7 @@ var Login = (function () {
       'Login'
     )
   );
-});
+};
 
 var routes$1 = {
   users: {
@@ -3659,14 +3736,14 @@ var AccountHeader = function AccountHeader() {
   );
 };
 
-var Account = (function () {
+var AccountApp = function AccountApp() {
   return preact.h(
     'div',
     { id: 'account-layout' },
     preact.h(AccountHeader, null),
-    preact.h(Router$1, { routes: routes$1 })
+    preact.h(Router, { routes: routes$1 })
   );
-});
+};
 
 // `<Router />`'s accept two object formats. The first, which we'll cover now, is for
 
@@ -3677,11 +3754,11 @@ var Account = (function () {
 var routes$2 = {
   main: {
     routes: routes,
-    component: Main
+    component: MainApp
   },
   account: {
     routes: routes$1,
-    component: Account
+    component: AccountApp
   }
 
   // The `routes` props for the `main` and `account` objects above, follow the second object
@@ -3743,8 +3820,8 @@ var urlFor = function urlFor(name) {
   return '' + replaced + (!hasQueries ? '' : '?' + qs.stringify(queries));
 };
 
-var Header = connect({
-  name: 'Header',
+var GlobalHeader = connect({
+  name: 'GlobalHeader',
   withActions: {
     increment: function increment(_ref) {
       var clicks = _ref.clicks;
@@ -3796,6 +3873,7 @@ var Base = function Base() {
 };
 
 var NotFound = connect({
+  name: 'NotFound',
   withState: function withState(_ref) {
     var currentRoute = _ref.currentRoute;
     return { currentRoute: currentRoute };
@@ -3824,7 +3902,7 @@ var RootApp = function RootApp() {
         titleTemplate: 'PWA Starter | %s',
         defaultTitle: 'Welcome'
       }),
-      preact.h(Header, null),
+      preact.h(GlobalHeader, null),
       preact.h(Notification, null),
       preact.h(Router, { routes: routes$2 }),
       preact.h(NotFound, null)
@@ -3861,15 +3939,15 @@ if (typeof window !== 'undefined') {
 // Elements are reusable Components that render some JSX. These are generic
 // and are common to use throughout all apps.
 
-// - [Header.js](/elements/Header)
-// - [NotFound.js](/elements/NotFound)
+// - [global-header.js](/elements/global-header)
+// - [not-found.js](/elements/not-found)
 
 // **modals/**
 
 // Any global (cross-app) modals can go here. These should all use the
 // [Modal](https://github.com/inputlogic/elements/tree/master/packages/Modal) element in their `render` method.
 
-// - [ExampleModal.js](/modals/ExampleModal)
+// - [example-modal.js](/modals/example-modal)
 
 // **styles/**
 

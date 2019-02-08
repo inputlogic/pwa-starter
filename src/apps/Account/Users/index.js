@@ -2,11 +2,13 @@ import ListResource from '@app-elements/list-resource'
 
 const endpoint = 'https://jsonplaceholder.typicode.com/users'
 
-export default () =>
+const Users = () =>
   <ListResource endpoint={endpoint}>
-    {({id, name, email}) =>
+    {({ id, name, email }) =>
       <div>
         <h2><a href={`/users/${id}`}>{name}</a></h2>
         <p>{email}</p>
       </div>}
   </ListResource>
+
+export default Users

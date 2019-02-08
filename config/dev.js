@@ -1,5 +1,5 @@
-import {resolve as pathResolve} from 'path'
-import {writeFileSync} from 'fs'
+import { resolve as pathResolve } from 'path'
+import { writeFileSync } from 'fs'
 import less from 'less'
 
 // Rollup plugins.
@@ -30,7 +30,7 @@ export default {
             // output.imports = array of string filenames of the imports referenced
             writeFileSync('public/bundle.css', output.css)
           },
-          error => console.log({error}))
+          error => console.log({ error }))
       }
     }),
     babel({

@@ -6,19 +6,19 @@ import Image from '@app-elements/image'
 import LoadingIndicator from '@app-elements/loading-indicator'
 import Tooltip from '@app-elements/tooltip'
 
-import {showNotification} from '@app-elements/notification'
+import { showNotification } from '@app-elements/notification'
 
-import {setState} from '/store'
+import { setState } from '/store'
 
-export default () =>
-  <div style={{padding: '1em'}}>
+const Home = () =>
+  <div style={{ padding: '1em' }}>
     <h1><Tooltip text='This is your tooltip'>Home</Tooltip></h1>
 
     <LoadingIndicator />
 
     <Dropdown uid='home-example'>
-      <p><button onClick={ev => setState({modal: 'ExampleModal'})}>Open Example Modal</button></p>
-      <p><button onClick={ev => showNotification({message: 'PIRATES!'})}>Pirates!</button></p>
+      <p><button onClick={ev => setState({ modal: 'ExampleModal' })}>Open Example Modal</button></p>
+      <p><button onClick={ev => showNotification({ message: 'PIRATES!' })}>Pirates!</button></p>
       <p>Classy Penguin</p>
     </Dropdown>
 
@@ -35,3 +35,5 @@ export default () =>
       )}
     </Carousel>
   </div>
+
+export default Home

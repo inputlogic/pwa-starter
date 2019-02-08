@@ -15,7 +15,7 @@ const assets = sirv('public', {
 const ssr = (req, res, next) => {
   console.log('ssr', req.url)
   renderReact(req.url)
-    .then(({html, head, state}) => {
+    .then(({ html, head, state }) => {
       res.end(`<!doctype html>
       <html lang="en">
         <head>

@@ -1,14 +1,14 @@
 import render from 'preact-render-to-string'
 
-import Helmet, {rewind} from '@app-elements/helmet'
+import Helmet, { rewind } from '@app-elements/helmet'
 
-import {RootApp} from '/index'
+import { RootApp } from '/index'
 import store from '/store'
 
-const {getState, setState} = store
+const { getState, setState } = store
 
 export const renderReact = (url) => new Promise((resolve, reject) => {
-  setState({currentPath: url})
+  setState({ currentPath: url })
   render(<RootApp />) // Render, to register pendingRequests
 
   const maxTime = 6000
@@ -22,7 +22,7 @@ export const renderReact = (url) => new Promise((resolve, reject) => {
       // Rerender html again, now that pendingRequests are done
       const html = render(<RootApp />)
       const head = render(<Helmet {...rewind()} />).slice(5, -6)
-      resolve({html, head, state})
+      resolve({ html, head, state })
     }
     count++
   }, delay)
