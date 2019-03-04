@@ -69,10 +69,12 @@ export const RootApp = () =>
 // Only render if we are in the browser, server-side rendering will be
 // handled by the `server` (which is not covered here).
 if (typeof window !== 'undefined') {
-  Preact.render(
-    <RootApp />,
-    document.body, document.body.children[0]
-  )
+  const root = document.getElementById('root')
+  if (root.hasChildNodes()) {
+    Preact.render(<RootApp />, root, root.firstElementChild)
+  } else {
+    Preact.render(<RootApp />, root)
+  }
 }
 
 // Contents

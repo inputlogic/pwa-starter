@@ -29,7 +29,9 @@ const User = ({ id }) =>
         </div>
       }
     </Resource>
-    <a href={`/users/${parseInt(id, 10) + 1}`}>Next</a>
+    {parseInt(id, 10) < 10 &&
+      <a href={`/users/${parseInt(id, 10) + 1}`}>Next</a>
+    }
   </div>
 
 export default User
