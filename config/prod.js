@@ -1,17 +1,8 @@
-// Rollup plugins.
-// import replace from 'rollup-plugin-replace'
-// import { uglify } from 'rollup-plugin-uglify'
 import compiler from '@ampproject/rollup-plugin-closure-compiler'
+import baseConfig from './base'
 
-// Import the development configuration.
-import config from './dev'
+const prodConfig = Object.assign({}, baseConfig)
 
-// Inject the production settings.
-// config.output.file = 'public/bundle.js'
-// config.plugins[3] = replace({ 'process.env.NODE_ENV': JSON.stringify('production') })
-config.plugins.push(compiler())
-// config.plugins.push(uglify({
-//   mangle: false
-// }))
+prodConfig.plugins.push(compiler())
 
-export default config
+export default prodConfig

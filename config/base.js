@@ -1,5 +1,8 @@
 import { resolve as pathResolve } from 'path'
+import { writeFileSync } from 'fs'
+import less from 'less'
 
+// Rollup plugins.
 import alias from 'rollup-plugin-alias'
 import babel from 'rollup-plugin-babel'
 import cjs from 'rollup-plugin-commonjs'
@@ -9,17 +12,25 @@ import replace from 'rollup-plugin-replace'
 import resolve from 'rollup-plugin-node-resolve'
 
 export default {
-  input: 'server/index.js',
+  input: 'src/index.js',
   output: {
-    file: 'server/bundle.js',
-    format: 'cjs'
-    // name: 'Server'
+    file: 'public/bundle.js',
+    format: 'iife',
+    name: 'PWA'
   },
   plugins: [
     css({
-      include: ['**/*.less'],
+      include: ['**/*.less', 'node_modules/@app-elements/**/*.less'],
       output: function (styles, styleNodes) {
-        console.log('no css')
+        less
+          .render(styles, {})
+          .then(output => {
+            // output.css = string of css
+            // output.map = string of sourcemap
+            // output.imports = array of string filenames of the imports referenced
+            writeFileSync('public/bundle.css', output.css)
+          },
+          error => console.log({ error }))
       }
     }),
     babel({
