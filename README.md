@@ -34,6 +34,8 @@ Documentation
 
 [http://pwa-starter.surge.sh/](http://pwa-starter.surge.sh/)
 
+To enable/configure PWA features (including icons), follow [this guide](https://developers.google.com/web/fundamentals/codelabs/your-first-pwapp/#support_native_integration).
+
 Deploying
 =========
 
