@@ -8,6 +8,9 @@ embrace Higher Order Components (HoC) and renderProps. You should be familiar
 with both terms, along with General React and JSX knowledge.
 (@TODO: Link to resources)
 
+[https://pwa-starter.netlify.com/](https://pwa-starter.netlify.com/)
+[https://pwa-starter.herokuapp.com/](https://pwa-starter.herokuapp.com/)
+
 Focus
 -----
 
@@ -44,3 +47,8 @@ You must add the Pupeteer buildpack for prerendering to work as a build step. Or
 1. https://github.com/jontewks/puppeteer-heroku-buildpack.git
 2. heroku/nodejs
 ```
+
+Netlify
+=======
+
+Nothing! Well, setup a site at [netlify.com](https://netlify.com), then keep pushing to master.
