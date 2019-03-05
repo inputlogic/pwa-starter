@@ -29,3 +29,18 @@ Documentation
 -------------
 
 [http://pwa-starter.surge.sh/](http://pwa-starter.surge.sh/)
+
+Deploying
+---------
+
+Heroku
+======
+
+You must add the Pupeteer buildpack for prerendering to work as a build step. Order of buildpacks also matter, and should look as so:
+
+```fish
+❯ heroku buildpacks
+=== pwa-starter Buildpack URLs
+1. https://github.com/jontewks/puppeteer-heroku-buildpack.git
+2. heroku/nodejs
+```

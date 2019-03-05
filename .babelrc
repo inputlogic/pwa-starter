@@ -9,6 +9,7 @@
     "external-helpers",
     "transform-es2015-spread",
     "transform-object-rest-spread",
+    ["transform-class-properties", { "spec": true }],
     ["module-resolver/lib/index.js", {
       "alias": {
         "react": "preact",
