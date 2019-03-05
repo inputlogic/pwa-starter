@@ -5,7 +5,7 @@
   "main": "server/index.js",
   "heroku-run-build-script": true,
   "scripts": {
-    "preinstall": "if test -z \"$NODE_ENV\"; rm .git/hooks/pre-commit; cp pre-commit.sh .git/hooks/pre-commit; else then rm -rf public; mkdir public; fi",
+    "preinstall": "if test -z \"$NODE_ENV\"; then rm .git/hooks/pre-commit; cp pre-commit.sh .git/hooks/pre-commit; else rm -rf public; mkdir public; fi",
     "start": "if test -z \"$NODE_ENV\"; then npm run dev; else npm run browse; fi",
     "dev": "npm run watch",
     "build-server": "rollup -c config/server.js",
