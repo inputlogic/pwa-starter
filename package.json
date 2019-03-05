@@ -36,7 +36,8 @@
     ]
   },
   "reactSnap": {
-    "source": "public"
+    "source": "public",
+    "puppeteerArgs": ["--no-sandbox", "--disable-setuid-sandbox"]
   },
   "keywords": [],
   "author": "Adrian Unger",
