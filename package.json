@@ -5,8 +5,8 @@
   "main": "server/index.js",
   "heroku-run-build-script": true,
   "scripts": {
-    "preinstall": "if test \"$NODE_ENV\" = \"production\"; then rm -rf public; mkdir public; else rm .git/hooks/pre-commit; cp pre-commit.sh .git/hooks/pre-commit; fi",
-    "start": "if test \"$NODE_ENV\" = \"production\"; then npm run browse; else npm run dev; fi",
+    "preinstall": "if test -z \"$NODE_ENV\"; rm .git/hooks/pre-commit; cp pre-commit.sh .git/hooks/pre-commit; else then rm -rf public; mkdir public; fi",
+    "start": "if test -z \"$NODE_ENV\"; then npm run dev; else npm run browse; fi",
     "dev": "npm run watch",
     "build-server": "rollup -c config/server.js",
     "watch": "npm-run-all --parallel build:dev watch-assets browse:dev",
