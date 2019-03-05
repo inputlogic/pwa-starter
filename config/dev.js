@@ -6,6 +6,9 @@ const devConfig = Object.assign({}, baseConfig)
 
 const dir = path.resolve(__dirname, '../public')
 
-devConfig.plugins.push(browsersync({ server: dir }))
+devConfig.plugins.push(browsersync({
+  server: dir,
+  single: true // for client-side routing
+}))
 
 export default devConfig
