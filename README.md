@@ -9,10 +9,11 @@ with both terms, along with General React and JSX knowledge.
 (@TODO: Link to resources)
 
 [https://pwa-starter.netlify.com/](https://pwa-starter.netlify.com/)
+
 [https://pwa-starter.herokuapp.com/](https://pwa-starter.herokuapp.com/)
 
 Focus
------
+=====
 
 - Small bundle size
 - Efficient networking
@@ -20,7 +21,7 @@ Focus
 - *Simplicity*
 
 Simplicity
-----------
+==========
 
 Simplicity is **always** encouraged. Generally, this means Components
 that do one thing. For example, the [WithRequest](/hoc/WithRequest.html)
@@ -29,15 +30,15 @@ multiple requests, but you're encouraged to build Components that handle
 one resource.
 
 Documentation
--------------
+=============
 
 [http://pwa-starter.surge.sh/](http://pwa-starter.surge.sh/)
 
 Deploying
----------
+=========
 
 Heroku
-======
+------
 
 You must add the Pupeteer buildpack for prerendering to work as a build step. Order of buildpacks also matter, and should look as so:
 
@@ -49,6 +50,6 @@ You must add the Pupeteer buildpack for prerendering to work as a build step. Or
 ```
 
 Netlify
-=======
+-------
 
 Nothing! Well, setup a site at [netlify.com](https://netlify.com), then keep pushing to master.
