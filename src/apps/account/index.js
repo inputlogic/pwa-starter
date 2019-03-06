@@ -16,9 +16,7 @@ export const routes = {
 }
 
 const LazyAccount = asyncComponent(() =>
-  import('./account.js').then(({ default: Account }) => {
-    return Account
-  })
+  import('./account.js').then(module => module.default)
 )
 
 export default LazyAccount
