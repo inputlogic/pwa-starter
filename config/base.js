@@ -13,11 +13,20 @@ import resolve from 'rollup-plugin-node-resolve'
 
 export default {
   input: 'src/index.js',
-  output: {
-    file: 'public/bundle.js',
-    format: 'iife',
-    name: 'PWA'
-  },
+  output: [
+    // ES module version, for modern browsers
+    {
+      dir: 'public/module',
+      format: 'es',
+      sourcemap: true
+    },
+    // SystemJS version, for older browsers
+    {
+      dir: 'public/nomodule',
+      format: 'system',
+      sourcemap: true
+    }
+  ],
   plugins: [
     css({
       include: ['**/*.less', 'node_modules/@app-elements/**/*.less'],
