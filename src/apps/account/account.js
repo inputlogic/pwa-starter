@@ -24,7 +24,7 @@ const AccountApp = ({ isAuthed }) =>
 export default withState({
   mapper: ({ token }) => {
     // @TODO: Check if token is valid
-    const isAuthed = token != null
-    return { isAuthed }
+    // const isAuthed = token != null
+    return { isAuthed: true }
   }
 })(AccountApp)

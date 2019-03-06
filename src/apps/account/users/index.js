@@ -1,7 +1,9 @@
 import ListResource from '@app-elements/list-resource'
 
+import './users.less'
+
 const UserItem = ({ id, name, email }) =>
-  <div>
+  <div class='user-item'>
     <h2><a href={`/users/${id}`}>{name}</a></h2>
     <p>{email}</p>
   </div>
