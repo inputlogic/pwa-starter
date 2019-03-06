@@ -1,10 +1,11 @@
-import Router from '@app-elements/router'
+
+import Router, { routeTo } from '@app-elements/router'
+import withState from '@app-elements/with-state'
 
 import urlFor from '/util/urlFor'
 
 import Users from './users'
 import User from './user'
-import Login from './login'
 
 export const routes = {
   users: {
@@ -14,10 +15,6 @@ export const routes = {
   user: {
     path: '/users/:id',
     component: User
-  },
-  login: {
-    path: '/login',
-    component: Login
   }
 }
 
@@ -27,10 +24,20 @@ const AccountHeader = () =>
     <a href={urlFor('login')}>Login</a>
   </header>
 
-const AccountApp = () =>
-  <div id='account-layout'>
-    <AccountHeader />
-    <Router routes={routes} />
-  </div>
+const AccountApp = ({ isAuthed }) =>
+  !isAuthed
+    ? routeTo('login')
+    : (
+      <div id='account-layout'>
+        <AccountHeader />
+        <Router routes={routes} />
+      </div>
+    )
 
-export default AccountApp
+export default withState({
+  mapper: ({ token }) => {
+    // @TODO: Check if token is valid
+    const isAuthed = token != null
+    return { isAuthed }
+  }
+})(AccountApp)

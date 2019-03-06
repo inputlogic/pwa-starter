@@ -4,11 +4,16 @@ import Router from '@app-elements/router'
 import ExampleModal from '/modals/example-modal'
 
 import Home from './home'
+import Login from './login'
 
 export const routes = {
   home: {
     path: '/',
     component: Home
+  },
+  login: {
+    path: '/login',
+    component: Login
   }
 }
 
