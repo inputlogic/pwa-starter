@@ -1,8 +1,17 @@
-import compiler from '@ampproject/rollup-plugin-closure-compiler'
+import minify from 'rollup-plugin-babel-minify'
+
 import baseConfig from './base'
 
 const prodConfig = Object.assign({}, baseConfig)
 
-prodConfig.plugins.push(compiler())
+prodConfig.output = prodConfig.output.map(cfg => ({
+  ...cfg,
+  sourcemap: false
+}))
+
+prodConfig.plugins.push(minify({
+  comments: false,
+  sourceMap: false
+}))
 
 export default prodConfig
