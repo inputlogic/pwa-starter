@@ -1,4 +1,3 @@
-// import compiler from '@ampproject/rollup-plugin-closure-compiler'
 import minify from 'rollup-plugin-babel-minify'
 
 import baseConfig from './base'
