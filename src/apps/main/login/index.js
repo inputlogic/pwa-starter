@@ -1,4 +1,4 @@
-import Form, { ErrorOrHint } from '@app-elements/form'
+import Form, { ErrorOrHint, SubmitButton } from '@app-elements/form'
 import { routeTo } from '@app-elements/router'
 
 const TextInput = ({ ...props }) =>
@@ -28,7 +28,7 @@ const Login = () =>
     <TextInput required name='email' placeholder='Your Email' />
     <TextInput required type='password' name='password' placeholder='Your Password' />
     <ErrorOrHint name='password' />
-    <button type='submit'>Login</button>
+    <SubmitButton>Login</SubmitButton>
   </Form>
 
 export default Login
