@@ -4,13 +4,13 @@ Progressive Web Apps.
 The key technology to be familiar with is React. This skeleton embraces
 component based architecture, and tries to introduce very few libraries
 where an API needs to be learned or memorized. To facilitate this, we
-embrace Higher Order Components (HoC) and renderProps. You should be familiar
-with both terms, along with General React and JSX knowledge.
-(@TODO: Link to resources)
+embrace [Higher Order Components](https://reactjs.org/docs/higher-order-components.html) (HoC) and [renderProps](https://reactjs.org/docs/render-props.html#use-render-props-for-cross-cutting-concerns). You should be familiar
+with both terms, along with General [React](https://reactjs.org/docs/thinking-in-react.html) and [JSX](https://reactjs.org/docs/introducing-jsx.html) knowledge.
 
-[https://pwa-starter.netlify.com/](https://pwa-starter.netlify.com/)
+#### Example Deployments
 
-[https://pwa-starter.herokuapp.com/](https://pwa-starter.herokuapp.com/)
+- [https://pwa-starter.netlify.com/](https://pwa-starter.netlify.com/)
+- [https://pwa-starter.herokuapp.com/](https://pwa-starter.herokuapp.com/)
 
 Focus
 =====
