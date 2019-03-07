@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>example-modal.js</title>
+  <title>async-component.js</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
   <link rel="stylesheet" media="all" href="../docco.css" />
@@ -13,7 +13,7 @@
 
       <div class="header">
         
-          <h1>example-modal.js</h1>
+          <h1>async-component.js</h1>
         
 
         
@@ -30,21 +30,21 @@
               
                 
                 <li>
-                  <a class="source" href="../elements/async-component.html">
+                  <a class="source" href="async-component.html">
                     elements/async-component.js
                   </a>
                 </li>
               
                 
                 <li>
-                  <a class="source" href="../elements/global-header.html">
+                  <a class="source" href="global-header.html">
                     elements/global-header.js
                   </a>
                 </li>
               
                 
                 <li>
-                  <a class="source" href="../elements/not-found.html">
+                  <a class="source" href="not-found.html">
                     elements/not-found.js
                   </a>
                 </li>
@@ -58,7 +58,7 @@
               
                 
                 <li>
-                  <a class="source" href="example-modal.html">
+                  <a class="source" href="../modals/example-modal.html">
                     modals/example-modal.js
                   </a>
                 </li>
@@ -114,15 +114,30 @@
         
         
         
-          <div class='highlight'><pre><span class="hljs-keyword">import</span> Modal <span class="hljs-keyword">from</span> <span class="hljs-string">'@app-elements/modal'</span>
+          <div class='highlight'><pre><span class="hljs-keyword">import</span> { h, Component } <span class="hljs-keyword">from</span> <span class="hljs-string">'preact'</span>
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ExampleModal</span> (<span class="hljs-params"></span>) </span>{
-  <span class="hljs-keyword">return</span> (
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Modal</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Example Modal<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-name">Modal</span>&gt;</span></span>
-  )
-}</pre></div>
+<span class="hljs-keyword">const</span> asyncComponent = <span class="hljs-function"><span class="hljs-params">getComponent</span> =&gt;</span> {
+  <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AsyncComponent</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+    componentWillMount () {
+      getComponent().then(<span class="hljs-function"><span class="hljs-params">component</span> =&gt;</span> {
+        <span class="hljs-keyword">this</span>.setState({ <span class="hljs-attr">componentData</span>: component })
+      })
+    }
+
+    render () {
+      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.state.componentData) {
+        <span class="hljs-keyword">return</span> h(<span class="hljs-keyword">this</span>.state.componentData, <span class="hljs-keyword">this</span>.props)
+      } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.props.loading) {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.props.loading()
+      }
+      <span class="hljs-keyword">return</span> <span class="hljs-literal">null</span>
+    }
+  }
+
+  <span class="hljs-keyword">return</span> AsyncComponent
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> asyncComponent</pre></div>
         
       
       <div class="fleur">h</div>

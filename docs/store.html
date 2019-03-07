@@ -30,6 +30,13 @@
               
                 
                 <li>
+                  <a class="source" href="elements/async-component.html">
+                    elements/async-component.js
+                  </a>
+                </li>
+              
+                
+                <li>
                   <a class="source" href="elements/global-header.html">
                     elements/global-header.js
                   </a>
@@ -105,16 +112,33 @@
 
       
         
+        <p>This is our global store. Which is basically just an single, global JavaScript object,
+which is immutable. Meaning you cannot mutate the object directly, but instead must call
+<code>store.setState</code> or dispatch actions similar to redux.</p>
+
         
-        
-          <div class='highlight'><pre><span class="hljs-keyword">import</span> createStore <span class="hljs-keyword">from</span> <span class="hljs-string">'atom'</span>
+          <div class='highlight'><pre>
+<span class="hljs-keyword">import</span> createStore <span class="hljs-keyword">from</span> <span class="hljs-string">'atom'</span>
 <span class="hljs-keyword">import</span> devtools <span class="hljs-keyword">from</span> <span class="hljs-string">'atom/devtools'</span>
 
 <span class="hljs-keyword">import</span> pathReducer <span class="hljs-keyword">from</span> <span class="hljs-string">'@wasmuth/path-reducer'</span>
 
-<span class="hljs-keyword">import</span> { DEBUG } <span class="hljs-keyword">from</span> <span class="hljs-string">'/consts'</span>
+<span class="hljs-keyword">import</span> { DEBUG } <span class="hljs-keyword">from</span> <span class="hljs-string">'/consts'</span></pre></div>
+        
+      
+        
+        <p>Load state set by react-snap during prerendering</p>
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> initialState = {
+        
+          <div class='highlight'><pre><span class="hljs-keyword">const</span> preloadedState = <span class="hljs-built_in">window</span>.__PRELOADED_STATE__
+<span class="hljs-keyword">delete</span> <span class="hljs-built_in">window</span>.__PRELOADED_STATE__ <span class="hljs-comment">// let it get garbage-collected</span></pre></div>
+        
+      
+        
+        <p>Define the global state on page load.</p>
+
+        
+          <div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> initialState = {
   <span class="hljs-attr">clicks</span>: <span class="hljs-number">0</span>,</pre></div>
         
       
@@ -136,14 +160,15 @@ by <a href="https://github.com/inputlogic/elements/tree/master/components/router
         
       
         
-        <p>Server-side rendering will have already computed some
-values for global state, and should be initialized on the client.
-This avoids redoing initial logic that was just computed on the server.</p>
+        <p>Pre-rendering will have already computed some values for global state,
+and should be initialized on the client.</p>
 
         
-          <div class='highlight'><pre>  ...(<span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> !== <span class="hljs-string">'undefined'</span>
-    ? <span class="hljs-built_in">JSON</span>.parse(<span class="hljs-built_in">window</span>.__initial_store__ || <span class="hljs-string">''</span>)
-    : {})
+          <div class='highlight'><pre>  ...(
+    <span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> !== <span class="hljs-string">'undefined'</span>
+      ? preloadedState || {}
+      : {}
+  )
 }</pre></div>
         
       
@@ -154,18 +179,39 @@ This avoids redoing initial logic that was just computed on the server.</p>
         
           <div class='highlight'><pre><span class="hljs-keyword">const</span> reducers = [
   pathReducer
-]
+]</pre></div>
+        
+      
+        
+        <p>If DEBUG is true, we will enable Redux devtools</p>
 
-<span class="hljs-keyword">const</span> store = <span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> !== <span class="hljs-string">'undefined'</span> &amp;&amp; DEBUG
+        
+          <div class='highlight'><pre><span class="hljs-keyword">const</span> store = <span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> !== <span class="hljs-string">'undefined'</span> &amp;&amp; DEBUG
   ? devtools(createStore(reducers, initialState))
-  : createStore(reducers, initialState)
+  : createStore(reducers, initialState)</pre></div>
+        
+      
+        
+        <p>Tell react-snap how to save Redux state</p>
+
+        
+          <div class='highlight'><pre><span class="hljs-built_in">window</span>.snapSaveState = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> ({
+  <span class="hljs-attr">__PRELOADED_STATE__</span>: store.getState()
+})
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> store
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> getState = store.getState
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> setState = store.setState
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> setState = store.setState</pre></div>
+        
+      
+        
+        <p>This is a simple Provider used in the RootApp to provide the
+store instance on the React Context, so any child Component can
+access it.</p>
 
-<span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Provider</span> (<span class="hljs-params">props</span>) </span>{
+        
+          <div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Provider</span> (<span class="hljs-params">props</span>) </span>{
   <span class="hljs-keyword">this</span>.getChildContext = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> ({ <span class="hljs-attr">store</span>: props.store })
 }
 Provider.prototype.render = <span class="hljs-function"><span class="hljs-params">props</span> =&gt;</span> props.children[<span class="hljs-number">0</span>]</pre></div>

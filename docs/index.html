@@ -30,6 +30,13 @@
               
                 
                 <li>
+                  <a class="source" href="elements/async-component.html">
+                    elements/async-component.js
+                  </a>
+                </li>
+              
+                
+                <li>
                   <a class="source" href="elements/global-header.html">
                     elements/global-header.js
                   </a>
@@ -229,10 +236,12 @@ handled by the <code>server</code> (which is not covered here).</p>
 
         
           <div class='highlight'><pre><span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> !== <span class="hljs-string">'undefined'</span>) {
-  Preact.render(
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">RootApp</span> /&gt;</span>,
-    document.body, document.body.children[0]
-  )
+  <span class="hljs-keyword">const</span> root = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'root'</span>)
+  <span class="hljs-keyword">if</span> (root.hasChildNodes()) {
+    Preact.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">RootApp</span> /&gt;</span>, root, root.firstElementChild)
+  } else {
+    Preact.render(<span class="hljs-tag">&lt;<span class="hljs-name">RootApp</span> /&gt;</span>, root)
+  }
 }
 
 </span></pre></div>
