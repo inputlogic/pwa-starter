@@ -2,10 +2,10 @@
 
 <html>
 <head>
-  <title>consts.js</title>
+  <title>index.js</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
-  <link rel="stylesheet" media="all" href="docco.css" />
+  <link rel="stylesheet" media="all" href="../../../docco.css" />
 </head>
 <body>
   <div id="container">
@@ -20,102 +20,102 @@
             <div id="jump_page">
               
                 
-                <a class="source" href="consts.html">
+                <a class="source" href="../../../consts.html">
                   ./consts.js
                 </a>
               
                 
-                <a class="source" href="index.html">
+                <a class="source" href="../../../index.html">
                   ./index.js
                 </a>
               
                 
-                <a class="source" href="routes.html">
+                <a class="source" href="../../../routes.html">
                   ./routes.js
                 </a>
               
                 
-                <a class="source" href="store.html">
+                <a class="source" href="../../../store.html">
                   ./store.js
                 </a>
               
                 
-                <a class="source" href="apps/account/account.html">
+                <a class="source" href="../../account/account.html">
                   apps/account/account.js
                 </a>
               
                 
-                <a class="source" href="apps/account/index.html">
+                <a class="source" href="../../account/index.html">
                   apps/account/index.js
                 </a>
               
                 
-                <a class="source" href="apps/account/user/index.html">
+                <a class="source" href="../../account/user/index.html">
                   apps/account/user/index.js
                 </a>
               
                 
-                <a class="source" href="apps/account/users/index.html">
+                <a class="source" href="../../account/users/index.html">
                   apps/account/users/index.js
                 </a>
               
                 
-                <a class="source" href="apps/main/home/index.html">
+                <a class="source" href="index.html">
                   apps/main/home/index.js
                 </a>
               
                 
-                <a class="source" href="apps/main/index.html">
+                <a class="source" href="../index.html">
                   apps/main/index.js
                 </a>
               
                 
-                <a class="source" href="apps/main/login/index.html">
+                <a class="source" href="../login/index.html">
                   apps/main/login/index.js
                 </a>
               
                 
-                <a class="source" href="assets/workers/request.html">
+                <a class="source" href="../../../assets/workers/request.html">
                   assets/workers/request.js
                 </a>
               
                 
-                <a class="source" href="elements/async-component.html">
+                <a class="source" href="../../../elements/async-component.html">
                   elements/async-component.js
                 </a>
               
                 
-                <a class="source" href="elements/global-header.html">
+                <a class="source" href="../../../elements/global-header.html">
                   elements/global-header.js
                 </a>
               
                 
-                <a class="source" href="elements/not-found.html">
+                <a class="source" href="../../../elements/not-found.html">
                   elements/not-found.js
                 </a>
               
                 
-                <a class="source" href="modals/example-modal.html">
+                <a class="source" href="../../../modals/example-modal.html">
                   modals/example-modal.js
                 </a>
               
                 
-                <a class="source" href="util/equal.html">
+                <a class="source" href="../../../util/equal.html">
                   util/equal.js
                 </a>
               
                 
-                <a class="source" href="util/loadImage.html">
+                <a class="source" href="../../../util/loadImage.html">
                   util/loadImage.js
                 </a>
               
                 
-                <a class="source" href="util/urlFor.html">
+                <a class="source" href="../../../util/urlFor.html">
                   util/urlFor.js
                 </a>
               
                 
-                <a class="source" href="util/workerize.html">
+                <a class="source" href="../../../util/workerize.html">
                   util/workerize.js
                 </a>
               
@@ -128,7 +128,7 @@
         
           <li id="title">
               <div class="annotation">
-                  <h1>consts.js</h1>
+                  <h1>index.js</h1>
               </div>
           </li>
         
@@ -143,16 +143,45 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> DEBUG = <span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> !== <span class="hljs-string">'undefined'</span>
-  ? <span class="hljs-built_in">window</span>.location.hostname.indexOf(<span class="hljs-string">'local'</span>) &gt; <span class="hljs-number">-1</span>
-  : process.env.NODE_ENV !== <span class="hljs-string">'production'</span>
+            <div class="content"><div class='highlight'><pre>import W from 'wasmuth'
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> WEB_URL = (<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> === <span class="hljs-string">'undefined'</span>) {
-    <span class="hljs-keyword">return</span> <span class="hljs-string">'https://cool-app.com'</span>
-  }
-  <span class="hljs-keyword">return</span> <span class="hljs-built_in">window</span>.location.href.replace(<span class="hljs-built_in">window</span>.location.pathname, <span class="hljs-string">''</span>)
-})()</pre></div></div>
+import Carousel from '@app-elements/carousel'
+import Dropdown from '@app-elements/dropdown'
+import Image from '@app-elements/image'
+import LoadingIndicator from '@app-elements/loading-indicator'
+import Tooltip from '@app-elements/tooltip'
+
+import { showNotification } from '@app-elements/notification'
+
+import { setState } from '/store'
+
+const Home = () =&gt;
+  &lt;div style={{ padding: '1em' }}&gt;
+    &lt;h1&gt;&lt;Tooltip text='This is your tooltip'&gt;Home&lt;/Tooltip&gt;&lt;/h1&gt;
+
+    &lt;LoadingIndicator /&gt;
+
+    &lt;Dropdown uid='home-example'&gt;
+      &lt;p&gt;&lt;button onClick={ev =&gt; setState({ modal: 'ExampleModal' })}&gt;Open Example Modal&lt;/button&gt;&lt;/p&gt;
+      &lt;p&gt;&lt;button onClick={ev =&gt; showNotification({ message: 'PIRATES!' })}&gt;Pirates!&lt;/button&gt;&lt;/p&gt;
+      &lt;p&gt;Classy Penguin&lt;/p&gt;
+    &lt;/Dropdown&gt;
+
+    &lt;Carousel withDots&gt;
+      {W.map(
+        (hex) =&gt; &lt;Image
+          srcs={[
+            'http://www.placehold.it/400x300/eee/eee?text=Loading',
+            `http://www.placehold.it/400x300/${hex}/f44?text=${hex}`
+          ]}
+          style='width: 100%'
+        /&gt;,
+        ['fff', 'a7c', '09d', '411', '111']
+      )}
+    &lt;/Carousel&gt;
+  &lt;/div&gt;
+
+export default Home</pre></div></div>
             
         </li>
         

@@ -18,7 +18,7 @@
     "prelint": "cp -r src/assets/* public/",
     "lint": "standard --verbose --parser babel-eslint | snazzy",
     "test": "standard --verbose --parser babel-eslint | snazzy",
-    "docs": "cd src/ && docco *.js **/*.js --output ../docs --layout linear",
+    "docs": "cd src/ && docco {**,.,**/**,**/**/**}/*.js --output ../docs --layout parallel",
     "postdocs": "surge --d pwa-starter.surge.sh -p docs/"
   },
   "lint-staged": {

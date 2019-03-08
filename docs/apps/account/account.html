@@ -2,10 +2,10 @@
 
 <html>
 <head>
-  <title>consts.js</title>
+  <title>account.js</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
-  <link rel="stylesheet" media="all" href="docco.css" />
+  <link rel="stylesheet" media="all" href="../../docco.css" />
 </head>
 <body>
   <div id="container">
@@ -20,102 +20,102 @@
             <div id="jump_page">
               
                 
-                <a class="source" href="consts.html">
+                <a class="source" href="../../consts.html">
                   ./consts.js
                 </a>
               
                 
-                <a class="source" href="index.html">
+                <a class="source" href="../../index.html">
                   ./index.js
                 </a>
               
                 
-                <a class="source" href="routes.html">
+                <a class="source" href="../../routes.html">
                   ./routes.js
                 </a>
               
                 
-                <a class="source" href="store.html">
+                <a class="source" href="../../store.html">
                   ./store.js
                 </a>
               
                 
-                <a class="source" href="apps/account/account.html">
+                <a class="source" href="account.html">
                   apps/account/account.js
                 </a>
               
                 
-                <a class="source" href="apps/account/index.html">
+                <a class="source" href="index.html">
                   apps/account/index.js
                 </a>
               
                 
-                <a class="source" href="apps/account/user/index.html">
+                <a class="source" href="user/index.html">
                   apps/account/user/index.js
                 </a>
               
                 
-                <a class="source" href="apps/account/users/index.html">
+                <a class="source" href="users/index.html">
                   apps/account/users/index.js
                 </a>
               
                 
-                <a class="source" href="apps/main/home/index.html">
+                <a class="source" href="../main/home/index.html">
                   apps/main/home/index.js
                 </a>
               
                 
-                <a class="source" href="apps/main/index.html">
+                <a class="source" href="../main/index.html">
                   apps/main/index.js
                 </a>
               
                 
-                <a class="source" href="apps/main/login/index.html">
+                <a class="source" href="../main/login/index.html">
                   apps/main/login/index.js
                 </a>
               
                 
-                <a class="source" href="assets/workers/request.html">
+                <a class="source" href="../../assets/workers/request.html">
                   assets/workers/request.js
                 </a>
               
                 
-                <a class="source" href="elements/async-component.html">
+                <a class="source" href="../../elements/async-component.html">
                   elements/async-component.js
                 </a>
               
                 
-                <a class="source" href="elements/global-header.html">
+                <a class="source" href="../../elements/global-header.html">
                   elements/global-header.js
                 </a>
               
                 
-                <a class="source" href="elements/not-found.html">
+                <a class="source" href="../../elements/not-found.html">
                   elements/not-found.js
                 </a>
               
                 
-                <a class="source" href="modals/example-modal.html">
+                <a class="source" href="../../modals/example-modal.html">
                   modals/example-modal.js
                 </a>
               
                 
-                <a class="source" href="util/equal.html">
+                <a class="source" href="../../util/equal.html">
                   util/equal.js
                 </a>
               
                 
-                <a class="source" href="util/loadImage.html">
+                <a class="source" href="../../util/loadImage.html">
                   util/loadImage.js
                 </a>
               
                 
-                <a class="source" href="util/urlFor.html">
+                <a class="source" href="../../util/urlFor.html">
                   util/urlFor.js
                 </a>
               
                 
-                <a class="source" href="util/workerize.html">
+                <a class="source" href="../../util/workerize.html">
                   util/workerize.js
                 </a>
               
@@ -128,7 +128,7 @@
         
           <li id="title">
               <div class="annotation">
-                  <h1>consts.js</h1>
+                  <h1>account.js</h1>
               </div>
           </li>
         
@@ -143,16 +143,49 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> DEBUG = <span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> !== <span class="hljs-string">'undefined'</span>
-  ? <span class="hljs-built_in">window</span>.location.hostname.indexOf(<span class="hljs-string">'local'</span>) &gt; <span class="hljs-number">-1</span>
-  : process.env.NODE_ENV !== <span class="hljs-string">'production'</span>
+            <div class="content"><div class='highlight'><pre>import Router, { routeTo } from '@app-elements/router'
+import withState from '@app-elements/with-state'
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> WEB_URL = (<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params"></span>) </span>{
-  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> === <span class="hljs-string">'undefined'</span>) {
-    <span class="hljs-keyword">return</span> <span class="hljs-string">'https://cool-app.com'</span>
+import urlFor from '/util/urlFor'
+
+import { routes } from './index'
+
+const AccountHeader = () =&gt;
+  &lt;header className='alt'&gt;
+    &lt;a href={urlFor('users')}&gt;Users&lt;/a&gt;&amp;nbsp;
+    &lt;a href={urlFor('login')}&gt;Login&lt;/a&gt;
+  &lt;/header&gt;
+
+const AccountApp = ({ isAuthed }) =&gt;
+  !isAuthed
+    ? routeTo('login')
+    : (
+      &lt;div id='account-layout'&gt;
+        &lt;AccountHeader /&gt;
+        &lt;Router routes={routes} /&gt;
+      &lt;/div&gt;
+    )
+
+export default withState({
+  mapper: ({ token }) =&gt; {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>@TODO: Check if token is valid</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">const</span> isAuthed = token != <span class="hljs-literal">null</span>
+    <span class="hljs-keyword">return</span> { isAuthed }
   }
-  <span class="hljs-keyword">return</span> <span class="hljs-built_in">window</span>.location.href.replace(<span class="hljs-built_in">window</span>.location.pathname, <span class="hljs-string">''</span>)
-})()</pre></div></div>
+})(AccountApp)</pre></div></div>
             
         </li>
         

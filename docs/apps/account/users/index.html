@@ -2,10 +2,10 @@
 
 <html>
 <head>
-  <title>workerize.js</title>
+  <title>index.js</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
-  <link rel="stylesheet" media="all" href="../docco.css" />
+  <link rel="stylesheet" media="all" href="../../../docco.css" />
 </head>
 <body>
   <div id="container">
@@ -20,102 +20,102 @@
             <div id="jump_page">
               
                 
-                <a class="source" href="../consts.html">
+                <a class="source" href="../../../consts.html">
                   ./consts.js
                 </a>
               
                 
-                <a class="source" href="../index.html">
+                <a class="source" href="../../../index.html">
                   ./index.js
                 </a>
               
                 
-                <a class="source" href="../routes.html">
+                <a class="source" href="../../../routes.html">
                   ./routes.js
                 </a>
               
                 
-                <a class="source" href="../store.html">
+                <a class="source" href="../../../store.html">
                   ./store.js
                 </a>
               
                 
-                <a class="source" href="../apps/account/account.html">
+                <a class="source" href="../account.html">
                   apps/account/account.js
                 </a>
               
                 
-                <a class="source" href="../apps/account/index.html">
+                <a class="source" href="../index.html">
                   apps/account/index.js
                 </a>
               
                 
-                <a class="source" href="../apps/account/user/index.html">
+                <a class="source" href="../user/index.html">
                   apps/account/user/index.js
                 </a>
               
                 
-                <a class="source" href="../apps/account/users/index.html">
+                <a class="source" href="index.html">
                   apps/account/users/index.js
                 </a>
               
                 
-                <a class="source" href="../apps/main/home/index.html">
+                <a class="source" href="../../main/home/index.html">
                   apps/main/home/index.js
                 </a>
               
                 
-                <a class="source" href="../apps/main/index.html">
+                <a class="source" href="../../main/index.html">
                   apps/main/index.js
                 </a>
               
                 
-                <a class="source" href="../apps/main/login/index.html">
+                <a class="source" href="../../main/login/index.html">
                   apps/main/login/index.js
                 </a>
               
                 
-                <a class="source" href="../assets/workers/request.html">
+                <a class="source" href="../../../assets/workers/request.html">
                   assets/workers/request.js
                 </a>
               
                 
-                <a class="source" href="../elements/async-component.html">
+                <a class="source" href="../../../elements/async-component.html">
                   elements/async-component.js
                 </a>
               
                 
-                <a class="source" href="../elements/global-header.html">
+                <a class="source" href="../../../elements/global-header.html">
                   elements/global-header.js
                 </a>
               
                 
-                <a class="source" href="../elements/not-found.html">
+                <a class="source" href="../../../elements/not-found.html">
                   elements/not-found.js
                 </a>
               
                 
-                <a class="source" href="../modals/example-modal.html">
+                <a class="source" href="../../../modals/example-modal.html">
                   modals/example-modal.js
                 </a>
               
                 
-                <a class="source" href="equal.html">
+                <a class="source" href="../../../util/equal.html">
                   util/equal.js
                 </a>
               
                 
-                <a class="source" href="loadImage.html">
+                <a class="source" href="../../../util/loadImage.html">
                   util/loadImage.js
                 </a>
               
                 
-                <a class="source" href="urlFor.html">
+                <a class="source" href="../../../util/urlFor.html">
                   util/urlFor.js
                 </a>
               
                 
-                <a class="source" href="workerize.html">
+                <a class="source" href="../../../util/workerize.html">
                   util/workerize.js
                 </a>
               
@@ -128,7 +128,7 @@
         
           <li id="title">
               <div class="annotation">
-                  <h1>workerize.js</h1>
+                  <h1>index.js</h1>
               </div>
           </li>
         
@@ -140,10 +140,12 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <p>// Build a worker from an anonymous function body
-var blobURL = URL.createObjectURL( new Blob([ ‘(‘,</p>
+              <p>We are going to use ListResource to fetch and display results of
+an API request. You could also use the lower-level <a href="https://github.com/inputlogic/elements/tree/master/components/with-request">withRequest HoC</a></p>
 
             </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> ListResource <span class="hljs-keyword">from</span> <span class="hljs-string">'@app-elements/list-resource'</span></pre></div></div>
             
         </li>
         
@@ -154,11 +156,11 @@ var blobURL = URL.createObjectURL( new Blob([ ‘(‘,</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>function(){
-    //Long-running work here
-}.toString(),</p>
+              <p>Just some simple styles for this page</p>
 
             </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> <span class="hljs-string">'./users.less'</span></pre></div></div>
             
         </li>
         
@@ -169,9 +171,20 @@ var blobURL = URL.createObjectURL( new Blob([ ‘(‘,</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>‘)()’ ], { type: ‘application/javascript’ } ) ),</p>
+              <p>We need to define a Component that represents each item returned
+from the API request. In our case, the API response looks like:
+  [
+    { id, name, email },
+    …
+  ]</p>
 
             </div>
+            
+            <div class="content"><div class='highlight'><pre>const UserItem = ({ id, name, email }) =&gt;
+  &lt;div class='user-item'&gt;
+    &lt;h2&gt;&lt;a href={`/users/${id}`}&gt;{name}&lt;/a&gt;&lt;/h2&gt;
+    &lt;p&gt;{email}&lt;/p&gt;
+  &lt;/div&gt;</pre></div></div>
             
         </li>
         
@@ -182,33 +195,20 @@ var blobURL = URL.createObjectURL( new Blob([ ‘(‘,</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>worker = new Worker( blobURL );</p>
+              <p>In our page component we render a ListResource instance, telling it
+the endpoint to fetch results from, to limit the results to <code>10</code>, and
+to render each result item with our <code>UserItem</code> component.</p>
 
             </div>
             
-        </li>
-        
-        
-        <li id="section-5">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
-              </div>
-              <p>// Won’t be needing this anymore
-URL.revokeObjectURL( blobURL );</p>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> Users = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span>
+  &lt;ListResource
+    endpoint=<span class="hljs-string">'https://jsonplaceholder.typicode.com/users'</span>
+    limit={<span class="hljs-number">10</span>}
+    render={UserItem}
+  /&gt;
 
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">workerize</span> (<span class="hljs-params">name, ...args</span>) </span>{
-  <span class="hljs-keyword">const</span> worker = <span class="hljs-keyword">new</span> <span class="hljs-built_in">window</span>.Worker(<span class="hljs-string">`workers/<span class="hljs-subst">${name}</span>.js`</span>)
-  <span class="hljs-keyword">const</span> promise = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
-    worker.onmessage = <span class="hljs-function"><span class="hljs-params">ev</span> =&gt;</span> resolve(ev.data)
-    worker.postMessage({ args })
-  })
-  <span class="hljs-keyword">return</span> { worker, promise }
-}</pre></div></div>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> Users</pre></div></div>
             
         </li>
         

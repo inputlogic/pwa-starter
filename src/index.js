@@ -91,6 +91,9 @@ if (typeof window !== 'undefined') {
 // This is where we organize project specific code into logical groupings.
 // Each app will need to export a Component and `{routes}` Object.
 
+// - [main](/apps/main) (Includes Login example)
+// - [account](/apps/account) (Includes data fetching and display)
+
 // **assets/**
 
 // Put any static files you want copied over to the `public/` folder.
@@ -118,3 +121,10 @@ if (typeof window !== 'undefined') {
 // **util/**
 
 // Simple helper functions used throughout your project.
+
+// Common Patterns / Recipes
+// --------
+
+// - [Login Form](/apps/main/login)
+// - [Fetch and display list of data](/apps/account/users)
+// - [Use route param to fetch resource by id](/apps/account/user)
