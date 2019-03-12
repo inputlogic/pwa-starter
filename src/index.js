@@ -16,6 +16,7 @@ import Preact from 'preact'
 import Helmet from '@app-elements/helmet'
 import Notification from '@app-elements/notification'
 import Router from '@app-elements/router'
+import { configure } from '@app-elements/with-request/makeRequest'
 
 // Here, we import Components we want to render on *all* routes. For example,
 // we include a GlobalHeader, and a *NotFound* component which renders when no route is
@@ -40,6 +41,9 @@ import store, { Provider } from '/store'
 // In this case, we are loading the global styles.
 import '/styles/variables.less'
 import '/styles/base.less'
+
+// We will also configure the storage function that withRequest will use.
+configure({ storage: window.localStorage })
 
 // And, finally, our RootApp! This is the top-level Component to render
 // into the DOM and kick-start our entire app!
