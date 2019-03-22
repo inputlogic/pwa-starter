@@ -9,7 +9,7 @@ const TextInput = ({ ...props }) =>
   <input type='text' {...props} />
 
 const Checkbox = (props) =>
-  <input type='checkbox' n{...props} />
+  <input type='checkbox' {...props} />
 
 // No we define our Form props. Every Form requires a `name`. We also include
 // the optional `validations` prop and an `onSubmit`. For more informaiton on the
