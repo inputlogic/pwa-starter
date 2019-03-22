@@ -8,6 +8,9 @@ import { routeTo } from '@app-elements/router'
 const TextInput = ({ ...props }) =>
   <input type='text' {...props} />
 
+const Checkbox = (props) =>
+  <input type='checkbox' n{...props} />
+
 // No we define our Form props. Every Form requires a `name`. We also include
 // the optional `validations` prop and an `onSubmit`. For more informaiton on the
 // props you can pass, see the [`<Form />` docs](https://github.com/inputlogic/elements/tree/master/components/form)
@@ -36,6 +39,7 @@ const Login = () =>
     <TextInput required name='email' placeholder='Your Email' />
     <TextInput required type='password' name='password' placeholder='Your Password' />
     <ErrorOrHint name='password' />
+    <Checkbox name='remember' />
     <SubmitButton>Login</SubmitButton>
   </Form>
 
