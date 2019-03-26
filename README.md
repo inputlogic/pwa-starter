@@ -49,6 +49,10 @@ You must add the Pupeteer buildpack for prerendering to work as a build step. Or
 === pwa-starter Buildpack URLs
 1. https://github.com/jontewks/puppeteer-heroku-buildpack.git
 2. heroku/nodejs
+
+Commands for adding multiple build packs:
+heroku buildpacks:set https://github.com/jontewks/puppeteer-heroku-buildpack.git
+heroku buildpacks:add --index 2 heroku/nodejs
 ```
 
 Netlify
