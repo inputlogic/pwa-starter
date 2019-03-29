@@ -64,5 +64,4 @@ typings/
 # Tern
 .tern-port
 
-public/*
-!public/.gitkeep
+public
