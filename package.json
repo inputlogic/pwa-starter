@@ -15,7 +15,7 @@
     "prebuild": "rm -rf public; mkdir public; cp -r src/assets/* public/;",
     "build": "rollup -c config/prod.js",
     "postbuild": "react-snap",
-    "prelint": "if test ! -d public; then mkdir public; fi; cp -r src/assets/* public/;",
+    "prelint": "cp -r src/assets/* public/",
     "lint": "standard --verbose --parser babel-eslint | snazzy",
     "test": "standard --verbose --parser babel-eslint | snazzy",
     "docs": "cd src/ && docco {**,.,**/**,**/**/**}/*.js --output ../docs --layout parallel",
