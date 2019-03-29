@@ -11,7 +11,9 @@ prodConfig.output = prodConfig.output.map(cfg => ({
 
 prodConfig.plugins.push(minify({
   comments: false,
-  sourceMap: false
+  sourceMap: false,
+  keepFnName: true,
+  keepClassName: true
 }))
 
 export default prodConfig
