@@ -10,8 +10,17 @@ const assets = sirv('public', {
   immutable: false
 })
 
+const notFound = (req, res) => {
+  const parts = req.url.split('.')
+  if (parts.length === 1) {
+    assets({ path: '/' }, res)
+  } else {
+    res.end()
+  }
+}
+
 polka()
-  .use(compress, assets)
+  .use(compress, assets, notFound)
   .listen(port, err => {
     if (err) throw err
     console.log(`> Ready on http://localhost:${port}`)
