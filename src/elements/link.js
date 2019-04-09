@@ -2,6 +2,8 @@ import qs from '@app-elements/router/qs'
 
 import routes from '/routes'
 
+let allRoutes
+
 const getAllRoutes = routes =>
   Object
     .keys(routes || {})
@@ -12,7 +14,10 @@ const getAllRoutes = routes =>
     {})
 
 export const Link = ({ children, name, args = {}, queries = {}, ...props }) => {
-  const rule = getAllRoutes(routes)[name]
+  if (allRoutes == null) {
+    allRoutes = getAllRoutes(routes)
+  }
+  const rule = allRoutes[name]
   if (!rule) {
     console.warn('No route found for name: ' + name)
     return
@@ -27,3 +32,5 @@ export const Link = ({ children, name, args = {}, queries = {}, ...props }) => {
     <a href={href} {...props}>{children}</a>
   )
 }
+
+export default Link

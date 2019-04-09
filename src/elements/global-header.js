@@ -1,5 +1,5 @@
 import connect from '@app-elements/connect'
-import urlFor from '/util/urlFor'
+import Link from '/elements/link'
 
 const GlobalHeader = connect({
   name: 'GlobalHeader',
@@ -11,8 +11,8 @@ const GlobalHeader = connect({
   <header class='layout-center'>
     <h1>PWA {clicks}</h1>
     <button onClick={increment}>+</button>
-    <a href={urlFor('home')}>Main App</a>&nbsp;
-    <a href={urlFor('users')}>Account App</a>&nbsp;
+    <Link name='home'>Main App</Link>&nbsp;
+    <Link name='users'>Account App</Link>&nbsp;
   </header>
 ))
 
