@@ -2,6 +2,7 @@
 // which is immutable. Meaning you cannot mutate the object directly, but instead must call
 // `store.setState` or dispatch actions similar to redux.
 
+import W from 'wasmuth'
 import createStore from 'atom'
 import devtools from 'atom/devtools'
 
@@ -45,7 +46,7 @@ const store = typeof window !== 'undefined' && DEBUG
 
 // Tell react-snap how to save Redux state
 window.snapSaveState = () => ({
-  __PRELOADED_STATE__: store.getState()
+  __PRELOADED_STATE__: W.without(['currentPath', 'currentRoute'], store.getState())
 })
 
 export default store
