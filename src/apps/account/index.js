@@ -1,9 +1,10 @@
 import asyncComponent from '/elements/async-component'
+import Users from './users'
 
 export const routes = {
   users: {
     path: '/users',
-    component: asyncComponent(() => import('./users').then(m => m.default))
+    component: Users // asyncComponent(() => import('./users').then(m => m.default))
   },
   user: {
     path: '/users/:id',

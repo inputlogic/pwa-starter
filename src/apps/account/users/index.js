@@ -2,6 +2,8 @@
 // an API request. You could also use the lower-level [withRequest HoC](https://github.com/inputlogic/elements/tree/master/components/with-request)
 import ListResource from '@app-elements/list-resource'
 
+import { Link } from '/elements/link'
+
 // Just some simple styles for this page
 import './users.less'
 
@@ -13,7 +15,7 @@ import './users.less'
 //   ]
 const UserItem = ({ id, name, email }) =>
   <div class='user-item'>
-    <h2><a href={`/users/${id}`}>{name}</a></h2>
+    <h2><Link name='user' args={{ id }}>{name}</Link></h2>
     <p>{email}</p>
   </div>
 
