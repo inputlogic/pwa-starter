@@ -58,6 +58,6 @@ export const setState = store.setState
 // store instance on the React Context, so any child Component can
 // access it.
 export function Provider (props) {
-  this.getChildContext = () => ({ store: props.store })
+  this.getChildContext = () => ({ store: props.store, routes: props.routes })
 }
 Provider.prototype.render = props => props.children[0]

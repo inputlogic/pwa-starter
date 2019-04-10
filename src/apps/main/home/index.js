@@ -8,6 +8,7 @@ import Tooltip from '@app-elements/tooltip'
 
 import { showNotification } from '@app-elements/notification'
 
+import Link from '/elements/link'
 import { setState } from '/store'
 
 const Home = () =>
@@ -19,7 +20,7 @@ const Home = () =>
     <Dropdown uid='home-example'>
       <p><button onClick={ev => setState({ modal: 'ExampleModal' })}>Open Example Modal</button></p>
       <p><button onClick={ev => showNotification({ message: 'PIRATES!' })}>Pirates!</button></p>
-      <p>Classy Penguin</p>
+      <p><Link name='user' args={{ id: 1 }}>Leanne</Link></p>
     </Dropdown>
 
     <Carousel withDots>

@@ -53,7 +53,7 @@ configure({ storage: window.localStorage })
 // store reference.
 // Then we include those Component's that we want to be rendered on *all* routes.
 export const RootApp = () =>
-  <Provider store={store}>
+  <Provider store={store} routes={routes}>
     <div className='main-app-container'>
       <Helmet
         title='Welcome'
