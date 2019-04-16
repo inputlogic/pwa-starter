@@ -5,10 +5,10 @@ import Dropdown from '@app-elements/dropdown'
 import Image from '@app-elements/image'
 import LoadingIndicator from '@app-elements/loading-indicator'
 import Tooltip from '@app-elements/tooltip'
+import { Link } from '@app-elements/router'
 
 import { showNotification } from '@app-elements/notification'
 
-import Link from '/elements/link'
 import { setState } from '/store'
 
 const Home = () =>

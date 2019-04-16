@@ -1,5 +1,5 @@
 import connect from '@app-elements/connect'
-import Link from '/elements/link'
+import { Link } from '@app-elements/router'
 
 const GlobalHeader = connect({
   name: 'GlobalHeader',

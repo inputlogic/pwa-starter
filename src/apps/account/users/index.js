@@ -2,7 +2,7 @@
 // an API request. You could also use the lower-level [withRequest HoC](https://github.com/inputlogic/elements/tree/master/components/with-request)
 import ListResource from '@app-elements/list-resource'
 
-import { Link } from '/elements/link'
+import { Link } from '@app-elements/router'
 
 // Just some simple styles for this page
 import './users.less'

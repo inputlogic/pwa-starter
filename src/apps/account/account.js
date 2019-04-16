@@ -1,7 +1,6 @@
-import Router, { routeTo } from '@app-elements/router'
+import Router, { RouteTo, Link } from '@app-elements/router'
 
 import { getState } from '/store'
-import Link from '/elements/link'
 import { routes } from './index'
 
 const AccountHeader = () =>
@@ -12,15 +11,12 @@ const AccountHeader = () =>
 
 export default function AccountApp () {
   const { token } = getState()
-  if (token == null) {
-    routeTo('login')
-    return null
-  }
-
-  return (
-    <div id='account-layout'>
-      <AccountHeader />
-      <Router routes={routes} />
-    </div>
-  )
+  return token == null
+    ? <RouteTo name='login' />
+    : (
+      <div id='account-layout'>
+        <AccountHeader />
+        <Router routes={routes} />
+      </div>
+    )
 }
