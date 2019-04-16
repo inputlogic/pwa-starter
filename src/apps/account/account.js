@@ -1,8 +1,7 @@
 import Router, { routeTo } from '@app-elements/router'
-import withState from '@app-elements/with-state'
 
+import { getState } from '/store'
 import Link from '/elements/link'
-
 import { routes } from './index'
 
 const AccountHeader = () =>
@@ -11,20 +10,17 @@ const AccountHeader = () =>
     <Link name='login'>Login</Link>
   </header>
 
-const AccountApp = ({ isAuthed }) =>
-  !isAuthed
-    ? routeTo('login')
-    : (
-      <div id='account-layout'>
-        <AccountHeader />
-        <Router routes={routes} />
-      </div>
-    )
-
-export default withState({
-  mapper: ({ token }) => {
-    // @TODO: Check if token is valid
-    const isAuthed = token == null
-    return { isAuthed }
+export default function AccountApp () {
+  const { token } = getState()
+  if (token == null) {
+    routeTo('login')
+    return null
   }
-})(AccountApp)
+
+  return (
+    <div id='account-layout'>
+      <AccountHeader />
+      <Router routes={routes} />
+    </div>
+  )
+}
