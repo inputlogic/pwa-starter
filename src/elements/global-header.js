@@ -11,7 +11,7 @@ const GlobalHeader = connect({
   <header class='layout-center'>
     <h1>PWA {clicks}</h1>
     <button onClick={increment}>+</button>
-    <Link name='home'>Main App</Link>&nbsp;
+    <Link name='home' activeClass='active-link'>Main App</Link>&nbsp;
     <Link name='users'>Account App</Link>&nbsp;
   </header>
 ))
