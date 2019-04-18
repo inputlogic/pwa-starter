@@ -7,7 +7,6 @@ import alias from 'rollup-plugin-alias'
 import babel from 'rollup-plugin-babel'
 import cjs from 'rollup-plugin-commonjs'
 import css from 'rollup-plugin-css-only'
-import globals from 'rollup-plugin-node-globals'
 import resolve from 'rollup-plugin-node-resolve'
 
 export default {
@@ -58,7 +57,6 @@ export default {
       browser: false,
       modulesOnly: false // Default: false
     }),
-    globals(),
     alias({
       react: pathResolve(
         __dirname,
