@@ -1,7 +1,9 @@
 import Router, { RouteTo, Link } from '@app-elements/router'
 
 import { getState } from '/store'
-import { routes } from './index'
+
+import Users from './users'
+import User from './user'
 
 const AccountHeader = () =>
   <header className='alt'>
@@ -16,7 +18,10 @@ export default function AccountApp () {
     : (
       <div id='account-layout'>
         <AccountHeader />
-        <Router routes={routes} />
+        <Router>
+          <Users route='users' />
+          <User route='user' />
+        </Router>
       </div>
     )
 }

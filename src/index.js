@@ -15,7 +15,6 @@ import Preact from 'preact'
 // the most important Component of all.
 import Helmet from '@app-elements/helmet'
 import Notification from '@app-elements/notification'
-import Router from '@app-elements/router'
 import { configure } from '@app-elements/with-request/makeRequest'
 
 // Here, we import Components we want to render on *all* routes. For example,
@@ -23,6 +22,9 @@ import { configure } from '@app-elements/with-request/makeRequest'
 // matched. (If your app does not need these global elements, you can of course remove them.)
 import GlobalHeader from '/elements/global-header'
 import NotFound from '/elements/not-found'
+
+// Our "Apps"
+import Apps from '/apps'
 
 // The main [routes](/routes.html) file defines the top-level routes and their respective
 // Components.
@@ -60,12 +62,9 @@ export const RootApp = () =>
         titleTemplate='PWA Starter | %s'
         defaultTitle='Welcome'
       />
-
       <GlobalHeader />
       <Notification />
-
-      <Router routes={routes} />
-
+      <Apps />
       <NotFound />
     </div>
   </Provider>
