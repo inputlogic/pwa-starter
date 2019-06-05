@@ -13,7 +13,7 @@ const assets = sirv('public', {
 const notFound = (req, res) => {
   const parts = req.url.split('.')
   if (parts.length === 1) {
-    assets({ path: '/' }, res)
+    assets({ path: '/200', headers: req.headers }, res)
   } else {
     res.end()
   }

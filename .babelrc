@@ -11,16 +11,11 @@
     "transform-es2015-spread",
     "transform-object-rest-spread",
     ["transform-class-properties", { "spec": true }],
-    ["module-resolver/lib/index.js", {
-      "alias": {
-        "react": "preact",
-        "": "./src"
-      }
+    ["transform-react-jsx", {"pragma": "h"}],
+    ["../node_modules/babel-plugin-jsx-import/src/index.js", {
+      "identifier": "h",
+      "moduleName": "preact",
+      "isNamed": true
     }],
-    ["jsx-import/src/index.js", {
-      "identifier": "Preact",
-      "moduleName": "preact"
-    }],
-    ["transform-react-jsx", {"pragma": "Preact.h"}]
   ]
 }
