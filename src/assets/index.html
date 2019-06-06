@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <base href="/">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="msapplication-starturl" content="/">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="manifest" href="./manifest.json">
+  <!-- <link rel="stylesheet" href="./bundle.css"> -->
+</head>
+<body>
+  <div id='root' />
+  <script>
+    // import('/module/index.js')
+    window.supportsDynamicImport = false
+  </script>
+  <script>
+    if (!window.supportsDynamicImport) {
+      const systemJsLoaderTag = document.createElement('script')
+      systemJsLoaderTag.src = 'https://unpkg.com/systemjs@2.0.0/dist/s.min.js'
+      systemJsLoaderTag.addEventListener('load', function () {
+        System.import('/nomodule/index.js')
+      })
+      document.head.appendChild(systemJsLoaderTag)
+    }
+  </script>
+</body>
+</html>
+

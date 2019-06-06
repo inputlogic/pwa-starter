@@ -8,14 +8,19 @@
   "plugins": [
     "external-helpers",
     "syntax-dynamic-import",
-    "transform-es2015-spread",
     "transform-object-rest-spread",
     ["transform-class-properties", { "spec": true }],
     ["transform-react-jsx", {"pragma": "h"}],
-    ["../node_modules/babel-plugin-jsx-import/src/index.js", {
+    ["module-resolver/lib/index.js", {
+      "alias": {
+        "react": "preact",
+        "": "./src"
+      }
+    }],
+    ["jsx-import/src/index.js", {
       "identifier": "h",
       "moduleName": "preact",
       "isNamed": true
-    }],
+    }]
   ]
 }

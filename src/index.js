@@ -13,4 +13,4 @@ export const Root = () =>
     <h1>Root</h1>
   </Provider>
 
-render(<Root />, document.body)
+render(<Root />, document.getElementById('root'))

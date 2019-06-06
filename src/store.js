@@ -1,6 +1,6 @@
+import W from 'wasmuth'
 import createStore from 'atom'
 import devtools from 'atom/devtools'
-import without from '@wasmuth/without'
 
 import pathReducer, { actions } from '@wasmuth/path-reducer'
 
@@ -8,7 +8,7 @@ import { DEBUG } from '/consts'
 
 // Tell react-snap how to save Redux state
 window.snapSaveState = () => ({
-  __PRELOADED_STATE__: without(['currentPath', 'currentRoute', 'token'], store.getState())
+  __PRELOADED_STATE__: W.without(['currentPath', 'currentRoute', 'token'], store.getState())
 })
 
 // Load state set by react-snap during prerendering
@@ -62,7 +62,5 @@ export const update = actions.update
 // This is a simple Provider used in the RootApp to provide the
 // store instance on the React Context, so any child Component can
 // access it.
-export function Provider (props) {
-  this.getChildContext = () => ({ store: props.store, routes: props.routes })
-}
-Provider.prototype.render = props => props.children[0]
+export function Provider (props) { this.getChildContext = () => ({ store: props.store }) }
+Provider.prototype.render = props => props.children
