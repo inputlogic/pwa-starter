@@ -1,3 +1,5 @@
+![PWA Starter](https://i.imgur.com/kJ7g4WG.jpg)
+
 **PWA-Starter** is a project skeleton for building Single Page Apps and/or
 Progressive Web Apps.
 
