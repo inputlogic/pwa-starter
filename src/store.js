@@ -22,8 +22,6 @@ export const initialState = {
   currentPath: typeof window !== 'undefined'
     ? window.location.pathname + window.location.search
     : '/',
-  // `pendingRequests` is used by the [WithRequest](https://github.com/inputlogic/elements/tree/master/components/with-request) HoC.
-  pendingRequests: 0,
   // Pre-rendering will have already computed some values for global state,
   // and should be initialized on the client.
   ...(
@@ -57,7 +55,5 @@ export const setState = store.setState
 // This is a simple Provider used in the RootApp to provide the
 // store instance on the React Context, so any child Component can
 // access it.
-export function Provider (props) {
-  this.getChildContext = () => ({ store: props.store, routes: props.routes })
-}
-Provider.prototype.render = props => props.children[0]
+export function Provider (props) { this.getChildContext = () => props }
+Provider.prototype.render = props => props.children

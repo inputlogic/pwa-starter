@@ -1,40 +1,11 @@
-import W from 'wasmuth'
-
-import Carousel from '@app-elements/carousel'
-import Dropdown from '@app-elements/dropdown'
-import Image from '@app-elements/image'
-import LoadingIndicator from '@app-elements/loading-indicator'
-import Tooltip from '@app-elements/tooltip'
-import { Link } from '@app-elements/router'
-
-import { showNotification } from '@app-elements/notification'
-
-import { setState } from '/store'
-
-const Home = () =>
-  <div style={{ padding: '1em' }}>
-    <h1><Tooltip text='This is your tooltip'>Home</Tooltip></h1>
-
-    <LoadingIndicator />
-
-    <Dropdown uid='home-example'>
-      <p><button onClick={ev => setState({ modal: 'ExampleModal' })}>Open Example Modal</button></p>
-      <p><button onClick={ev => showNotification({ message: 'PIRATES!' })}>Pirates!</button></p>
-      <p><Link name='user' args={{ id: 1 }}>Leanne</Link></p>
-    </Dropdown>
-
-    <Carousel withDots>
-      {W.map(
-        (hex) => <Image
-          srcs={[
-            'http://www.placehold.it/400x300/eee/eee?text=Loading',
-            `http://www.placehold.it/400x300/${hex}/f44?text=${hex}`
-          ]}
-          style='width: 100%'
-        />,
-        ['fff', 'a7c', '09d', '411', '111']
-      )}
-    </Carousel>
-  </div>
-
-export default Home
+export default function Home () {
+  return (
+    <div>
+      <h1>PWA Starter</h1>
+      <img
+        src='https://camo.githubusercontent.com/974ab5e63b58eb0bb51ca21eb1b047e64ee0ea6d/68747470733a2f2f692e696d6775722e636f6d2f6b4a37673457472e6a7067'
+        alt='PWA Starter'
+      />
+    </div>
+  )
+}

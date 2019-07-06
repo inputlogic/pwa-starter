@@ -1,4 +1,4 @@
-import Preact from 'preact'
+import { render } from 'react'
 
 // Entry Point of Your App
 // -----------------------
@@ -16,7 +16,6 @@ import Preact from 'preact'
 import Helmet from '@app-elements/helmet'
 import Notification from '@app-elements/notification'
 import Router from '@app-elements/router'
-import { configure } from '@app-elements/with-request/makeRequest'
 
 // Here, we import Components we want to render on *all* routes. For example,
 // we include a GlobalHeader, and a *NotFound* component which renders when no route is
@@ -42,44 +41,35 @@ import store, { Provider } from '/store'
 import '/styles/variables.less'
 import '/styles/base.less'
 
-// We will also configure the storage function that withRequest will use.
-configure({ storage: window.localStorage })
-
-// And, finally, our RootApp! This is the top-level Component to render
+// And, finally, our Root! This is the top-level Component to render
 // into the DOM and kick-start our entire app!
 
 // First, our entire app is wrapped in the _atom_ `Provider` component.
 // This adds the store to the React context, meaning any child can access our
 // store reference.
 // Then we include those Component's that we want to be rendered on *all* routes.
-export const RootApp = () =>
-  <Provider store={store} routes={routes}>
-    <div className='main-app-container'>
-      <Helmet
-        title='Welcome'
-        titleTemplate='PWA Starter | %s'
-        defaultTitle='Welcome'
-      />
+function Root () {
+  return (
+    <Provider store={store} routes={routes}>
+      <div className='main-app-container'>
+        <Helmet
+          title='Welcome'
+          titleTemplate='PWA Starter | %s'
+          defaultTitle='Welcome'
+        />
 
-      <GlobalHeader />
-      <Notification />
+        <GlobalHeader />
+        <Notification />
 
-      <Router routes={routes} />
+        <Router routes={routes} />
 
-      <NotFound />
-    </div>
-  </Provider>
-
-// Only render if we are in the browser, server-side rendering will be
-// handled by the `server` (which is not covered here).
-if (typeof window !== 'undefined') {
-  const root = document.getElementById('root')
-  if (root.hasChildNodes()) {
-    Preact.render(<RootApp />, root, root.firstElementChild)
-  } else {
-    Preact.render(<RootApp />, root)
-  }
+        <NotFound />
+      </div>
+    </Provider>
+  )
 }
+
+render(<Root />, document.getElementById('root'))
 
 // Contents
 // --------

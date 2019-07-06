@@ -18,9 +18,9 @@
       }
     }],
     ["jsx-import/src/index.js", {
-      "identifier": "Preact",
+      "identifier": "{ h }",
       "moduleName": "preact"
     }],
-    ["transform-react-jsx", {"pragma": "Preact.h"}]
+    ["transform-react-jsx", {"pragma": "h"}]
   ]
 }

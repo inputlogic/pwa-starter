@@ -44,25 +44,32 @@ export default {
     babel({
       include: ['src/**', 'server/**', 'node_modules/@app-elements/**']
     }),
+    resolve({
+      browser: false,
+      modulesOnly: false // Default: false
+    }),
     cjs({
       exclude: [
         'node_modules/process-es6/**'
       ],
       include: [
         'node_modules/preact/**',
-        'node_modules/preact-portal/**',
+        'node_modules/prop-types/**',
+        'node_modules/react-is/**',
+        'node_modules/object-assign/**',
+        'node_modules/warning/**',
         'node_modules/atom/**'
       ]
-    }),
-    resolve({
-      browser: false,
-      modulesOnly: false // Default: false
     }),
     globals(),
     alias({
       react: pathResolve(
         __dirname,
-        '../node_modules/preact/src/preact.js'
+        '../node_modules/preact/compat/src/index.js'
+      ),
+      'react-dom': pathResolve(
+        __dirname,
+        '../node_modules/preact/compat/src/index.js'
       )
     })
   ]
