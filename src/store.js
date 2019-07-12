@@ -44,7 +44,7 @@ const store = typeof window !== 'undefined' && DEBUG
 
 // Tell react-snap how to save Redux state
 window.snapSaveState = () => ({
-  __PRELOADED_STATE__: W.without(['currentPath', 'currentRoute'], store.getState())
+  __PRELOADED_STATE__: W.without(['currentPath', 'currentRoute', 'token'], store.getState())
 })
 
 export default store
