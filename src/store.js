@@ -61,13 +61,13 @@ export const dispatch = store.dispatch
 export function logout (stateToKeep = {}) {
   window.localStorage.removeItem('token')
   window.localStorage.removeItem('userId')
-  setState({
-    ...initialState,
-    ...stateToKeep,
-    token: null
-  })
+  window.location.pathname = '/'
   window.requestAnimationFrame(() => {
-    window.location.pathname = '/'
+    setState({
+      ...initialState,
+      ...stateToKeep,
+      token: null
+    })
   })
 }
 
