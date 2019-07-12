@@ -2,6 +2,8 @@ import qs from '@app-elements/router/qs'
 
 import routes from '/routes'
 
+const hasProp = Object.prototype.hasOwnProperty
+
 // Transform our `Component => Object` pairs to a single Object.
 // The `urlFor` function below will reference it to return a URL string
 // for a given name.
@@ -10,7 +12,7 @@ const getAllRoutes = routes =>
   Object
     .keys(routes || {})
     .reduce((acc, r) =>
-      routes[r].hasOwnProperty('routes')
+      hasProp.call(routes[r], 'routes')
         ? { ...acc, ...getAllRoutes(routes[r].routes) }
         : { ...acc, [r]: routes[r] },
     {})

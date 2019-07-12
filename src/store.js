@@ -6,7 +6,7 @@ import W from 'wasmuth'
 import createStore from 'atom'
 import devtools from 'atom/devtools'
 
-import pathReducer from '@wasmuth/path-reducer'
+import pathReducer, { actions } from '@wasmuth/path-reducer'
 
 import { DEBUG } from '/consts'
 
@@ -17,6 +17,7 @@ delete window.__PRELOADED_STATE__ // let it get garbage-collected
 // Define the global state on page load.
 export const initialState = {
   clicks: 0,
+  token: window.localStorage.getItem('token'),
   // In the browser, we initialize the currentPath prop, which is set
   // by [Router](https://github.com/inputlogic/elements/tree/master/components/router)
   currentPath: typeof window !== 'undefined'
@@ -51,6 +52,24 @@ export default store
 
 export const getState = store.getState
 export const setState = store.setState
+
+export const set = actions.set
+export const update = actions.update
+export const remove = actions.remove
+export const dispatch = store.dispatch
+
+export function logout (stateToKeep = {}) {
+  window.localStorage.removeItem('token')
+  window.localStorage.removeItem('userId')
+  setState({
+    ...initialState,
+    ...stateToKeep,
+    token: null
+  })
+  window.requestAnimationFrame(() => {
+    window.location.pathname = '/'
+  })
+}
 
 // This is a simple Provider used in the RootApp to provide the
 // store instance on the React Context, so any child Component can

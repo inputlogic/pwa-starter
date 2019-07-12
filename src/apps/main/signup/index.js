@@ -4,13 +4,13 @@ import { showNotification } from '@app-elements/notification'
 
 import { dispatch, set } from '/store'
 
-import LoginBase from './login'
+import SignUpBase from './signup'
 
-export default function Login () {
-  // We'll use local state to manage when we have successfully logged in.
+export default function SignUp () {
+  // We'll use local state to manage when we have successfully signed in.
   const [isSuccess, setSuccess] = useState(false)
 
-  // If we have logged in successfully, use RouteTo to navigate to a new page.
+  // If we have signed in successfully, use RouteTo to navigate to a new page.
   if (isSuccess) {
     return <RouteTo name='users' />
   }
@@ -19,8 +19,8 @@ export default function Login () {
   // the optional `validations` prop and an `onSubmit`. For more informaiton on the
   // props you can pass, see the [`<Form />` docs](https://github.com/inputlogic/elements/tree/master/components/form)
   const formProps = useMemo(() => ({
-    name: 'Login',
-    action: 'http://www.mocky.io/v2/5d28e8362c000068003edca8',
+    name: 'SignUp',
+    action: 'http://www.mocky.io/v2/5d28efd02c0000cd2f3edcc9',
     method: 'post',
     noAuth: true,
     validations: {
@@ -34,16 +34,20 @@ export default function Login () {
         set('userId', userId)
       )
       setSuccess(true)
+      showNotification({
+        type: 'success',
+        message: 'Your account has been created!'
+      })
     },
     onFailure: (err) => {
-      console.error('Login', { err })
+      console.error('SignUp', { err })
       showNotification({
-        message: 'We were not able to log you in!'
+        message: 'We were not able to create an account for you!'
       })
     }
   }), [])
 
   return (
-    <LoginBase formProps={formProps} />
+    <SignUpBase formProps={formProps} />
   )
 }

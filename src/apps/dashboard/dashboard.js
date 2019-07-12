@@ -1,23 +1,25 @@
 import Router, { RouteTo, Link } from '@app-elements/router'
+import { showNotification } from '@app-elements/notification'
 
-// import { getState } from '/store'
+import { getState, logout } from '/store'
 import { routes } from './index'
 
 const DashboardHeader = () =>
   <header className='alt'>
     <Link name='users'>Users</Link>&nbsp;
-    <Link name='login'>Login</Link>
+    <button onClick={ev => logout()}>Logout</button>
   </header>
 
 export default function DashboardApp () {
-  // const { token } = getState()
-  const token = 1
-  return token == null
-    ? <RouteTo name='login' />
-    : (
-      <div id='dashboard-layout'>
-        <DashboardHeader />
-        <Router routes={routes} />
-      </div>
-    )
+  const { token } = getState()
+  if (token == null) {
+    showNotification({ message: 'Please login to view that page.' })
+    return <RouteTo name='login' />
+  }
+  return (
+    <div id='dashboard-layout'>
+      <DashboardHeader />
+      <Router routes={routes} />
+    </div>
+  )
 }
