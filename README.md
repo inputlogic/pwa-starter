@@ -38,6 +38,14 @@ Documentation
 
 To enable/configure PWA features (including icons), follow [this guide](https://developers.google.com/web/fundamentals/codelabs/your-first-pwapp/#support_native_integration).
 
+[React Style Guide](https://github.com/inputlogic/styleguides/blob/master/react.md)
+
+[Why Preact over React?](https://gist.github.com/staydecent/9c43364c8f52e944fdb1100bcc4bae82)
+
+[Hooks Intro](https://reactjs.org/docs/hooks-intro.html)
+
+[Thinking in React](https://reactjs.org/docs/thinking-in-react.html)
+
 Deploying
 =========
 
