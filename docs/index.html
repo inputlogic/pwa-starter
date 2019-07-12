@@ -40,23 +40,23 @@
                 </a>
               
                 
-                <a class="source" href="apps/account/account.html">
-                  apps/account/account.js
+                <a class="source" href="apps/dashboard/dashboard.html">
+                  apps/dashboard/dashboard.js
                 </a>
               
                 
-                <a class="source" href="apps/account/index.html">
-                  apps/account/index.js
+                <a class="source" href="apps/dashboard/index.html">
+                  apps/dashboard/index.js
                 </a>
               
                 
-                <a class="source" href="apps/account/user/index.html">
-                  apps/account/user/index.js
+                <a class="source" href="apps/dashboard/user/index.html">
+                  apps/dashboard/user/index.js
                 </a>
               
                 
-                <a class="source" href="apps/account/users/index.html">
-                  apps/account/users/index.js
+                <a class="source" href="apps/dashboard/users/index.html">
+                  apps/dashboard/users/index.js
                 </a>
               
                 
@@ -72,6 +72,11 @@
                 
                 <a class="source" href="apps/main/login/index.html">
                   apps/main/login/index.js
+                </a>
+              
+                
+                <a class="source" href="apps/main/login/login.html">
+                  apps/main/login/login.js
                 </a>
               
                 
@@ -143,7 +148,7 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> Preact <span class="hljs-keyword">from</span> <span class="hljs-string">'preact'</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { render } <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span></pre></div></div>
             
         </li>
         
@@ -321,7 +326,7 @@ changing the way we write CSS.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-13">&#182;</a>
               </div>
-              <p>And, finally, our RootApp! This is the top-level Component to render
+              <p>And, finally, our Root! This is the top-level Component to render
 into the DOM and kick-start our entire app!</p>
 
             </div>
@@ -342,25 +347,28 @@ Then we include those Component’s that we want to be rendered on <em>all</em> 
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> RootApp = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span>
-  &lt;Provider store={store}&gt;
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span> <span class="hljs-attr">className</span>=<span class="hljs-string">'main-app-container'</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">Helmet</span>
-        <span class="hljs-attr">title</span>=<span class="hljs-string">'Welcome'</span>
-        <span class="hljs-attr">titleTemplate</span>=<span class="hljs-string">'PWA Starter | %s'</span>
-        <span class="hljs-attr">defaultTitle</span>=<span class="hljs-string">'Welcome'</span>
-      /&gt;</span>
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Root</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> (
+    &lt;Provider store={store} routes={routes}&gt;
+      &lt;div className='main-app-container'&gt;
+        &lt;Helmet
+          title='Welcome'
+          titleTemplate='PWA Starter | %s'
+          defaultTitle='Welcome'
+        /&gt;
 
-      <span class="hljs-tag">&lt;<span class="hljs-name">GlobalHeader</span> /&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">Notification</span> /&gt;</span>
+        &lt;GlobalHeader /&gt;
+        &lt;Notification /&gt;
 
-      <span class="hljs-tag">&lt;<span class="hljs-name">Router</span> <span class="hljs-attr">routes</span>=<span class="hljs-string">{routes}</span> /&gt;</span>
+        &lt;Router routes={routes} /&gt;
 
-      <span class="hljs-tag">&lt;<span class="hljs-name">NotFound</span> /&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
-  <span class="hljs-tag">&lt;/<span class="hljs-name">Provider</span>&gt;</span>
+        &lt;NotFound /&gt;
+      &lt;/div&gt;
+    &lt;/Provider&gt;
+  )
+}
 
-</span></pre></div></div>
+render(&lt;Root /&gt;, document.getElementById('root'))</pre></div></div>
             
         </li>
         
@@ -371,21 +379,9 @@ Then we include those Component’s that we want to be rendered on <em>all</em> 
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-15">&#182;</a>
               </div>
-              <p>Only render if we are in the browser, server-side rendering will be
-handled by the <code>server</code> (which is not covered here).</p>
+              <h2 id="contents">Contents</h2>
 
             </div>
-            
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> !== <span class="hljs-string">'undefined'</span>) {
-  <span class="hljs-keyword">const</span> root = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'root'</span>)
-  <span class="hljs-keyword">if</span> (root.hasChildNodes()) {
-    Preact.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">RootApp</span> /&gt;</span>, root, root.firstElementChild)
-  } else {
-    Preact.render(<span class="hljs-tag">&lt;<span class="hljs-name">RootApp</span> /&gt;</span>, root)
-  }
-}
-
-</span></pre></div></div>
             
         </li>
         
@@ -396,8 +392,7 @@ handled by the <code>server</code> (which is not covered here).</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-16">&#182;</a>
               </div>
-              <h2 id="contents">Contents</h2>
-
+              
             </div>
             
         </li>
@@ -409,7 +404,8 @@ handled by the <code>server</code> (which is not covered here).</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-17">&#182;</a>
               </div>
-              
+              <p><strong>/</strong></p>
+
             </div>
             
         </li>
@@ -420,19 +416,6 @@ handled by the <code>server</code> (which is not covered here).</p>
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-18">&#182;</a>
-              </div>
-              <p><strong>/</strong></p>
-
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-19">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-19">&#182;</a>
               </div>
               <ul>
 <li><a href="/consts.html">consts.js</a></li>
@@ -445,13 +428,27 @@ handled by the <code>server</code> (which is not covered here).</p>
         </li>
         
         
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p><strong>apps/</strong></p>
+
+            </div>
+            
+        </li>
+        
+        
         <li id="section-20">
             <div class="annotation">
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-20">&#182;</a>
               </div>
-              <p><strong>apps/</strong></p>
+              <p>This is where we organize project specific code into logical groupings.
+Each app will need to export a Component and <code>{routes}</code> Object.</p>
 
             </div>
             
@@ -464,8 +461,10 @@ handled by the <code>server</code> (which is not covered here).</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-21">&#182;</a>
               </div>
-              <p>This is where we organize project specific code into logical groupings.
-Each app will need to export a Component and <code>{routes}</code> Object.</p>
+              <ul>
+<li><a href="/apps/main">main</a> (Includes Login example)</li>
+<li><a href="/apps/dashboard">dashboard</a> (Includes data fetching and display)</li>
+</ul>
 
             </div>
             
@@ -478,10 +477,7 @@ Each app will need to export a Component and <code>{routes}</code> Object.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-22">&#182;</a>
               </div>
-              <ul>
-<li><a href="/apps/main">main</a> (Includes Login example)</li>
-<li><a href="/apps/account">account</a> (Includes data fetching and display)</li>
-</ul>
+              <p><strong>assets/</strong></p>
 
             </div>
             
@@ -494,7 +490,7 @@ Each app will need to export a Component and <code>{routes}</code> Object.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-23">&#182;</a>
               </div>
-              <p><strong>assets/</strong></p>
+              <p>Put any static files you want copied over to the <code>public/</code> folder.</p>
 
             </div>
             
@@ -507,7 +503,7 @@ Each app will need to export a Component and <code>{routes}</code> Object.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-24">&#182;</a>
               </div>
-              <p>Put any static files you want copied over to the <code>public/</code> folder.</p>
+              <p><strong>elements/</strong></p>
 
             </div>
             
@@ -520,7 +516,8 @@ Each app will need to export a Component and <code>{routes}</code> Object.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-25">&#182;</a>
               </div>
-              <p><strong>elements/</strong></p>
+              <p>Elements are reusable Components that render some JSX. These are generic
+and are common to use throughout all apps.</p>
 
             </div>
             
@@ -533,8 +530,10 @@ Each app will need to export a Component and <code>{routes}</code> Object.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-26">&#182;</a>
               </div>
-              <p>Elements are reusable Components that render some JSX. These are generic
-and are common to use throughout all apps.</p>
+              <ul>
+<li><a href="/elements/global-header">global-header.js</a></li>
+<li><a href="/elements/not-found">not-found.js</a></li>
+</ul>
 
             </div>
             
@@ -547,10 +546,7 @@ and are common to use throughout all apps.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-27">&#182;</a>
               </div>
-              <ul>
-<li><a href="/elements/global-header">global-header.js</a></li>
-<li><a href="/elements/not-found">not-found.js</a></li>
-</ul>
+              <p><strong>modals/</strong></p>
 
             </div>
             
@@ -563,7 +559,8 @@ and are common to use throughout all apps.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-28">&#182;</a>
               </div>
-              <p><strong>modals/</strong></p>
+              <p>Any global (cross-app) modals can go here. These should all use the
+<a href="https://github.com/inputlogic/elements/tree/master/packages/Modal">Modal</a> element in their <code>render</code> method.</p>
 
             </div>
             
@@ -576,8 +573,9 @@ and are common to use throughout all apps.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-29">&#182;</a>
               </div>
-              <p>Any global (cross-app) modals can go here. These should all use the
-<a href="https://github.com/inputlogic/elements/tree/master/packages/Modal">Modal</a> element in their <code>render</code> method.</p>
+              <ul>
+<li><a href="/modals/example-modal">example-modal.js</a></li>
+</ul>
 
             </div>
             
@@ -590,9 +588,7 @@ and are common to use throughout all apps.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-30">&#182;</a>
               </div>
-              <ul>
-<li><a href="/modals/example-modal">example-modal.js</a></li>
-</ul>
+              <p><strong>styles/</strong></p>
 
             </div>
             
@@ -605,7 +601,8 @@ and are common to use throughout all apps.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-31">&#182;</a>
               </div>
-              <p><strong>styles/</strong></p>
+              <p>Global LESS files can go here. They should be manually imported by
+<code>src/index.js</code></p>
 
             </div>
             
@@ -618,8 +615,7 @@ and are common to use throughout all apps.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-32">&#182;</a>
               </div>
-              <p>Global LESS files can go here. They should be manually imported by
-<code>src/index.js</code></p>
+              <p><strong>util/</strong></p>
 
             </div>
             
@@ -632,7 +628,7 @@ and are common to use throughout all apps.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-33">&#182;</a>
               </div>
-              <p><strong>util/</strong></p>
+              <p>Simple helper functions used throughout your project.</p>
 
             </div>
             
@@ -645,7 +641,7 @@ and are common to use throughout all apps.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-34">&#182;</a>
               </div>
-              <p>Simple helper functions used throughout your project.</p>
+              <h2 id="common-patterns--recipes">Common Patterns / Recipes</h2>
 
             </div>
             
@@ -658,8 +654,7 @@ and are common to use throughout all apps.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-35">&#182;</a>
               </div>
-              <h2 id="common-patterns-recipes">Common Patterns / Recipes</h2>
-
+              
             </div>
             
         </li>
@@ -671,22 +666,10 @@ and are common to use throughout all apps.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-36">&#182;</a>
               </div>
-              
-            </div>
-            
-        </li>
-        
-        
-        <li id="section-37">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-37">&#182;</a>
-              </div>
               <ul>
 <li><a href="/apps/main/login">Login Form</a></li>
-<li><a href="/apps/account/users">Fetch and display list of data</a></li>
-<li><a href="/apps/account/user">Use route param to fetch resource by id</a></li>
+<li><a href="/apps/dashboard/users">Fetch and display list of data</a></li>
+<li><a href="/apps/dashboard/user">Use route param to fetch resource by id</a></li>
 </ul>
 
             </div>

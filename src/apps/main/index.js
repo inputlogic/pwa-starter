@@ -17,12 +17,13 @@ export const routes = {
   }
 }
 
-const MainApp = () =>
-  <div>
-    <Router routes={routes} />
-    <Modals>
-      <ExampleModal />
-    </Modals>
-  </div>
-
-export default MainApp
+export default function MainApp () {
+  return (
+    <div>
+      <Router routes={routes} />
+      <Modals>
+        <ExampleModal />
+      </Modals>
+    </div>
+  )
+}

@@ -40,23 +40,23 @@
                 </a>
               
                 
-                <a class="source" href="../../account/account.html">
-                  apps/account/account.js
+                <a class="source" href="../../dashboard/dashboard.html">
+                  apps/dashboard/dashboard.js
                 </a>
               
                 
-                <a class="source" href="../../account/index.html">
-                  apps/account/index.js
+                <a class="source" href="../../dashboard/index.html">
+                  apps/dashboard/index.js
                 </a>
               
                 
-                <a class="source" href="../../account/user/index.html">
-                  apps/account/user/index.js
+                <a class="source" href="../../dashboard/user/index.html">
+                  apps/dashboard/user/index.js
                 </a>
               
                 
-                <a class="source" href="../../account/users/index.html">
-                  apps/account/users/index.js
+                <a class="source" href="../../dashboard/users/index.html">
+                  apps/dashboard/users/index.js
                 </a>
               
                 
@@ -72,6 +72,11 @@
                 
                 <a class="source" href="index.html">
                   apps/main/login/index.js
+                </a>
+              
+                
+                <a class="source" href="login.html">
+                  apps/main/login/login.js
                 </a>
               
                 
@@ -140,12 +145,15 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              <p>We will utilize the <code>form</code> and <code>router</code> packages from <code>@app-elements.</code></p>
-
+              
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> Form, { ErrorOrHint, SubmitButton } <span class="hljs-keyword">from</span> <span class="hljs-string">'@app-elements/form'</span>
-<span class="hljs-keyword">import</span> { routeTo } <span class="hljs-keyword">from</span> <span class="hljs-string">'@app-elements/router'</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> { useState, useMemo } <span class="hljs-keyword">from</span> <span class="hljs-string">'preact/hooks'</span>
+<span class="hljs-keyword">import</span> { RouteTo } <span class="hljs-keyword">from</span> <span class="hljs-string">'@app-elements/router'</span>
+
+<span class="hljs-keyword">import</span> LoginBase <span class="hljs-keyword">from</span> <span class="hljs-string">'./login'</span>
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Login</span> (<span class="hljs-params"></span>) </span>{</pre></div></div>
             
         </li>
         
@@ -156,14 +164,11 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-2">&#182;</a>
               </div>
-              <p>Here is a simple text input for our form. When nested under a <code>&lt;Form /&gt;</code>
-it will be assigned an <code>onChange</code> function in it’s props, which will sync
-the input value to the global state.</p>
+              <p>We’ll use local state to manage when we have successfully logged in.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> TextInput = <span class="hljs-function">(<span class="hljs-params">{ ...props }</span>) =&gt;</span>
-  &lt;input type=<span class="hljs-string">'text'</span> {...props} /&gt;</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> [isSuccess, setSuccess] = useState(<span class="hljs-literal">false</span>)</pre></div></div>
             
         </li>
         
@@ -174,24 +179,15 @@ the input value to the global state.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <p>No we define our Form props. Every Form requires a <code>name</code>. We also include
-the optional <code>validations</code> prop and an <code>onSubmit</code>. For more informaiton on the
-props you can pass, see the <a href="https://github.com/inputlogic/elements/tree/master/components/form"><code>&lt;Form /&gt;</code> docs</a></p>
+              <p>If we have logged in successfully, use RouteTo to navigate to a new page.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> formProps = {
-  <span class="hljs-attr">name</span>: <span class="hljs-string">'Login'</span>,
-  <span class="hljs-attr">validations</span>: {
-    <span class="hljs-attr">password</span>: <span class="hljs-function">(<span class="hljs-params">val = <span class="hljs-string">''</span></span>) =&gt;</span>
-      val.length &lt; <span class="hljs-number">6</span> &amp;&amp; <span class="hljs-string">'Password must be greater than 6 characters!'</span>
-  },
-  <span class="hljs-attr">onSubmit</span>: <span class="hljs-function">(<span class="hljs-params">{ hasError, errors, data, done }</span>) =&gt;</span> {
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'onSubmit'</span>, { hasError, errors, data })
-    <span class="hljs-keyword">if</span> (!hasError) {
-      routeTo(<span class="hljs-string">'/'</span>, <span class="hljs-literal">true</span>)
-      done() <span class="hljs-comment">// clear form data and errors</span>
-    } <span class="hljs-keyword">else</span> {</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> (isSuccess) {
+    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">RouteTo</span> <span class="hljs-attr">name</span>=<span class="hljs-string">'users'</span> /&gt;</span>
+  }
+
+</span></pre></div></div>
             
         </li>
         
@@ -202,15 +198,23 @@ props you can pass, see the <a href="https://github.com/inputlogic/elements/tree
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
               </div>
-              <p>tell the form we are no longer submitting,
-but keep the errors, and reset password value.</p>
+              <p>Now we define our Form props. Every Form requires a <code>name</code>. We also include
+the optional <code>validations</code> prop and an <code>onSubmit</code>. For more informaiton on the
+props you can pass, see the <a href="https://github.com/inputlogic/elements/tree/master/components/form"><code>&lt;Form /&gt;</code> docs</a></p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>      done(errors, { ...data, <span class="hljs-attr">password</span>: <span class="hljs-literal">null</span> })
-    }
-  }
-}</pre></div></div>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> formProps = useMemo(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> ({
+    <span class="hljs-attr">name</span>: <span class="hljs-string">'Login'</span>,
+    <span class="hljs-attr">validations</span>: {
+      <span class="hljs-attr">password</span>: <span class="hljs-function">(<span class="hljs-params">val = <span class="hljs-string">''</span></span>) =&gt;</span>
+        val.length &lt; <span class="hljs-number">6</span> &amp;&amp; <span class="hljs-string">'Password must be greater than 6 characters!'</span>
+    },
+    <span class="hljs-attr">onSubmit</span>: <span class="hljs-function">(<span class="hljs-params">{ hasError, errors, data, done }</span>) =&gt;</span> {
+      <span class="hljs-keyword">if</span> (!hasError) {
+        setSuccess(<span class="hljs-literal">true</span>)
+        done() <span class="hljs-comment">// clear form data and errors</span>
+      } <span class="hljs-keyword">else</span> {</pre></div></div>
             
         </li>
         
@@ -221,19 +225,22 @@ but keep the errors, and reset password value.</p>
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>And our page Component that renders our login <code>&lt;Form /&gt;</code>.</p>
+              <p>tell the form we are no longer submitting,
+but keep the errors, and reset password value.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">const</span> Login = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span>
-  &lt;Form {...formProps}&gt;
-    &lt;TextInput required name='email' placeholder='Your Email' /&gt;
-    &lt;TextInput required type='password' name='password' placeholder='Your Password' /&gt;
-    &lt;ErrorOrHint name='password' /&gt;
-    &lt;SubmitButton&gt;Login&lt;/SubmitButton&gt;
-  &lt;/Form&gt;
+            <div class="content"><div class='highlight'><pre>        done(errors, { ...data, <span class="hljs-attr">password</span>: <span class="hljs-literal">null</span> })
+      }
+    }
+  }), [])
 
-export default Login</pre></div></div>
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">LoginBase</span> <span class="hljs-attr">formProps</span>=<span class="hljs-string">{formProps}</span> /&gt;</span>
+  )
+}
+
+</span></pre></div></div>
             
         </li>
         

@@ -13,14 +13,13 @@
     ["transform-class-properties", { "spec": true }],
     ["module-resolver/lib/index.js", {
       "alias": {
-        "react": "preact",
         "": "./src"
       }
     }],
     ["jsx-import/src/index.js", {
-      "identifier": "Preact",
+      "identifier": "{ h }",
       "moduleName": "preact"
     }],
-    ["transform-react-jsx", {"pragma": "Preact.h"}]
+    ["transform-react-jsx", {"pragma": "h"}]
   ]
 }

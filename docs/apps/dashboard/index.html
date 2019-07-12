@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>account.js</title>
+  <title>index.js</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="../../docco.css" />
@@ -40,23 +40,23 @@
                 </a>
               
                 
-                <a class="source" href="account.html">
-                  apps/account/account.js
+                <a class="source" href="dashboard.html">
+                  apps/dashboard/dashboard.js
                 </a>
               
                 
                 <a class="source" href="index.html">
-                  apps/account/index.js
+                  apps/dashboard/index.js
                 </a>
               
                 
                 <a class="source" href="user/index.html">
-                  apps/account/user/index.js
+                  apps/dashboard/user/index.js
                 </a>
               
                 
                 <a class="source" href="users/index.html">
-                  apps/account/users/index.js
+                  apps/dashboard/users/index.js
                 </a>
               
                 
@@ -72,6 +72,11 @@
                 
                 <a class="source" href="../main/login/index.html">
                   apps/main/login/index.js
+                </a>
+              
+                
+                <a class="source" href="../main/login/login.html">
+                  apps/main/login/login.js
                 </a>
               
                 
@@ -128,7 +133,7 @@
         
           <li id="title">
               <div class="annotation">
-                  <h1>account.js</h1>
+                  <h1>index.js</h1>
               </div>
           </li>
         
@@ -143,49 +148,25 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>import Router, { routeTo } from '@app-elements/router'
-import withState from '@app-elements/with-state'
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> asyncComponent <span class="hljs-keyword">from</span> <span class="hljs-string">'/elements/async-component'</span>
+<span class="hljs-keyword">import</span> Users <span class="hljs-keyword">from</span> <span class="hljs-string">'./users'</span>
 
-import urlFor from '/util/urlFor'
-
-import { routes } from './index'
-
-const AccountHeader = () =&gt;
-  &lt;header className='alt'&gt;
-    &lt;a href={urlFor('users')}&gt;Users&lt;/a&gt;&amp;nbsp;
-    &lt;a href={urlFor('login')}&gt;Login&lt;/a&gt;
-  &lt;/header&gt;
-
-const AccountApp = ({ isAuthed }) =&gt;
-  !isAuthed
-    ? routeTo('login')
-    : (
-      &lt;div id='account-layout'&gt;
-        &lt;AccountHeader /&gt;
-        &lt;Router routes={routes} /&gt;
-      &lt;/div&gt;
-    )
-
-export default withState({
-  mapper: ({ token }) =&gt; {</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-2">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-2">&#182;</a>
-              </div>
-              <p>@TODO: Check if token is valid</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">const</span> isAuthed = token != <span class="hljs-literal">null</span>
-    <span class="hljs-keyword">return</span> { isAuthed }
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> routes = {
+  <span class="hljs-attr">users</span>: {
+    <span class="hljs-attr">path</span>: <span class="hljs-string">'/users'</span>,
+    <span class="hljs-attr">component</span>: Users <span class="hljs-comment">// asyncComponent(() =&gt; import('./users').then(m =&gt; m.default))</span>
+  },
+  <span class="hljs-attr">user</span>: {
+    <span class="hljs-attr">path</span>: <span class="hljs-string">'/users/:id'</span>,
+    <span class="hljs-attr">component</span>: asyncComponent(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">'./user'</span>).then(<span class="hljs-function"><span class="hljs-params">m</span> =&gt;</span> m.default))
   }
-})(AccountApp)</pre></div></div>
+}
+
+<span class="hljs-keyword">const</span> LazyDashboard = asyncComponent(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span>
+  <span class="hljs-keyword">import</span>(<span class="hljs-string">'./dashboard.js'</span>).then(<span class="hljs-function"><span class="hljs-params">m</span> =&gt;</span> m.default)
+)
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> LazyDashboard</pre></div></div>
             
         </li>
         

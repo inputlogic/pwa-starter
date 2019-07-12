@@ -40,23 +40,23 @@
                 </a>
               
                 
-                <a class="source" href="../apps/account/account.html">
-                  apps/account/account.js
+                <a class="source" href="../apps/dashboard/dashboard.html">
+                  apps/dashboard/dashboard.js
                 </a>
               
                 
-                <a class="source" href="../apps/account/index.html">
-                  apps/account/index.js
+                <a class="source" href="../apps/dashboard/index.html">
+                  apps/dashboard/index.js
                 </a>
               
                 
-                <a class="source" href="../apps/account/user/index.html">
-                  apps/account/user/index.js
+                <a class="source" href="../apps/dashboard/user/index.html">
+                  apps/dashboard/user/index.js
                 </a>
               
                 
-                <a class="source" href="../apps/account/users/index.html">
-                  apps/account/users/index.js
+                <a class="source" href="../apps/dashboard/users/index.html">
+                  apps/dashboard/users/index.js
                 </a>
               
                 
@@ -72,6 +72,11 @@
                 
                 <a class="source" href="../apps/main/login/index.html">
                   apps/main/login/index.js
+                </a>
+              
+                
+                <a class="source" href="../apps/main/login/login.html">
+                  apps/main/login/login.js
                 </a>
               
                 
@@ -144,7 +149,7 @@
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> connect <span class="hljs-keyword">from</span> <span class="hljs-string">'@app-elements/connect'</span>
-<span class="hljs-keyword">import</span> urlFor <span class="hljs-keyword">from</span> <span class="hljs-string">'/util/urlFor'</span>
+<span class="hljs-keyword">import</span> { Link } <span class="hljs-keyword">from</span> <span class="hljs-string">'@app-elements/router'</span>
 
 <span class="hljs-keyword">const</span> GlobalHeader = connect({
   <span class="hljs-attr">name</span>: <span class="hljs-string">'GlobalHeader'</span>,
@@ -156,8 +161,8 @@
   <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">header</span> <span class="hljs-attr">class</span>=<span class="hljs-string">'layout-center'</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>PWA {clicks}<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-name">button</span> <span class="hljs-attr">onClick</span>=<span class="hljs-string">{increment}</span>&gt;</span>+<span class="hljs-tag">&lt;/<span class="hljs-name">button</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">{urlFor(</span>'<span class="hljs-attr">home</span>')}&gt;</span>Main App<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>&amp;nbsp;
-    <span class="hljs-tag">&lt;<span class="hljs-name">a</span> <span class="hljs-attr">href</span>=<span class="hljs-string">{urlFor(</span>'<span class="hljs-attr">users</span>')}&gt;</span>Account App<span class="hljs-tag">&lt;/<span class="hljs-name">a</span>&gt;</span>&amp;nbsp;
+    <span class="hljs-tag">&lt;<span class="hljs-name">Link</span> <span class="hljs-attr">name</span>=<span class="hljs-string">'home'</span> <span class="hljs-attr">activeClass</span>=<span class="hljs-string">'active-link'</span>&gt;</span>Main App<span class="hljs-tag">&lt;/<span class="hljs-name">Link</span>&gt;</span>&amp;nbsp;
+    <span class="hljs-tag">&lt;<span class="hljs-name">Link</span> <span class="hljs-attr">name</span>=<span class="hljs-string">'users'</span>&gt;</span>Dashboard App<span class="hljs-tag">&lt;/<span class="hljs-name">Link</span>&gt;</span>&amp;nbsp;
   <span class="hljs-tag">&lt;/<span class="hljs-name">header</span>&gt;</span></span>
 ))
 
