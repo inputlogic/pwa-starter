@@ -40,23 +40,23 @@
                 </a>
               
                 
-                <a class="source" href="../../account/account.html">
-                  apps/account/account.js
+                <a class="source" href="../../dashboard/dashboard.html">
+                  apps/dashboard/dashboard.js
                 </a>
               
                 
-                <a class="source" href="../../account/index.html">
-                  apps/account/index.js
+                <a class="source" href="../../dashboard/index.html">
+                  apps/dashboard/index.js
                 </a>
               
                 
-                <a class="source" href="../../account/user/index.html">
-                  apps/account/user/index.js
+                <a class="source" href="../../dashboard/user/index.html">
+                  apps/dashboard/user/index.js
                 </a>
               
                 
-                <a class="source" href="../../account/users/index.html">
-                  apps/account/users/index.js
+                <a class="source" href="../../dashboard/users/index.html">
+                  apps/dashboard/users/index.js
                 </a>
               
                 
@@ -72,6 +72,11 @@
                 
                 <a class="source" href="../login/index.html">
                   apps/main/login/index.js
+                </a>
+              
+                
+                <a class="source" href="../login/login.html">
+                  apps/main/login/login.js
                 </a>
               
                 
@@ -143,45 +148,19 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre>import W from 'wasmuth'
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Home</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>PWA Starter<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">img</span>
+        <span class="hljs-attr">src</span>=<span class="hljs-string">'https://camo.githubusercontent.com/974ab5e63b58eb0bb51ca21eb1b047e64ee0ea6d/68747470733a2f2f692e696d6775722e636f6d2f6b4a37673457472e6a7067'</span>
+        <span class="hljs-attr">alt</span>=<span class="hljs-string">'PWA Starter'</span>
+      /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  )
+}
 
-import Carousel from '@app-elements/carousel'
-import Dropdown from '@app-elements/dropdown'
-import Image from '@app-elements/image'
-import LoadingIndicator from '@app-elements/loading-indicator'
-import Tooltip from '@app-elements/tooltip'
-
-import { showNotification } from '@app-elements/notification'
-
-import { setState } from '/store'
-
-const Home = () =&gt;
-  &lt;div style={{ padding: '1em' }}&gt;
-    &lt;h1&gt;&lt;Tooltip text='This is your tooltip'&gt;Home&lt;/Tooltip&gt;&lt;/h1&gt;
-
-    &lt;LoadingIndicator /&gt;
-
-    &lt;Dropdown uid='home-example'&gt;
-      &lt;p&gt;&lt;button onClick={ev =&gt; setState({ modal: 'ExampleModal' })}&gt;Open Example Modal&lt;/button&gt;&lt;/p&gt;
-      &lt;p&gt;&lt;button onClick={ev =&gt; showNotification({ message: 'PIRATES!' })}&gt;Pirates!&lt;/button&gt;&lt;/p&gt;
-      &lt;p&gt;Classy Penguin&lt;/p&gt;
-    &lt;/Dropdown&gt;
-
-    &lt;Carousel withDots&gt;
-      {W.map(
-        (hex) =&gt; &lt;Image
-          srcs={[
-            'http://www.placehold.it/400x300/eee/eee?text=Loading',
-            `http://www.placehold.it/400x300/${hex}/f44?text=${hex}`
-          ]}
-          style='width: 100%'
-        /&gt;,
-        ['fff', 'a7c', '09d', '411', '111']
-      )}
-    &lt;/Carousel&gt;
-  &lt;/div&gt;
-
-export default Home</pre></div></div>
+</span></pre></div></div>
             
         </li>
         

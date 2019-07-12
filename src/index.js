@@ -86,7 +86,7 @@ render(<Root />, document.getElementById('root'))
 // Each app will need to export a Component and `{routes}` Object.
 
 // - [main](/apps/main) (Includes Login example)
-// - [account](/apps/account) (Includes data fetching and display)
+// - [dashboard](/apps/dashboard) (Includes data fetching and display)
 
 // **assets/**
 
@@ -120,5 +120,5 @@ render(<Root />, document.getElementById('root'))
 // --------
 
 // - [Login Form](/apps/main/login)
-// - [Fetch and display list of data](/apps/account/users)
-// - [Use route param to fetch resource by id](/apps/account/user)
+// - [Fetch and display list of data](/apps/dashboard/users)
+// - [Use route param to fetch resource by id](/apps/dashboard/user)

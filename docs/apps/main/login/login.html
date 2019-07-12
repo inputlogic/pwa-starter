@@ -2,10 +2,10 @@
 
 <html>
 <head>
-  <title>example-modal.js</title>
+  <title>login.js</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
-  <link rel="stylesheet" media="all" href="../docco.css" />
+  <link rel="stylesheet" media="all" href="../../../docco.css" />
 </head>
 <body>
   <div id="container">
@@ -20,107 +20,107 @@
             <div id="jump_page">
               
                 
-                <a class="source" href="../consts.html">
+                <a class="source" href="../../../consts.html">
                   ./consts.js
                 </a>
               
                 
-                <a class="source" href="../index.html">
+                <a class="source" href="../../../index.html">
                   ./index.js
                 </a>
               
                 
-                <a class="source" href="../routes.html">
+                <a class="source" href="../../../routes.html">
                   ./routes.js
                 </a>
               
                 
-                <a class="source" href="../store.html">
+                <a class="source" href="../../../store.html">
                   ./store.js
                 </a>
               
                 
-                <a class="source" href="../apps/dashboard/dashboard.html">
+                <a class="source" href="../../dashboard/dashboard.html">
                   apps/dashboard/dashboard.js
                 </a>
               
                 
-                <a class="source" href="../apps/dashboard/index.html">
+                <a class="source" href="../../dashboard/index.html">
                   apps/dashboard/index.js
                 </a>
               
                 
-                <a class="source" href="../apps/dashboard/user/index.html">
+                <a class="source" href="../../dashboard/user/index.html">
                   apps/dashboard/user/index.js
                 </a>
               
                 
-                <a class="source" href="../apps/dashboard/users/index.html">
+                <a class="source" href="../../dashboard/users/index.html">
                   apps/dashboard/users/index.js
                 </a>
               
                 
-                <a class="source" href="../apps/main/home/index.html">
+                <a class="source" href="../home/index.html">
                   apps/main/home/index.js
                 </a>
               
                 
-                <a class="source" href="../apps/main/index.html">
+                <a class="source" href="../index.html">
                   apps/main/index.js
                 </a>
               
                 
-                <a class="source" href="../apps/main/login/index.html">
+                <a class="source" href="index.html">
                   apps/main/login/index.js
                 </a>
               
                 
-                <a class="source" href="../apps/main/login/login.html">
+                <a class="source" href="login.html">
                   apps/main/login/login.js
                 </a>
               
                 
-                <a class="source" href="../assets/workers/request.html">
+                <a class="source" href="../../../assets/workers/request.html">
                   assets/workers/request.js
                 </a>
               
                 
-                <a class="source" href="../elements/async-component.html">
+                <a class="source" href="../../../elements/async-component.html">
                   elements/async-component.js
                 </a>
               
                 
-                <a class="source" href="../elements/global-header.html">
+                <a class="source" href="../../../elements/global-header.html">
                   elements/global-header.js
                 </a>
               
                 
-                <a class="source" href="../elements/not-found.html">
+                <a class="source" href="../../../elements/not-found.html">
                   elements/not-found.js
                 </a>
               
                 
-                <a class="source" href="example-modal.html">
+                <a class="source" href="../../../modals/example-modal.html">
                   modals/example-modal.js
                 </a>
               
                 
-                <a class="source" href="../util/equal.html">
+                <a class="source" href="../../../util/equal.html">
                   util/equal.js
                 </a>
               
                 
-                <a class="source" href="../util/loadImage.html">
+                <a class="source" href="../../../util/loadImage.html">
                   util/loadImage.js
                 </a>
               
                 
-                <a class="source" href="../util/urlFor.html">
+                <a class="source" href="../../../util/urlFor.html">
                   util/urlFor.js
                 </a>
               
                 
-                <a class="source" href="../util/workerize.html">
+                <a class="source" href="../../../util/workerize.html">
                   util/workerize.js
                 </a>
               
@@ -133,7 +133,7 @@
         
           <li id="title">
               <div class="annotation">
-                  <h1>example-modal.js</h1>
+                  <h1>login.js</h1>
               </div>
           </li>
         
@@ -148,13 +148,17 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> Modal <span class="hljs-keyword">from</span> <span class="hljs-string">'@app-elements/modal'</span>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> Form, { ErrorOrHint, SubmitButton } <span class="hljs-keyword">from</span> <span class="hljs-string">'@app-elements/form'</span>
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">ExampleModal</span> (<span class="hljs-params"></span>) </span>{
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Login</span> (<span class="hljs-params">{ formProps }</span>) </span>{
   <span class="hljs-keyword">return</span> (
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Modal</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span>Example Modal<span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-name">Modal</span>&gt;</span></span>
+    &lt;Form {...formProps}&gt;
+      &lt;input type='text' name='email' placeholder='Your Email' required isFormField /&gt;
+      &lt;input type='password' name='password' placeholder='Your Password' required isFormField /&gt;
+      &lt;ErrorOrHint name='password' /&gt;
+      &lt;input type='checkbox' name='remember' isFormField /&gt;
+      &lt;SubmitButton&gt;Login&lt;/SubmitButton&gt;
+    &lt;/Form&gt;
   )
 }</pre></div></div>
             

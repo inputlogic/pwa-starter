@@ -40,23 +40,23 @@
                 </a>
               
                 
-                <a class="source" href="apps/account/account.html">
-                  apps/account/account.js
+                <a class="source" href="apps/dashboard/dashboard.html">
+                  apps/dashboard/dashboard.js
                 </a>
               
                 
-                <a class="source" href="apps/account/index.html">
-                  apps/account/index.js
+                <a class="source" href="apps/dashboard/index.html">
+                  apps/dashboard/index.js
                 </a>
               
                 
-                <a class="source" href="apps/account/user/index.html">
-                  apps/account/user/index.js
+                <a class="source" href="apps/dashboard/user/index.html">
+                  apps/dashboard/user/index.js
                 </a>
               
                 
-                <a class="source" href="apps/account/users/index.html">
-                  apps/account/users/index.js
+                <a class="source" href="apps/dashboard/users/index.html">
+                  apps/dashboard/users/index.js
                 </a>
               
                 
@@ -72,6 +72,11 @@
                 
                 <a class="source" href="apps/main/login/index.html">
                   apps/main/login/index.js
+                </a>
+              
+                
+                <a class="source" href="apps/main/login/login.html">
+                  apps/main/login/login.js
                 </a>
               
                 
@@ -182,7 +187,7 @@ folder within <code>src/apps</code> should have an <code>index.js</code> that ex
             
             <div class="content"><div class='highlight'><pre>
 <span class="hljs-keyword">import</span> Main, { routes <span class="hljs-keyword">as</span> mainRoutes } <span class="hljs-keyword">from</span> <span class="hljs-string">'/apps/main'</span>
-<span class="hljs-keyword">import</span> Account, { routes <span class="hljs-keyword">as</span> accountRoutes } <span class="hljs-keyword">from</span> <span class="hljs-string">'/apps/account'</span></pre></div></div>
+<span class="hljs-keyword">import</span> Dashboard, { routes <span class="hljs-keyword">as</span> dashboardRoutes } <span class="hljs-keyword">from</span> <span class="hljs-string">'/apps/dashboard'</span></pre></div></div>
             
         </li>
         
@@ -205,9 +210,9 @@ Component and only render if a path within their <code>routes</code> object is c
     <span class="hljs-attr">routes</span>: mainRoutes,
     <span class="hljs-attr">component</span>: Main
   },
-  <span class="hljs-attr">account</span>: {
-    <span class="hljs-attr">routes</span>: accountRoutes,
-    <span class="hljs-attr">component</span>: Account
+  <span class="hljs-attr">dashboard</span>: {
+    <span class="hljs-attr">routes</span>: dashboardRoutes,
+    <span class="hljs-attr">component</span>: Dashboard
   }
 }</pre></div></div>
             
@@ -220,7 +225,7 @@ Component and only render if a path within their <code>routes</code> object is c
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p>The <code>routes</code> props for the <code>main</code> and <code>account</code> objects above, follow the second object
+              <p>The <code>routes</code> props for the <code>main</code> and <code>dashboard</code> objects above, follow the second object
 format that our <code>&lt;Router /&gt;</code>‘s understand. Which follows the follwing signature:</p>
 
             </div>

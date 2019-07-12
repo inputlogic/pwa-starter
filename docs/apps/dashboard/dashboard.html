@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>index.js</title>
+  <title>dashboard.js</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="../../docco.css" />
@@ -40,23 +40,23 @@
                 </a>
               
                 
-                <a class="source" href="account.html">
-                  apps/account/account.js
+                <a class="source" href="dashboard.html">
+                  apps/dashboard/dashboard.js
                 </a>
               
                 
                 <a class="source" href="index.html">
-                  apps/account/index.js
+                  apps/dashboard/index.js
                 </a>
               
                 
                 <a class="source" href="user/index.html">
-                  apps/account/user/index.js
+                  apps/dashboard/user/index.js
                 </a>
               
                 
                 <a class="source" href="users/index.html">
-                  apps/account/users/index.js
+                  apps/dashboard/users/index.js
                 </a>
               
                 
@@ -72,6 +72,11 @@
                 
                 <a class="source" href="../main/login/index.html">
                   apps/main/login/index.js
+                </a>
+              
+                
+                <a class="source" href="../main/login/login.html">
+                  apps/main/login/login.js
                 </a>
               
                 
@@ -128,7 +133,7 @@
         
           <li id="title">
               <div class="annotation">
-                  <h1>index.js</h1>
+                  <h1>dashboard.js</h1>
               </div>
           </li>
         
@@ -143,24 +148,54 @@
               
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> asyncComponent <span class="hljs-keyword">from</span> <span class="hljs-string">'/elements/async-component'</span>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> Router, { RouteTo, Link } <span class="hljs-keyword">from</span> <span class="hljs-string">'@app-elements/router'</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>import { getState } from ‘/store’</p>
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">const</span> routes = {
-  <span class="hljs-attr">users</span>: {
-    <span class="hljs-attr">path</span>: <span class="hljs-string">'/users'</span>,
-    <span class="hljs-attr">component</span>: asyncComponent(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">'./users'</span>).then(<span class="hljs-function"><span class="hljs-params">m</span> =&gt;</span> m.default))
-  },
-  <span class="hljs-attr">user</span>: {
-    <span class="hljs-attr">path</span>: <span class="hljs-string">'/users/:id'</span>,
-    <span class="hljs-attr">component</span>: asyncComponent(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> <span class="hljs-keyword">import</span>(<span class="hljs-string">'./user'</span>).then(<span class="hljs-function"><span class="hljs-params">m</span> =&gt;</span> m.default))
-  }
-}
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>import { routes } from './index'
 
-<span class="hljs-keyword">const</span> LazyAccount = asyncComponent(<span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span>
-  <span class="hljs-keyword">import</span>(<span class="hljs-string">'./account.js'</span>).then(<span class="hljs-function"><span class="hljs-params">m</span> =&gt;</span> m.default)
-)
+const DashboardHeader = () =&gt;
+  &lt;header className='alt'&gt;
+    &lt;Link name='users'&gt;Users&lt;/Link&gt;&amp;nbsp;
+    &lt;Link name='login'&gt;Login&lt;/Link&gt;
+  &lt;/header&gt;
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> LazyAccount</pre></div></div>
+export default function DashboardApp () {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>const { token } = getState()</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">const</span> token = <span class="hljs-number">1</span>
+  <span class="hljs-keyword">return</span> token == <span class="hljs-literal">null</span>
+    ? &lt;RouteTo name='login' /&gt;
+    : (
+      &lt;div id='dashboard-layout'&gt;
+        &lt;DashboardHeader /&gt;
+        &lt;Router routes={routes} /&gt;
+      &lt;/div&gt;
+    )
+}</pre></div></div>
             
         </li>
         

@@ -40,23 +40,23 @@
                 </a>
               
                 
-                <a class="source" href="apps/account/account.html">
-                  apps/account/account.js
+                <a class="source" href="apps/dashboard/dashboard.html">
+                  apps/dashboard/dashboard.js
                 </a>
               
                 
-                <a class="source" href="apps/account/index.html">
-                  apps/account/index.js
+                <a class="source" href="apps/dashboard/index.html">
+                  apps/dashboard/index.js
                 </a>
               
                 
-                <a class="source" href="apps/account/user/index.html">
-                  apps/account/user/index.js
+                <a class="source" href="apps/dashboard/user/index.html">
+                  apps/dashboard/user/index.js
                 </a>
               
                 
-                <a class="source" href="apps/account/users/index.html">
-                  apps/account/users/index.js
+                <a class="source" href="apps/dashboard/users/index.html">
+                  apps/dashboard/users/index.js
                 </a>
               
                 
@@ -72,6 +72,11 @@
                 
                 <a class="source" href="apps/main/login/index.html">
                   apps/main/login/index.js
+                </a>
+              
+                
+                <a class="source" href="apps/main/login/login.html">
+                  apps/main/login/login.js
                 </a>
               
                 
@@ -147,6 +152,7 @@ which is immutable. Meaning you cannot mutate the object directly, but instead m
             </div>
             
             <div class="content"><div class='highlight'><pre>
+<span class="hljs-keyword">import</span> W <span class="hljs-keyword">from</span> <span class="hljs-string">'wasmuth'</span>
 <span class="hljs-keyword">import</span> createStore <span class="hljs-keyword">from</span> <span class="hljs-string">'atom'</span>
 <span class="hljs-keyword">import</span> devtools <span class="hljs-keyword">from</span> <span class="hljs-string">'atom/devtools'</span>
 
@@ -213,21 +219,6 @@ by <a href="https://github.com/inputlogic/elements/tree/master/components/router
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
-              <p><code>pendingRequests</code> is used by the <a href="https://github.com/inputlogic/elements/tree/master/components/with-request">WithRequest</a> HoC.</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre>  pendingRequests: <span class="hljs-number">0</span>,</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-6">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
-              </div>
               <p>Pre-rendering will have already computed some values for global state,
 and should be initialized on the client.</p>
 
@@ -243,11 +234,11 @@ and should be initialized on the client.</p>
         </li>
         
         
-        <li id="section-7">
+        <li id="section-6">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>You can either define your reducers here, or add them later with:
 <code>store.addReducer(reducer)</code></p>
@@ -261,11 +252,11 @@ and should be initialized on the client.</p>
         </li>
         
         
-        <li id="section-8">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-8">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>If DEBUG is true, we will enable Redux devtools</p>
 
@@ -278,18 +269,18 @@ and should be initialized on the client.</p>
         </li>
         
         
-        <li id="section-9">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-9">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>Tell react-snap how to save Redux state</p>
 
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-built_in">window</span>.snapSaveState = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> ({
-  <span class="hljs-attr">__PRELOADED_STATE__</span>: store.getState()
+  <span class="hljs-attr">__PRELOADED_STATE__</span>: W.without([<span class="hljs-string">'currentPath'</span>, <span class="hljs-string">'currentRoute'</span>], store.getState())
 })
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> store
@@ -300,11 +291,11 @@ and should be initialized on the client.</p>
         </li>
         
         
-        <li id="section-10">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-10">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <p>This is a simple Provider used in the RootApp to provide the
 store instance on the React Context, so any child Component can
@@ -312,10 +303,8 @@ access it.</p>
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Provider</span> (<span class="hljs-params">props</span>) </span>{
-  <span class="hljs-keyword">this</span>.getChildContext = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> ({ <span class="hljs-attr">store</span>: props.store })
-}
-Provider.prototype.render = <span class="hljs-function"><span class="hljs-params">props</span> =&gt;</span> props.children[<span class="hljs-number">0</span>]</pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">export</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Provider</span> (<span class="hljs-params">props</span>) </span>{ <span class="hljs-keyword">this</span>.getChildContext = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> props }
+Provider.prototype.render = <span class="hljs-function"><span class="hljs-params">props</span> =&gt;</span> props.children</pre></div></div>
             
         </li>
         

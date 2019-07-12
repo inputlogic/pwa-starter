@@ -15,7 +15,7 @@
 // `default` and a `routes` const.
 
 import Main, { routes as mainRoutes } from '/apps/main'
-import Account, { routes as accountRoutes } from '/apps/account'
+import Dashboard, { routes as dashboardRoutes } from '/apps/dashboard'
 
 // These app routes need to be defined here (outside of a Component's render function)
 // so that our [urlFor](/util/urlFor.html) function works without mounting any React
@@ -26,13 +26,13 @@ export default {
     routes: mainRoutes,
     component: Main
   },
-  account: {
-    routes: accountRoutes,
-    component: Account
+  dashboard: {
+    routes: dashboardRoutes,
+    component: Dashboard
   }
 }
 
-// The `routes` props for the `main` and `account` objects above, follow the second object
+// The `routes` props for the `main` and `dashboard` objects above, follow the second object
 // format that our `<Router />`'s understand. Which follows the follwing signature:
 
 // ```

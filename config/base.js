@@ -57,7 +57,10 @@ export default {
         'node_modules/prop-types/**',
         'node_modules/react-is/**',
         'node_modules/object-assign/**',
+        'node_modules/autobind-decorator/**',
         'node_modules/warning/**',
+        'node_modules/to-snake-case/**',
+        'node_modules/debounce/**',
         'node_modules/atom/**'
       ]
     }),

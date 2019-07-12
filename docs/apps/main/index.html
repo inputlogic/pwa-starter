@@ -40,23 +40,23 @@
                 </a>
               
                 
-                <a class="source" href="../account/account.html">
-                  apps/account/account.js
+                <a class="source" href="../dashboard/dashboard.html">
+                  apps/dashboard/dashboard.js
                 </a>
               
                 
-                <a class="source" href="../account/index.html">
-                  apps/account/index.js
+                <a class="source" href="../dashboard/index.html">
+                  apps/dashboard/index.js
                 </a>
               
                 
-                <a class="source" href="../account/user/index.html">
-                  apps/account/user/index.js
+                <a class="source" href="../dashboard/user/index.html">
+                  apps/dashboard/user/index.js
                 </a>
               
                 
-                <a class="source" href="../account/users/index.html">
-                  apps/account/users/index.js
+                <a class="source" href="../dashboard/users/index.html">
+                  apps/dashboard/users/index.js
                 </a>
               
                 
@@ -72,6 +72,11 @@
                 
                 <a class="source" href="login/index.html">
                   apps/main/login/index.js
+                </a>
+              
+                
+                <a class="source" href="login/login.html">
+                  apps/main/login/login.js
                 </a>
               
                 
@@ -162,15 +167,18 @@
   }
 }
 
-<span class="hljs-keyword">const</span> MainApp = <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span>
-  &lt;div&gt;
-    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Router</span> <span class="hljs-attr">routes</span>=<span class="hljs-string">{routes}</span> /&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-name">Modals</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-name">ExampleModal</span> /&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-name">Modals</span>&gt;</span>
-  <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span></span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">MainApp</span> (<span class="hljs-params"></span>) </span>{
+  <span class="hljs-keyword">return</span> (
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Router</span> <span class="hljs-attr">routes</span>=<span class="hljs-string">{routes}</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-name">Modals</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-name">ExampleModal</span> /&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-name">Modals</span>&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-name">div</span>&gt;</span>
+  )
+}
 
-<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> MainApp</pre></div></div>
+</span></pre></div></div>
             
         </li>
         

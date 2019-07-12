@@ -40,23 +40,23 @@
                 </a>
               
                 
-                <a class="source" href="../account.html">
-                  apps/account/account.js
+                <a class="source" href="../dashboard.html">
+                  apps/dashboard/dashboard.js
                 </a>
               
                 
                 <a class="source" href="../index.html">
-                  apps/account/index.js
+                  apps/dashboard/index.js
                 </a>
               
                 
                 <a class="source" href="../user/index.html">
-                  apps/account/user/index.js
+                  apps/dashboard/user/index.js
                 </a>
               
                 
                 <a class="source" href="index.html">
-                  apps/account/users/index.js
+                  apps/dashboard/users/index.js
                 </a>
               
                 
@@ -72,6 +72,11 @@
                 
                 <a class="source" href="../../main/login/index.html">
                   apps/main/login/index.js
+                </a>
+              
+                
+                <a class="source" href="../../main/login/login.html">
+                  apps/main/login/login.js
                 </a>
               
                 
@@ -145,7 +150,9 @@ an API request. You could also use the lower-level <a href="https://github.com/i
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> ListResource <span class="hljs-keyword">from</span> <span class="hljs-string">'@app-elements/list-resource'</span></pre></div></div>
+            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">import</span> ListResource <span class="hljs-keyword">from</span> <span class="hljs-string">'@app-elements/list-resource'</span>
+
+<span class="hljs-keyword">import</span> { Link } <span class="hljs-keyword">from</span> <span class="hljs-string">'@app-elements/router'</span></pre></div></div>
             
         </li>
         
@@ -182,7 +189,7 @@ from the API request. In our case, the API response looks like:
             
             <div class="content"><div class='highlight'><pre>const UserItem = ({ id, name, email }) =&gt;
   &lt;div class='user-item'&gt;
-    &lt;h2&gt;&lt;a href={`/users/${id}`}&gt;{name}&lt;/a&gt;&lt;/h2&gt;
+    &lt;h2&gt;&lt;Link name='user' args={{ id }}&gt;{name}&lt;/Link&gt;&lt;/h2&gt;
     &lt;p&gt;{email}&lt;/p&gt;
   &lt;/div&gt;</pre></div></div>
             
