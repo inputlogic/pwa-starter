@@ -23,10 +23,6 @@ import Router from '@app-elements/router'
 import GlobalHeader from '/elements/global-header'
 import NotFound from '/elements/not-found'
 
-// The main [routes](/routes.html) file defines the top-level routes and their respective
-// Components.
-import routes from '/routes'
-
 // And our apps' global store.
 import store, { Provider } from '/store'
 
@@ -40,6 +36,23 @@ import store, { Provider } from '/store'
 // In this case, we are loading the global styles.
 import '/styles/variables.less'
 import '/styles/base.less'
+
+// ### Our top-level components
+
+import Main, { routes as mainRoutes } from '/apps/main'
+import Dashboard, { routes as dashboardRoutes } from '/apps/dashboard'
+
+// Define our top-level routes
+const routes = {
+  main: {
+    routes: mainRoutes,
+    component: Main
+  },
+  dashboard: {
+    routes: dashboardRoutes,
+    component: Dashboard
+  }
+}
 
 // And, finally, our Root! This is the top-level Component to render
 // into the DOM and kick-start our entire app!

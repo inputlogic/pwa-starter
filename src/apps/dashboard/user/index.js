@@ -10,16 +10,14 @@ import LoadingIndicator from '@app-elements/loading-indicator'
 import { Link } from '@app-elements/router'
 import { useRequest } from '@app-elements/use-request'
 
-// `urlFor` is a util for getting route paths by name. It's a project
+// `url` is a util for getting route paths by name. It's a project
 // level util because it reads the statically defined [routes.js](/routes.html)
-import urlFor from '/util/urlFor'
-
-// `WEB_URL` is based on the currrent URL. If you are browsing the site
-// via `http://localhost:3000` then `WEB_URL` will represent that.
-import { WEB_URL } from '/consts'
+import url from '/util/url'
 
 // We'll need to pass our store to `useRequest`
 import store from '/store'
+
+import { WEB_URL } from '/consts'
 
 // Here is our page component which will use the `useRequest` hook.
 export default function User ({ id }) {
@@ -47,7 +45,7 @@ export default function User ({ id }) {
           { property: 'og:title', content: name },
           { property: 'og:description', content: 'Helmet description' },
           { property: 'og:image', content: 'https://www.gooseinsurance.com/images/blog-image-1.jpg' },
-          { property: 'og:url', content: `${WEB_URL}${urlFor('user', { args: { id } })}` }
+          { property: 'og:url', content: `${WEB_URL}${url('user', { args: { id } })}` }
         ]}
       />
       <h1>{name}</h1>
