@@ -2,13 +2,14 @@ import { useState, useMemo } from 'preact/hooks'
 import { showNotification } from '@app-elements/notification'
 
 import ForgotPasswordBase from './forgot-password'
+import url from '/util/url'
 
 export default function ForgotPassword () {
   const [isSuccess, setSuccess] = useState(false)
 
   const formProps = useMemo(() => ({
     name: 'ForgotPassword',
-    action: 'http://www.mocky.io/v2/5d28e8362c000068003edca8',
+    action: url('mock.forgotPassword'),
     method: 'post',
     noAuth: true,
     onSuccess: () => {
