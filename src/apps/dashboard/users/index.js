@@ -4,6 +4,8 @@ import ListResource from '@app-elements/list-resource'
 
 import { Link } from '@app-elements/router'
 
+import url from '/util/url'
+
 // Just some simple styles for this page
 import './users.less'
 
@@ -24,7 +26,7 @@ const UserItem = ({ id, name, email }) =>
 // to render each result item with our `UserItem` component.
 const Users = () =>
   <ListResource
-    endpoint='https://jsonplaceholder.typicode.com/users'
+    endpoint={url('placeholder.users')}
     limit={10}
     render={UserItem}
   />

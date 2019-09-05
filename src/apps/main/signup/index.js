@@ -3,6 +3,7 @@ import { RouteTo } from '@app-elements/router'
 import { showNotification } from '@app-elements/notification'
 
 import { dispatch, set } from '/store'
+import url from '/util/url'
 
 import SignUpBase from './signup'
 
@@ -20,7 +21,7 @@ export default function SignUp () {
   // props you can pass, see the [`<Form />` docs](https://github.com/inputlogic/elements/tree/master/components/form)
   const formProps = useMemo(() => ({
     name: 'SignUp',
-    action: 'http://www.mocky.io/v2/5d28efd02c0000cd2f3edcc9',
+    action: url('mock.signup'),
     method: 'post',
     noAuth: true,
     validations: {
