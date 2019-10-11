@@ -27,7 +27,7 @@ import NotFound from '/elements/not-found'
 import store, { Provider } from '/store'
 
 // We'll also import this file that extends some native functions.
-import '/util/extensions'
+import '/util/extend-xhr'
 
 // ### Styling
 
