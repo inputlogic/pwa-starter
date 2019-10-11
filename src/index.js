@@ -26,6 +26,9 @@ import NotFound from '/elements/not-found'
 // And our apps' global store.
 import store, { Provider } from '/store'
 
+// We'll also import this file that extends some native functions.
+import '/util/extensions'
+
 // ### Styling
 
 // We use LESS for styling. And ideally, each element Component will
