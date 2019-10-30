@@ -62,16 +62,17 @@ export default function AdminApp () {
     <Admin api={API_URL} auth={isStaff}>
       <Resource name='User' path='users'>
         <Create />
-        <Read fields={['id', 'email', 'createdAt']} />
+        <Read fields={['id', 'email', 'createdAt']}>
+          <Action label='Mark selected users as active' action={(selected) => {
+            // We want to send a PATCH to API/users with data:
+            // [{ id, isActive: true }, { id, isActive: true }, ...]
+            // Then our API can handle each item in the array, updating the user by id.
+          }} />
+        </Read>
         <Update>
           <MyCustomInline />
         </Update>
         <Delete auth={isAdmin} />
-        <Action label='Mark selected users as active' action={(selected) => {
-          // We want to send a PATCH to API/users with data:
-          // [{ id, isActive: true }, { id, isActive: true }, ...]
-          // Then our API can handle each item in the array, updating the user by id.
-        }} />
       </Resource>
     </Admin>
   )
