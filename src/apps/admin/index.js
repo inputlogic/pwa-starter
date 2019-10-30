@@ -1,12 +1,30 @@
 import { API_URL } from '/consts'
 import url from '/util/url'
 
+// This component would render the base layout and navigation.
+// It would also hold some defaults that nested Components would
+// extend from. Ex. `auth`.
 const Admin = () => null
+
+// This registers a navigation item for Admin to render, and
+// boilerplate UI for interacting with a resource.
 const Resource = () => null
+
+// This tells the parent Resource that we want a form to create
+// new instances of the parent Resource.
 const Create = () => null
+
+// Tells the parent Resource we want a tabular list of instances.
 const Read = () => null
+
+// Tells parent we want a form to edit existing instances.
 const Update = () => null
+
+// Tells parent Resource that we want the Delete action available.
 const Delete = () => null
+
+// Interface for creating custom Actions to be used in the admin.
+const Action = () => null
 
 const getUser = async (token) => {
   const res = await fetch(url('api.me'), {
@@ -33,6 +51,11 @@ export default function AdminApp () {
         <Read fields={['id', 'email', 'createdAt']} />
         <Update />
         <Delete auth={isAdmin} />
+        <Action label='Mark selected users as active' action={(selected) => {
+          // We want to send a PATCH to API/users with data:
+          // [{ id, isActive: true }, { id, isActive: true }, ...]
+          // Then our API can handle each item in the array, updating the user by id.
+        }} />
       </Resource>
     </Admin>
   )
