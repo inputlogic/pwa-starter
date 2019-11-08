@@ -47,6 +47,7 @@
     "@app-elements/carousel": "1.2.0",
     "@app-elements/form": "1.3.10",
     "@app-elements/helmet": "2.0.2",
+    "@app-elements/image": "1.1.5",
     "@app-elements/list-resource": "2.0.22",
     "@app-elements/loading-indicator": "1.0.4",
     "@app-elements/modal": "2.2.0",
