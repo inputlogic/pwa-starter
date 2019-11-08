@@ -5,7 +5,7 @@ import { getState, logout } from '/store'
 import { routes } from './index'
 
 const DashboardHeader = () =>
-  <header className='alt'>
+  <header className='container'>
     <Link name='users'>Users</Link>&nbsp;
     <button onClick={ev => logout()}>Logout</button>
   </header>

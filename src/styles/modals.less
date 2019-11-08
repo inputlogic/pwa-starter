@@ -1,0 +1,147 @@
+.modal-container.styled-modal {
+  background: rgba(0, 0, 0, .5);
+  z-index: 100;
+
+  &.small {
+    .modal-content {
+      max-width: 415px;
+    }
+  }
+
+  &.medium {
+    .modal-content {
+      max-width: 660px;
+
+      @media @phone {
+        max-width: unset;
+      }
+    }
+  }
+
+  .modal-content {
+    padding: 0;
+    text-align: left;
+    width: 92%;
+    max-width: 610px;
+    border-radius: @border-radius * 2;
+    box-shadow: @box-shadow;
+    z-index: 100;
+    // To remedy text shift during transform animation
+    transform: perspective(1px) translateZ(0);
+    backface-visibility: hidden;
+    will-change: auto;
+    outline: 0;
+
+    @media @phone {
+      width: 100%;
+      height: 100%;
+      border-radius: 0;
+      font-size: 81%;
+    }
+
+    .close {
+      text-indent: -9999px;
+      position: absolute;
+      top: @gutterE;
+      right: @gutterE;
+      width: 1.25rem;
+      height: 1.25rem;
+      background: #666 url(/images/icons/icon-close.svg) no-repeat center center;
+      background-size: 40%;
+      cursor: pointer;
+      border-radius: 50%;
+    }
+  }
+
+  .modal-header {
+    text-align: center;
+    margin: 0;
+    height: 5em;
+    display: flex;
+
+    h2 {
+      font-weight: bold;
+      font-size: 1.3em;
+      margin: auto;
+    }
+  }
+
+  .modal-scrollview {
+    display: flex;
+    flex-direction: column;
+
+    .content {
+      overflow: scroll;
+      max-height: 670px;
+      padding: @gutterE;
+      min-height: 100px;
+
+      @media screen and (max-height: 800px) {
+        max-height: 550px;
+      }
+
+      @media @phone {
+        padding: @gutterE;
+        max-height: ~"calc(100vh - 140px)";
+      }
+
+      &.centered {
+        text-align: center;
+      }
+
+      hr {
+        border: 0;
+        height: 1px;
+        background: @border-color-alt;
+        width: calc(100% + 4rem);
+        margin-left: -2rem;
+        margin-bottom: 1rem;
+      }
+    }
+
+    .actions {
+      height: 5em;
+      border-top: solid 1px @border-color-alt;
+      align-self: flex-end;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0 @gutterE * 2;
+      justify-content: space-between;
+      position: relative;
+
+      @media @phone {
+        padding: 0 @gutter;
+      }
+
+      &.centered {
+        justify-content: center;
+      }
+
+      &::before {
+        content: '';
+        display: block;
+        height: 60px;
+        width: 100%;
+        position: absolute;
+        top: -61px;
+        left: 0;
+        background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 90%);
+      }
+
+      .btn {
+        min-width: 144px;
+
+
+        @media @phone {
+          min-width: unset;
+          font-size: .75rem;
+        }
+
+        & + .btn {
+          margin-left: 1em;
+        }
+      }
+    }
+  }
+}

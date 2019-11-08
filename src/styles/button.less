@@ -1,0 +1,229 @@
+.btn {
+  display: inline-block;
+  outline: none;
+  background-color: @primary-color;
+  border: none;
+  border: solid 1px @primary-color;
+  border-radius: @border-radius;
+  padding: .65rem 1.25rem;
+  color: @white;
+  cursor: pointer;
+  line-height: 1;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+  text-decoration: none;
+  font-family: @font-family;
+  transition: background-color 0.25s ease-in-out, border-color .25s ease-in-out;
+  position: relative;
+  margin: 0;
+
+  @media @phone-tablet {
+    font-size: .9rem;
+  }
+
+  &:hover {
+    background-color: lighten(@primary-color, 6%);
+    border-color: lighten(@primary-color, 6%);
+    color: @white;
+  }
+
+  &:active {
+    background-color: @primary-color;
+    border-color: @primary-color;
+  }
+
+  &.disabled,
+  &:disabled {
+    opacity: .70;
+  }
+
+  & > .badge {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    border-radius: 50%;
+    line-height: 20px;
+    font-size: .875em;
+    color: @white;
+    background: @error;
+    margin: -3px 5px -3px 0;
+    transform: translateY(-1.5px);
+  }
+
+
+  &.btn-secondary {
+    background-color: @secondary-color;
+    border-color: @secondary-color;
+
+    &:hover {
+      background-color: darken(@secondary-color, 5%);
+      border-color: darken(@secondary-color, 5%);
+    }
+  }
+
+  &.btn-ghost {
+    background-color: transparent;
+    border-color: @border-color;
+    color: @text-color;
+
+    &:hover {
+      background-color: transparent;
+      border-color: @border-color;
+      color: @text-color;
+    }
+
+    &.selected {
+      background-color: @secondary-color;
+      border-color: @secondary-color;
+    }
+  }
+
+  &.btn-text-only {
+    background-color: transparent;
+    border-color: transparent;
+    color: @text-color;
+
+    &:hover {
+      background-color: transparent;
+      border-color: transparent;
+    }
+  }
+
+  &.with-icon {
+    display: flex;
+    align-items: center;
+
+    &.light {
+      color: @grey;
+    }
+
+    .stroke {
+      stroke: currentColor;
+    }
+
+    .fill {
+      fill: currentColor;
+    }
+
+    svg {
+      display: block;
+      width: 1.1rem;
+      height: 1.1rem;
+      margin-top: -3px;
+    }
+
+    &.left {
+      svg {
+        margin-right: .5rem;
+      }
+    }
+  }
+
+  &.is-icon {
+    text-indent: -9999px;
+    padding: .5rem .5rem;
+
+    svg {
+      display: block;
+      width: 1.3em;
+      height: 1.3em;
+    }
+
+    .stroke,
+    .fill {
+      color: @white;
+    }
+
+    .stroke {
+      stroke: currentColor;
+    }
+
+    .fill {
+      fill: currentColor;
+    }
+
+    &.btn-ghost {
+      .stroke,
+      .fill {
+        color: @text-color;
+      }
+
+      &.selected {
+        .stroke,
+        .fill {
+          color: @white;
+        }
+      }
+    }
+
+    &.light {
+
+      .stroke,
+      .fill {
+        color: @grey;
+      }
+    }
+  }
+
+  &.btn-center {
+    margin-right: auto;
+    margin-left: auto;
+    display: block;
+  }
+
+  &.btn-stretchy {
+    width: 100%;
+  }
+}
+
+.button-group {
+  display: flex;
+
+  .btn {
+    padding-right: 1em;
+    padding-left: 1em;
+  }
+
+  .btn:first-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  .btn:last-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  .btn + .btn {
+    border-left: none
+  }
+
+  &.arrows {
+    .btn,
+    .group-text {
+      background-color: @white;
+    }
+
+    .btn {
+      padding-right: .7em;
+      padding-left: .7em;
+
+      svg {
+        width: .5em;
+        height: 1em;
+      }
+
+      &:hover {
+        background-color: #eaeaea;
+      }
+    }
+  }
+
+  .group-text {
+    border-top: 1px solid @border-color;
+    border-bottom: 1px solid @border-color;
+    padding: .35em .75em;
+    font-size: 1em;
+    flex: 1;
+  }
+}

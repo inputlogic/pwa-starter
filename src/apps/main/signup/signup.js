@@ -3,7 +3,7 @@ import { Link } from '@app-elements/router'
 
 export default function SignUp ({ formProps }) {
   return (
-    <div>
+    <div className='container'>
       <h2>Sign up</h2>
       <Form {...formProps}>
         <input type='text' name='email' placeholder='Your Email' required isFormField />

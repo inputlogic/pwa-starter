@@ -1,17 +1,79 @@
-@gutter: 20px;
-@drop-shadow: drop-shadow(0 4px 10px rgba(20,22,44,0.08));
+@font-face {
+  font-family: 'Circular Air Pro';
+  src: url('fonts/CircularAirPro-Light.eot');
+  src: url('fonts/CircularAirPro-Light.eot?#iefix') format('embedded-opentype'),
+  url('fonts/CircularAirPro-Light.woff') format('woff'),
+  url('fonts/CircularAirPro-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Circular Air Pro';
+  src: url('fonts/CircularAirPro-Medium.woff2') format('woff2'),
+  url('fonts/CircularAirPro-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Circular Air Pro';
+  src: url('fonts/CircularAirPro-Bold.eot');
+  src: url('fonts/CircularAirPro-Bold.eot?#iefix') format('embedded-opentype'),
+  url('fonts/CircularAirPro-Bold.woff') format('woff'),
+  url('fonts/CircularAirPro-Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Circular Air Pro';
+  src: url('fonts/CircularAirPro-Book.eot');
+  src: url('fonts/CircularAirPro-Book.eot?#iefix') format('embedded-opentype'),
+  url('fonts/CircularAirPro-Book.woff') format('woff'),
+  url('fonts/CircularAirPro-Book.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+// General
+@gutter: 16px;
+@gutterR: 1rem;
+@gutterE: 1em;
+@border-radius: 4px;
+@container-width: 1200px;
+@transition: all 0.25s ease-in-out;
+@box-shadow: 0 3px 7px 0 rgba(0,0,0,0.10);
+@drop-shadow: drop-shadow(0 3px 7px rgba(0,0,0,0.10));
+
+// Typography
+@font-family: 'Circular Air Pro', Arial, Helvetica, sans-serif;
+@line-height: 1.6;
+@font-size: 16px;
+
+// Colors
+@primary-color: #3ECF8E;
+@secondary-color: #4285F4;
+
+@green : #41D100;
+@orange: #FFB000;
+@teal: #00D1F7;
+@purple: #733DBE;
 
 @white: #fff;
-@black: #1a1a1a;
+@black: #000;
+@grey: #7F909F;
 @light-grey: #ccc;
 
-@body-color: #fafcff;
-@border-color: #eee;
+@body-color: #fff;
+@border-color: #EBEBEB;
+@border-color-alt: #E1E7F0;
+@text-color: #484848;
+@heading-color: @text-color;
 
-@primary-color: #9880ff;
-
-@warning: #FFCC00;
-@error: #FF2F00;
+@success: #4BB543;
+@warning: #fbb231;
+@error: #FF3000;
 
 // For Loading Indicator
 @dotWidth: 10px;
