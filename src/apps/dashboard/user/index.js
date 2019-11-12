@@ -36,7 +36,7 @@ export default function User ({ id }) {
   const { name, email } = result
 
   return (
-    <div key='user' className='container mt-2'>
+    <div key='user' className='container pt-7'>
       <Helmet
         title={name}
         meta={[

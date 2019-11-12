@@ -1,8 +1,8 @@
 import { ErrorOrHint } from '@app-elements/form'
 
-import './input.less'
+import './text-input.less'
 
-export const Input = ({
+export const TextInput = ({
   type = 'text',
   name,
   value,

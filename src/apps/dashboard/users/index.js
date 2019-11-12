@@ -25,7 +25,7 @@ const UserItem = ({ id, name, email }) =>
 // the endpoint to fetch results from, to limit the results to `10`, and
 // to render each result item with our `UserItem` component.
 const Users = () =>
-  <div className='container'>
+  <div className='container pt-7'>
     <ListResource
       endpoint={url('placeholder.users')}
       limit={10}
