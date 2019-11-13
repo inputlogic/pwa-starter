@@ -8,7 +8,7 @@ import Tooltip from '@app-elements/tooltip'
 import { showNotification } from '@app-elements/notification'
 
 import { Checkbox } from '/elements/checkbox'
-import { ElementHolder } from '/elements/element-holder'
+import { ElementHolder } from './elements/element-holder'
 import { Radio } from '/elements/radio'
 import { Select } from '/elements/select'
 import { TextArea } from '/elements/textarea'
