@@ -64,21 +64,12 @@
   opacity: 1;
 }
 
-.checkbox-component.label-top {
-  min-width: 1.5em;
-  text-align: center;
+.checkbox-row {
+  display: flex;
 
-  input[type="checkbox"] + label {
-    padding: 0;
-    font-size: .85em;
-    display: block;
-  }
-
-  input[type="checkbox"] + label::before,
-  [type="checkbox"] + label::after {
-    left: 0;
-    right: 0;
-    top: 1.7em;
-    margin: auto;
+  .checkbox-component {
+    & + .checkbox-component{
+      margin-left: .8rem;
+    }
   }
 }

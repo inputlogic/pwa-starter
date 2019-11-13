@@ -19,32 +19,6 @@ label {
   user-select: none;
 }
 
-.radio-component,
-.checkbox-component {
-  & + .select-wrap {
-    margin-top: @gutterE * 2.2;
-  }
-}
-
-.input-component,
-.radio-component,
-.textarea-component,
-.checkbox-component {
-  & + .field-hint {
-    margin: -1em 0 1em 0;
-  }
-}
-
-.checkbox-row {
-  display: flex;
-
-  .checkbox-component {
-    & + .checkbox-component{
-      margin-left: .8rem;
-    }
-  }
-}
-
 .field-hint {
   color: fade(@text-color, 40%);
   font-size: .74em;
@@ -71,6 +45,15 @@ label {
   }
 }
 
+.input-component,
+.radio-component,
+.textarea-component,
+.checkbox-component {
+  & + .field-hint {
+    margin: -1em 0 1em 0;
+  }
+}
+
 fieldset {
   padding: 0;
   margin: 0;
@@ -88,11 +71,3 @@ fieldset {
   }
 }
 
-.form-row {
-  display: flex;
-  align-items: center;
-
-  * + * {
-    margin-left: 1.5em;
-  }
-}
