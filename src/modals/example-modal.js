@@ -1,5 +1,7 @@
 import Modal from '@app-elements/modal'
 
+import { setState } from '/store'
+
 export default function ExampleModal () {
   return (
     <Modal className='styled-modal small'>
@@ -12,8 +14,8 @@ export default function ExampleModal () {
             <h3>Lorem ipsum dolor sit amet</h3>
           </div>
           <div className='actions centered'>
-            <button className='btn btn-ghost'>Cancel</button>
-            <button className='btn'>Yes</button>
+            <button onClick={ev => setState({ modal: null })} className='btn btn-ghost'>Cancel</button>
+            <button onClick={ev => setState({ modal: null })} className='btn'>Yes</button>
           </div>
         </div>
       </form>
