@@ -3,7 +3,7 @@ import { Link } from '@app-elements/router'
 
 export default function ForgotPassword ({ formProps, isSuccess }) {
   return (
-    <div className='container'>
+    <div className='container pt-7'>
       <h2>Forgot password</h2>
       {isSuccess
         ? <p>Please check your email to reset your password.</p>
