@@ -1,24 +1,30 @@
 import Form, { ErrorOrHint, SubmitButton } from '@app-elements/form'
 import { Link } from '@app-elements/router'
 
+import { Checkbox } from '/elements/checkbox'
+import { TextInput } from '/elements/text-input'
+
 export default function Login ({ formProps }) {
   return (
-    <div className='container'>
-      <h2>Log in</h2>
-      <Form {...formProps}>
-        <input type='text' name='email' placeholder='Your Email' required isFormField />
-        <input type='password' name='password' placeholder='Your Password' required isFormField />
-        <ErrorOrHint name='password' isFormField />
-        <input type='checkbox' name='remember' isFormField />
-        <SubmitButton>Login</SubmitButton>
-        <div>
-          <span className='field-hint'>
+    <div className='container pt-10'>
+      <div style={{ maxWidth: '320px' }}>
+        <h2>Log in</h2>
+        <Form {...formProps}>
+          <TextInput label='Email Address' name='email' placeholder='Your Email' required isFormField />
+          <TextInput type='password' label='Password Address' name='password' placeholder='Your Password' required isFormField />
+          <ErrorOrHint name='password' isFormField />
+          <Checkbox label='Stay Logged in' name='remember' id='remember' value='remember' isFormField />
+
+          <SubmitButton className='btn'>Login</SubmitButton>
+          <div className='pt-1'>
+            <span className='field-hint'>
             Need an account? <Link name='signup'>Sign Up</Link>.
-            <br />
-            <Link name='forgotPassword'>Forgot password?</Link>
-          </span>
-        </div>
-      </Form>
+              <br />
+              <Link name='forgotPassword'>Forgot password?</Link>
+            </span>
+          </div>
+        </Form>
+      </div>
     </div>
   )
 }
