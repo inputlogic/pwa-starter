@@ -29,8 +29,6 @@ export const routes = {
   }
 }
 
-console.log({ routes })
-
 export default function MainApp () {
   return (
     <div>
