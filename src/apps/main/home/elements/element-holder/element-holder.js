@@ -66,7 +66,7 @@ export const ElementHolder = ({ heading, children }) => {
     }
     return () => {
       if (refs.includes(ref.current)) {
-        refs = refs.reject(ref => ref === ref.current)
+        refs = refs.filter(ref => ref !== ref.current)
       }
     }
   }, [])
