@@ -1,3 +1,5 @@
+import { useState } from 'preact/hooks'
+
 import { setState } from '/store'
 import Avatar from '@app-elements/avatar'
 import Carousel from '@app-elements/carousel'
@@ -17,6 +19,25 @@ import { TextInput } from '/elements/text-input'
 const MyTrigger = ({ children, ...props }) =>
   <div {...props}>{children}</div>
 
+const Anchors = ({ anchors = ['Avatar', 'Button', 'Carousel', 'Dropdown', 'Form', 'Loading', 'Modal', 'Notification', 'Tooltip'] }) => {
+  const [activeAnchor, setAnchor] = useState(null)
+  return (
+    <ul>
+      {anchors.map(anchor =>
+        <li>
+          <a data-external-link
+            href={`#${anchor}`}
+            key={anchor}
+            onClick={() => { setAnchor(anchor) }}
+            className={`anchor ${activeAnchor === anchor ? 'active' : ''}`}
+          >
+            {anchor}</a>
+        </li>
+      )}
+    </ul>
+  )
+}
+
 export default function Home () {
   const openModal = (ev) => {
     ev.preventDefault()
@@ -28,17 +49,7 @@ export default function Home () {
       <div className='elements-wrapper'>
 
         <div className='legend'>
-          <ul>
-            <li><a data-external-link href='#Avatar'>Avatar</a></li>
-            <li><a data-external-link href='#Button'>Button</a></li>
-            <li><a data-external-link href='#Carousel'>Carousel</a></li>
-            <li><a data-external-link href='#Dropdown'>Dropdown</a></li>
-            <li><a data-external-link href='#Form'>Form</a></li>
-            <li><a data-external-link href='#Loading'>Loading</a></li>
-            <li><a data-external-link href='#Modal'>Modal</a></li>
-            <li><a data-external-link href='#Notification'>Notification</a></li>
-            <li><a data-external-link href='#Tooltip'>Tooltip</a></li>
-          </ul>
+          <Anchors />
         </div>
         <div className='elements-content'>
 
