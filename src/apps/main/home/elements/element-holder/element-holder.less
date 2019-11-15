@@ -1,0 +1,133 @@
+.element-holder {
+  height: 100vh;
+  display: flex;
+
+  .dropdown-menu li > a {
+    text-decoration: none;
+
+    &:hover {
+      background-color: @primary-color;
+    }
+  }
+
+  .lazy img {
+    width: 100%;
+    height: auto;
+  }
+
+  h2 {
+    font-size: 1.5em;
+    margin-bottom: 1em;
+  }
+
+  .inside {
+    margin: auto;
+    width: 100%;
+  }
+
+  .carousel {
+    padding: 0;
+
+    nav.prev,
+    nav.next, {
+      position: absolute;
+      top: 0;
+      z-index: 100;
+      top: 50%;
+      transform: translateY(-50%);
+
+      &.prev button {
+        background-image: url(/images/_temp/arrow-back.svg);
+      }
+
+      &.next button {
+        background-image: url(/images/_temp/arrow-forward.svg);
+      }
+
+      button {
+        outline: 0;
+        display: block;
+        height: 50px;
+        width: 50px;
+        cursor: pointer;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-color: transparent;
+        background-size: 100% 100%;
+        padding: 0;
+        filter: invert(1);
+        border: none;
+      }
+
+      &.prev {
+        left: 1em;
+      }
+
+      &.next {
+        right: 1em;
+      }
+    }
+
+    .level {
+      padding: 0;
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+
+    .carousel-inner {
+      position: relative;
+      grid-template-columns: auto;
+
+      .slides-wrapper {
+        .slides {
+          .carousel-slide {
+            opacity: 1;
+          }
+        }
+      }
+    }
+
+    .carousel-dots {
+      margin: 1em auto;
+
+      button {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: transparent;
+        border: 0;
+        text-indent: -9999px;
+        outline: none;
+        cursor: pointer;
+        color: transparent;
+        background-color: transparent;
+        overflow: visible;
+        margin: 0 .5em;
+
+        &::before {
+          width: 12px;
+          height: 12px;
+          content: '';
+          display: block;
+          background: @grey;
+          border-radius: 50%;
+        }
+
+        &.active {
+          background-color: transparent;
+
+          &::before {
+            background-color: @primary-color;
+          }
+        }
+      }
+    }
+  }
+
+  .carousel .carousel-inner .slides-wrapper .slides .carousel-slide {
+    transition: margin .5s cubic-bezier(0.46, 0.03, 0.52, 0.96);
+  }
+}

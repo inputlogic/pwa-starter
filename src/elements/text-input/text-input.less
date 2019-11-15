@@ -1,0 +1,39 @@
+.input-component {
+  position: relative;
+  margin-bottom: @gutterE * 1.1;
+
+  &.is-thin {
+    max-width: 3.5em;
+  }
+
+  label {
+    margin: 0 0 .75em 0;
+    display: block;
+    color: @text-color;
+    font-size: .95em;
+    letter-spacing: .05em;
+  }
+
+  input {
+    width: 100%;
+    padding: .65em .75em;
+    border: none;
+    outline: none;
+    border: 1px solid @border-color;
+    border-radius: @border-radius;
+    background-color: @white;
+    font-size: 1em;
+    font-family: @font-family;
+    -webkit-appearance: none;
+    color: @text-color;
+    font-weight: normal;
+
+    &:focus {
+      border: 1px solid @secondary-color;
+    }
+
+    &::placeholder {
+      color: @grey;
+    }
+  }
+}

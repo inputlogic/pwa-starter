@@ -1,20 +1,159 @@
-import { setState } from '/store'
+import { useMappedState } from '@app-elements/use-mapped-state'
+import { showNotification } from '@app-elements/notification'
+
+import Avatar from '@app-elements/avatar'
+import Carousel from '@app-elements/carousel'
+import Dropdown from '@app-elements/dropdown'
+import Image from '@app-elements/image'
+import LoadingIndicator from '@app-elements/loading-indicator'
+import Tooltip from '@app-elements/tooltip'
+
+import { Checkbox } from '/elements/checkbox'
+import { Radio } from '/elements/radio'
+import { Select } from '/elements/select'
+import { TextArea } from '/elements/textarea'
+import { TextInput } from '/elements/text-input'
+
+import { ElementHolder } from './elements/element-holder'
+
+import store from '/store'
+
+import './home.less'
+
+const anchors = ['Avatar', 'Button', 'Carousel', 'Dropdown', 'Form', 'Loading', 'Modal', 'Notification', 'Tooltip']
+const hashSelector = ({ currentHash }) => ({ currentHash })
+
+const Anchors = () => {
+  const { currentHash } = useMappedState(store, hashSelector)
+  return (
+    <ul>
+      {anchors.map(anchor =>
+        <li>
+          <a
+            data-external-link
+            key={anchor}
+            href={`#${anchor}`}
+            onClick={(ev) => {
+              ev.preventDefault()
+              store.setState({ currentHash: anchor })
+              window.location.hash = '#' + anchor
+            }}
+            className={`anchor ${currentHash === anchor ? 'active' : ''}`}
+          >
+            {anchor}
+          </a>
+        </li>
+      )}
+    </ul>
+  )
+}
 
 export default function Home () {
   const openModal = (ev) => {
     ev.preventDefault()
-    setState({ modal: 'ExampleModal' })
+    store.setState({ modal: 'ExampleModal' })
   }
   return (
-    <div>
-      <h1>PWA Starter</h1>
-      <p>
-        <button onClick={openModal}>Open Modal</button>
-      </p>
-      <img
-        src='https://camo.githubusercontent.com/974ab5e63b58eb0bb51ca21eb1b047e64ee0ea6d/68747470733a2f2f692e696d6775722e636f6d2f6b4a37673457472e6a7067'
-        alt='PWA Starter'
-      />
+    <div className='container'>
+      <div className='elements-wrapper'>
+        <div className='legend'>
+          <Anchors />
+        </div>
+
+        <div className='elements-content'>
+          <ElementHolder heading='Avatar'>
+            <div className='row'>
+              <Avatar
+                src='/images/_temp/avatar.png'
+                fullName='Chris Smith'
+                size='170'
+              />
+              <Avatar
+                fullName='Chris Smith'
+                size='170'
+              />
+            </div>
+          </ElementHolder>
+
+          <ElementHolder heading='Button'>
+            <div className='button-group'>
+              <button className='btn'>Primary</button>
+              <button className='btn btn-secondary'>Secondary</button>
+              <button className='btn btn-ghost'>Ghost</button>
+              <button className='btn btn-text'>Text</button>
+            </div>
+          </ElementHolder>
+
+          <ElementHolder heading='Carousel'>
+            <Carousel withDots>
+              <Image
+                srcs={[
+                  'https://source.unsplash.com/WLUHO9A_xik/200x133',
+                  'https://source.unsplash.com/WLUHO9A_xik/1200x800'
+                ]}
+              />
+              <Image
+                srcs={[
+                  'https://source.unsplash.com/WLUHO9A_xik/200x133',
+                  'https://source.unsplash.com/WLUHO9A_xik/1200x800'
+                ]}
+              />
+            </Carousel>
+          </ElementHolder>
+
+          <ElementHolder heading='Dropdown'>
+            <Dropdown uid='home-example'>
+              <ul>
+                <li><a href='#'>Account</a></li>
+                <li><a href='#'>Settings</a></li>
+                <li><a href='#'>Log Out</a></li>
+              </ul>
+            </Dropdown>
+          </ElementHolder>
+
+          <ElementHolder heading='Form'>
+            <form>
+              <TextInput label='Text Input' />
+              <Select name='select' label='Select'>
+                <option value='volvo'>Volvo</option>
+                <option value='saab'>Saab</option>
+                <option value='mercedes'>Mercedes</option>
+                <option value='audi'>Audi</option>
+              </Select>
+              <TextArea label='Textarea' />
+
+              <div className='form-row'>
+                <Radio label='Yes' name='name' id='cool' value='cool' />
+                <Radio label='No' name='name' id='cool1' value='cool1' />
+              </div>
+
+              <Checkbox label='Checkbox' name='nameo' id='x1' value='v3' />
+            </form>
+          </ElementHolder>
+
+          <ElementHolder heading='Loading'>
+            <LoadingIndicator />
+          </ElementHolder>
+
+          <ElementHolder heading='Modal'>
+            <button className='btn' onClick={openModal}>Open Modal</button>
+          </ElementHolder>
+
+          <ElementHolder heading='Notification'>
+            <button className='btn' onClick={ev => showNotification({ message: 'You Look Nice Today!' })}>Notify Me!</button>
+          </ElementHolder>
+
+          <ElementHolder heading='Tooltip'>
+            <div className='demo-tooltips'>
+              <Tooltip up text='This is your tooltip'>top</Tooltip>
+              <Tooltip right text='This is your tooltip'>right</Tooltip>
+              <Tooltip down text='This is your tooltip'>bottom</Tooltip>
+              <Tooltip left text='This is your tooltip'>left</Tooltip>
+            </div>
+          </ElementHolder>
+
+        </div>
+      </div>
     </div>
   )
 }

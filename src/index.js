@@ -20,7 +20,7 @@ import Router from '@app-elements/router'
 // Here, we import Components we want to render on *all* routes. For example,
 // we include a GlobalHeader, and a *NotFound* component which renders when no route is
 // matched. (If your app does not need these global elements, you can of course remove them.)
-import GlobalHeader from '/elements/global-header'
+import { GlobalHeader } from '/elements/global-header'
 import NotFound from '/elements/not-found'
 
 // And our apps' global store.
@@ -34,8 +34,14 @@ import store, { Provider } from '/store'
 // changing the way we write CSS.
 
 // In this case, we are loading the global styles.
-import '/styles/variables.less'
+import '/styles/reset.less'
 import '/styles/base.less'
+import '/styles/variables.less'
+import '/styles/typography.less'
+import '/styles/button.less'
+import '/styles/containers.less'
+import '/styles/modals.less'
+import '/styles/form.less'
 
 // ### Our top-level components
 

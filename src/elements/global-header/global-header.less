@@ -1,0 +1,75 @@
+.global-header {
+  margin-bottom: 3em;
+  height: 6em;
+  border-bottom: solid 1px @border-color;
+  background-color: #fff;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 200;
+
+  .clicks {
+    position: absolute;
+    left: 2.5em;
+    font-weight: bold;
+    color: #ccc;
+    z-index: 10;
+  }
+
+  .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+    z-index: 20;
+
+    .logo {
+      display: flex;
+      align-items: center;
+      z-index: 15;
+    }
+
+    h1 {
+      margin: 0 1.5em 0 0;
+    }
+  }
+
+  .user-actions {
+    display: flex;
+    align-items: center;
+
+    .avatar-wrap {
+      margin-left: 1.25em;
+    }
+  }
+
+  .nav {
+    margin: 0 0 0 2em;
+    z-index: 15;
+
+    li {
+      display: inline-block;
+      margin: 0;
+      list-style: none;
+      font-size: 1em;
+      font-weight: 500;
+
+      & + li {
+        margin-left: 2em;
+      }
+
+      a {
+        color: @text-color;
+        text-decoration: none;
+
+        &:hover,
+        &.active-link {
+          color: @primary-color;
+        }
+      }
+    }
+  }
+
+
+
+}

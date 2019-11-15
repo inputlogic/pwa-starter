@@ -1,0 +1,82 @@
+// General Form Styles
+@-webkit-keyframes autofill {
+  to {
+    color: #666;
+    background: @white;
+  }
+}
+
+input:-webkit-autofill {
+  -webkit-animation-name: autofill;
+  -webkit-animation-fill-mode: both;
+}
+
+form {
+  margin: 0;
+}
+
+label {
+  user-select: none;
+}
+
+.field-hint {
+  color: fade(@text-color, 40%);
+  font-size: .74em;
+  font-weight: normal;
+  display: block;
+
+  &:empty {
+    display: none;
+  }
+
+  &.is-error {
+    text-align: left;
+    color: @error;
+  }
+
+  &.center {
+    text-align: center;
+    margin: .5em 0;
+  }
+
+  a {
+    color: currentColor;
+    text-decoration: none;
+  }
+}
+
+.input-component,
+.radio-component,
+.textarea-component,
+.checkbox-component {
+  & + .field-hint {
+    margin: -1em 0 1em 0;
+  }
+}
+
+fieldset {
+  padding: 0;
+  margin: 0;
+  margin-bottom: @gutterE * 1;
+  margin-top: @gutterE * 2;
+
+  legend {
+    font-weight: 600;
+    color: @text-color;
+    font-size: .889em;
+    margin-bottom: @gutterE * 2.5;
+    padding-bottom: @gutterE;
+    border-bottom: solid 1px @border-color;
+    width: 100%;
+  }
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+
+  * + * {
+    margin-left: 1.5em;
+  }
+}
+

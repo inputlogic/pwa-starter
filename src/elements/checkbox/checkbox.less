@@ -1,0 +1,75 @@
+@check-size: 1.75rem;
+
+.checkbox-component {
+  margin-bottom: @gutterE * 1.1;
+  color: @text-color;
+}
+
+.checkbox-component input[type="checkbox"] {
+  position: absolute;
+  left: -9999px;
+}
+
+.checkbox-component input[type="checkbox"] + label {
+  position: relative;
+  padding-left: @check-size * 1.5;
+  cursor: pointer;
+  text-transform: none;
+  font-weight: normal;
+  letter-spacing: unset;
+  margin: 0;
+  padding-left: @check-size * 1.5;
+  font-size: @check-size / 1.8;
+  font-weight: normal;
+  display: inline-block;
+}
+
+.checkbox-component:hover {
+  input[type="checkbox"] + label::before,
+  [type="checkbox"] + label::after {
+    border-color: @secondary-color;
+  }
+}
+
+.checkbox-component input[type="checkbox"] + label::before,
+.checkbox-component [type="checkbox"] + label::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: @white;
+  border: 1px solid @border-color;
+  width: @check-size;
+  height: @check-size;
+  border-radius: 4px;
+  color: @white;
+  display: block;
+}
+
+.checkbox-component [type="checkbox"] + label::after {
+  background-image: url(/images/controls/check.svg);
+  background-repeat: no-repeat;
+  background-size: 75% 75%;
+  background-color: @secondary-color;
+  transition: all .2s;
+  background-position: center center;
+  border-color: @secondary-color;
+}
+
+.checkbox-component input[type="checkbox"]:not(:checked) + label::after {
+  opacity: 0;
+}
+
+.checkbox-component input[type="checkbox"]:checked + label::after {
+  opacity: 1;
+}
+
+.checkbox-row {
+  display: flex;
+
+  .checkbox-component {
+    & + .checkbox-component{
+      margin-left: .8rem;
+    }
+  }
+}

@@ -1,0 +1,50 @@
+.container {
+  margin-right: auto;
+  margin-left: auto;
+  max-width: @container-width;
+  width: 94%;
+  position: relative;
+
+  .dot-flashing {
+    margin: 0 auto;
+  }
+}
+
+@iterations: 50;
+
+//margin-top helper class
+.mt-loop (@i) when (@i > 0) {
+  .mt-@{i} {
+    margin-top: ~"@{i}em";
+  }
+  .mt-loop(@i - 1);
+}
+.mt-loop (@iterations);
+
+//margin-bottom helper class
+.mb-loop (@i) when (@i > 0) {
+  .mb-@{i} {
+    margin-bottom: ~"@{i}em";
+  }
+  .mb-loop(@i - 1);
+}
+.mb-loop (@iterations);
+
+//padding-top helper class
+.pt-loop (@i) when (@i > 0) {
+  .pt-@{i} {
+    padding-top: ~"@{i}em";
+  }
+  .pt-loop(@i - 1);
+}
+.pt-loop (@iterations);
+
+//padding-bottom helper class
+.pb-loop (@i) when (@i > 0) {
+  .pb-@{i} {
+    padding-bottom: ~"@{i}em";
+  }
+  .pb-loop(@i - 1);
+}
+.pb-loop (@iterations);
+

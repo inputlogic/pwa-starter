@@ -24,7 +24,7 @@ export default function User ({ id }) {
   const { result, error, isLoading } = useRequest(store, url('placeholder.user', { args: { id } }))
 
   if (isLoading) {
-    return <LoadingIndicator />
+    return <div className='container mt-2'><LoadingIndicator /></div>
   }
 
   if (error != null) {
@@ -36,7 +36,7 @@ export default function User ({ id }) {
   const { name, email } = result
 
   return (
-    <div key='user'>
+    <div key='user' className='container pt-7'>
       <Helmet
         title={name}
         meta={[
