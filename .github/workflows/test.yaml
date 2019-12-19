@@ -1,0 +1,44 @@
+name: npm-test
+
+on:
+  # Trigger the workflow on push or pull request,
+  # but only for branches other than master
+  push:
+    branches-ignore:
+      - master
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+  pull_request:
+    branches-ignore:
+      - master
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+
+jobs:
+  build:
+    name: test
+
+    strategy:
+      matrix:
+        runs-on: [ubuntu-latest, macOS-latest]
+      fail-fast: false
+
+    runs-on: ${{ matrix.runs-on }}
+
+    steps:
+    - name: checkout
+      uses: actions/checkout@v1
+
+    - name: setup node 12.x
+      uses: actions/setup-node@master
+      with:
+        node-version: 12.x
+
+    - name: npm install
+      run: npm install
+
+    - name: npm test
+      run: npm run test
+
