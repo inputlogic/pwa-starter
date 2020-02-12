@@ -9,9 +9,11 @@ const enforceHttps = (req, res, next) => {
   // The 'x-forwarded-proto' check is for Heroku
   const proto = req.headers['x-forwarded-proto']
   if (!req.secure && proto !== 'https' && process.env.NODE_ENV !== 'development') {
-    return res.redirect('https://' + req.headers.host + req.url)
+    res.writeHead(301, { Location: 'https://' + req.headers.host + req.url })
+    res.end()
+  } else {
+    next()
   }
-  next()
 }
 
 const assets = sirv('public', {
