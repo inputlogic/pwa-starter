@@ -46,6 +46,7 @@
   "dependencies": {
     "@app-elements/avatar": "1.1.1",
     "@app-elements/carousel": "1.2.2",
+    "@app-elements/date-picker": "0.1.0",
     "@app-elements/dropdown": "3.0.0",
     "@app-elements/form": "2.2.0",
     "@app-elements/helmet": "2.1.0",
