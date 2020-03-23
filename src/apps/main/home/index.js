@@ -3,6 +3,7 @@ import { showNotification } from '@app-elements/notification'
 
 import Avatar from '@app-elements/avatar'
 import Carousel from '@app-elements/carousel'
+import { DatePicker, DateRangePicker } from '@app-elements/date-picker'
 import Dropdown from '@app-elements/dropdown'
 import Image from '@app-elements/image'
 import LoadingIndicator from '@app-elements/loading-indicator'
@@ -20,11 +21,22 @@ import store from '/store'
 
 import './home.less'
 
-const anchors = ['Avatar', 'Button', 'Carousel', 'Dropdown', 'Form', 'Loading', 'Modal', 'Notification', 'Tooltip']
-const hashSelector = ({ currentHash }) => ({ currentHash })
+const anchors = [
+  'Avatar',
+  'Button',
+  'Carousel',
+  'Dropdown',
+  'DatePicker',
+  'DateRangePicker',
+  'Form',
+  'Loading',
+  'Modal',
+  'Notification',
+  'Tooltip'
+]
 
 const Anchors = () => {
-  const { currentHash } = useMappedState(store, hashSelector)
+  const currentHash = useMappedState(store, ({ currentHash }) => currentHash)
   return (
     <ul>
       {anchors.map(anchor =>
@@ -49,6 +61,24 @@ const Anchors = () => {
 }
 
 export default function Home () {
+  const {
+    selectedDate,
+    startDate,
+    endDate
+  } = useMappedState(store, state => ({
+    selectedDate: state.selectedDate,
+    startDate: state.startDate,
+    endDate: state.endDate
+  }))
+  const onDateRange = ({ startDate, endDate }) => {
+    if (startDate != null) {
+      store.setState({ startDate: startDate.getTime() })
+    } else if (endDate != null) {
+      store.setState({ endDate: endDate.getTime() })
+    } else if (startDate == null && endDate == null) {
+      store.setState({ startDate, endDate })
+    }
+  }
   const openModal = (ev) => {
     ev.preventDefault()
     store.setState({ modal: 'ExampleModal' })
@@ -109,6 +139,25 @@ export default function Home () {
                 <li><a href='#'>Log Out</a></li>
               </ul>
             </Dropdown>
+          </ElementHolder>
+
+          <ElementHolder heading='DatePicker'>
+            <div style={{ maxWidth: 400 }}>
+              <DatePicker
+                selectedDate={selectedDate}
+                onChange={day => store.setState({ selectedDate: day.getTime() })}
+              />
+            </div>
+          </ElementHolder>
+
+          <ElementHolder heading='DateRangePicker'>
+            <div style={{ maxWidth: 400 }}>
+              <DateRangePicker
+                startDate={startDate}
+                endDate={endDate}
+                onChange={onDateRange}
+              />
+            </div>
           </ElementHolder>
 
           <ElementHolder heading='Form'>
