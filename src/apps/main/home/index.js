@@ -3,7 +3,7 @@ import { showNotification } from '@app-elements/notification'
 
 import Avatar from '@app-elements/avatar'
 import Carousel from '@app-elements/carousel'
-import { DatePicker } from '@app-elements/date-picker'
+import { DatePicker, DateRangePicker } from '@app-elements/date-picker'
 import Dropdown from '@app-elements/dropdown'
 import Image from '@app-elements/image'
 import LoadingIndicator from '@app-elements/loading-indicator'
@@ -27,6 +27,7 @@ const anchors = [
   'Carousel',
   'Dropdown',
   'DatePicker',
+  'DateRangePicker',
   'Form',
   'Loading',
   'Modal',
@@ -60,7 +61,24 @@ const Anchors = () => {
 }
 
 export default function Home () {
-  const selectedDate = useMappedState(store, ({ selectedDate }) => selectedDate)
+  const {
+    selectedDate,
+    startDate,
+    endDate
+  } = useMappedState(store, state => ({
+    selectedDate: state.selectedDate,
+    startDate: state.startDate,
+    endDate: state.endDate
+  }))
+  const onDateRange = ({ startDate, endDate }) => {
+    if (startDate != null) {
+      store.setState({ startDate: startDate.getTime() })
+    } else if (endDate != null) {
+      store.setState({ endDate: endDate.getTime() })
+    } else if (startDate == null && endDate == null) {
+      store.setState({ startDate, endDate })
+    }
+  }
   const openModal = (ev) => {
     ev.preventDefault()
     store.setState({ modal: 'ExampleModal' })
@@ -128,6 +146,16 @@ export default function Home () {
               <DatePicker
                 selectedDate={selectedDate}
                 onChange={day => store.setState({ selectedDate: day.getTime() })}
+              />
+            </div>
+          </ElementHolder>
+
+          <ElementHolder heading='DateRangePicker'>
+            <div style={{ maxWidth: 400 }}>
+              <DateRangePicker
+                startDate={startDate}
+                endDate={endDate}
+                onChange={onDateRange}
               />
             </div>
           </ElementHolder>
