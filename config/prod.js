@@ -1,3 +1,6 @@
+import { resolve as pathResolve } from 'path'
+import { readFile, writeFile } from 'fs'
+
 import minify from 'rollup-plugin-babel-minify'
 
 import baseConfig from './base'
@@ -32,8 +35,16 @@ function cacheBuster ({ count, uid }) {
     writeBundle (opts) {
       c++
       if (c === count) {
-        const filename = Object.keys(opts)[0]
-        console.log('!!! REPLACE', filename)
+        return new Promise((resolve, reject) => {
+          const filename = Object.keys(opts)[0]
+          const file = pathResolve('public', 'index.html')
+          readFile(file, 'utf8', (err, data) => {
+            if (err) return console.log(err)
+            writeFile(file, data.replace(/index\.js/g, filename), (err) => {
+              if (err) return console.log(err)
+            })
+          })
+        })
       }
       return null
     }
