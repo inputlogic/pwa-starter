@@ -59,6 +59,7 @@
     "@app-elements/tooltip": "2.0.0",
     "@app-elements/use-mapped-state": "0.3.2",
     "@app-elements/use-request": "1.6.0",
+    "@app-elements/use-variant-state": "0.1.0",
     "@wasmuth/path-reducer": "0.1.6",
     "atom": "1.4.1",
     "compression": "1.7.4",

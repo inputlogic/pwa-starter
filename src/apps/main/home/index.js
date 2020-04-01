@@ -5,6 +5,7 @@ import Avatar from '@app-elements/avatar'
 import Carousel from '@app-elements/carousel'
 import { DatePicker, DateRangePicker } from '@app-elements/date-picker'
 import Dropdown from '@app-elements/dropdown'
+import { FileUpload } from '/elements/file-upload'
 import Image from '@app-elements/image'
 import LoadingIndicator from '@app-elements/loading-indicator'
 import Tooltip from '@app-elements/tooltip'
@@ -28,6 +29,7 @@ const anchors = [
   'Dropdown',
   'DatePicker',
   'DateRangePicker',
+  'FileUpload',
   'Form',
   'Loading',
   'Modal',
@@ -156,6 +158,21 @@ export default function Home () {
                 startDate={startDate}
                 endDate={endDate}
                 onChange={onDateRange}
+              />
+            </div>
+          </ElementHolder>
+
+          <ElementHolder heading='FileUpload'>
+            <div>
+              <FileUpload
+                Initial={({ FileInput }) => <FileInput label='Upload Image' />}
+                Uploading={({ files }) => (
+                  <div>
+                    Uploading {files.length} file{files.length === 1 ? '' : 's'}
+                    &nbsp;
+                    <LoadingIndicator />
+                  </div>  
+                )}
               />
             </div>
           </ElementHolder>
