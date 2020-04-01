@@ -15,7 +15,7 @@
     "prebuild": "npm run test",
     "build": "rollup -c config/prod.js",
     "postbuild": "react-snap",
-    "prelint": "rm -rf public; mkdir public; cp -r src/assets/* public/; cp -r src/assets/* public/",
+    "prelint": "rm -rf public; mkdir public; cp -r src/assets/* public/",
     "lint": "standard --verbose --parser babel-eslint | snazzy",
     "pretest": "npm run lint",
     "test": "exit 0",
