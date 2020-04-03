@@ -17,6 +17,7 @@ export default [
     namespace: 'api',
     url: API_URL,
     routes: {
+      me: '/me',
       users: '/users',
       user: '/users/:id'
     }
