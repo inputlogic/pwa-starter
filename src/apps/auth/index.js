@@ -5,7 +5,7 @@ import url from '/util/url'
 import Login from './login'
 import SignUp from './signup'
 import ForgotPassword from './forgot-password'
-// import ResetPassword from './reset-password'
+import ResetPassword from './reset-password'
 
 export const routes = {
   login: {
@@ -19,11 +19,11 @@ export const routes = {
   forgotPassword: {
     path: url('forgotPassword'),
     component: ForgotPassword
+  },
+  resetPassword: {
+    path: url('resetPassword'),
+    component: ResetPassword
   }
-  //  resetPassword: {
-  //    path: url('resetPassword'),
-  //    component: ResetPassword
-  //  }
 }
 
 export default function AuthApp () {
