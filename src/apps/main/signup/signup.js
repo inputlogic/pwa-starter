@@ -1,4 +1,4 @@
-import Form, { ErrorOrHint, SubmitButton } from '@app-elements/form'
+import Form, { SubmitButton } from '@app-elements/form'
 import { Link } from '@app-elements/router'
 
 import { TextInput } from '/elements/text-input'
@@ -11,7 +11,6 @@ export default function SignUp ({ formProps }) {
         <Form {...formProps}>
           <TextInput label='Email Address' name='email' placeholder='Your Email' required isFormField />
           <TextInput type='password' label='Password Address' name='password' placeholder='Your Password' required isFormField />
-          <ErrorOrHint name='password' isFormField />
           <SubmitButton className='btn'>SignUp</SubmitButton>
           <div className='pt-1'>
             <span className='field-hint'>

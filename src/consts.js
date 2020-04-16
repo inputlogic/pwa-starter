@@ -1,7 +1,7 @@
 import { environment } from '/util/environments'
 
 export const DEBUG = typeof window !== 'undefined'
-  ? (window.location.hostname.indexOf('local') > -1 || window.location.hostname.indexOf('192.168.1.90') > -1)
+  ? (window.location.hostname.indexOf('local') > -1)
   : process.env.NODE_ENV !== 'production'
 
 export const WEB_URL = (function () {
@@ -23,5 +23,3 @@ export const API_URL = {
 }[environment]
 
 export const HEADLESS = navigator.userAgent === 'ReactSnap'
-
-console.log({ environment, HEADLESS, WEB_URL, API_URL })

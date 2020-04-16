@@ -1,7 +1,7 @@
-import Form, { ErrorOrHint, SubmitButton } from '@app-elements/form'
+import Form, { SubmitButton } from '@app-elements/form'
 import { Link } from '@app-elements/router'
 
-import { Checkbox } from '/elements/checkbox'
+// import { Checkbox } from '/elements/checkbox'
 import { TextInput } from '/elements/text-input'
 
 export default function Login ({ formProps }) {
@@ -12,16 +12,15 @@ export default function Login ({ formProps }) {
         <Form {...formProps}>
           <TextInput label='Email Address' name='email' placeholder='Your Email' required isFormField />
           <TextInput type='password' label='Password Address' name='password' placeholder='Your Password' required isFormField />
-          <ErrorOrHint name='password' isFormField />
-          <Checkbox label='Stay Logged in' name='remember' id='remember' value='remember' isFormField />
+          {/* <Checkbox label='Stay Logged in' name='remember' id='remember' value='remember' isFormField /> */}
 
           <SubmitButton className='btn'>Login</SubmitButton>
           <div className='pt-1'>
-            <span className='field-hint'>
-            Need an account? <Link name='signup'>Sign Up</Link>.
+            <div className='field-hint'>
+              Need an account? <Link name='signup'>Sign Up</Link>.
               <br />
               <Link name='forgotPassword'>Forgot password?</Link>
-            </span>
+            </div>
           </div>
         </Form>
       </div>
