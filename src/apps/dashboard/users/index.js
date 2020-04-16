@@ -27,7 +27,7 @@ const UserItem = ({ id, name, email }) =>
 const Users = () =>
   <div className='container pt-7 pb-4'>
     <ListResource
-      endpoint={url('placeholder.users')}
+      endpoint={url('api.users')}
       limit={10}
       render={UserItem}
     />
