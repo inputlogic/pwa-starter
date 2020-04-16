@@ -21,7 +21,7 @@ import { WEB_URL } from '/consts'
 
 // Here is our page component which will use the `useRequest` hook.
 export default function User ({ id }) {
-  const { result, error, isLoading } = useRequest(store, url('placeholder.user', { args: { id } }))
+  const { result, error, isLoading } = useRequest(store, url('api.user', { args: { id } }))
 
   if (isLoading) {
     return <div className='container mt-2'><LoadingIndicator /></div>

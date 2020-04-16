@@ -49,6 +49,7 @@ import '/styles/form.less'
 // ### Our top-level components
 
 import Main, { routes as mainRoutes } from '/apps/main'
+import Auth, { routes as authRoutes } from '/apps/auth'
 import Dashboard, { routes as dashboardRoutes } from '/apps/dashboard'
 
 // Define our top-level routes
@@ -56,6 +57,10 @@ const routes = {
   main: {
     routes: mainRoutes,
     component: Main
+  },
+  auth: {
+    routes: authRoutes,
+    component: Auth
   },
   dashboard: {
     routes: dashboardRoutes,
