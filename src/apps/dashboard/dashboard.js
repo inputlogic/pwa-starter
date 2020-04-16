@@ -4,7 +4,7 @@ import { showNotification } from '@app-elements/notification'
 import { getState, logout } from '/store'
 import { routes } from './index'
 
-const DashboardHeader = () =>
+const DashboardFooter = () =>
   <header className='container'>
     <Link name='users'>Users</Link>&nbsp;
     <button onClick={ev => logout()}>Logout</button>
@@ -18,8 +18,8 @@ export default function DashboardApp () {
   }
   return (
     <div id='dashboard-layout'>
-      <DashboardHeader />
       <Router routes={routes} />
+      <DashboardFooter />
     </div>
   )
 }
