@@ -11,7 +11,7 @@ export default function Login ({ formProps }) {
         <h2>Log in</h2>
         <Form {...formProps}>
           <TextInput label='Email Address' name='email' placeholder='Your Email' required isFormField />
-          <TextInput type='password' label='Password Address' name='password' placeholder='Your Password' required isFormField />
+          <TextInput type='password' label='Password' name='password' placeholder='Your Password' required isFormField />
           {/* <Checkbox label='Stay Logged in' name='remember' id='remember' value='remember' isFormField /> */}
 
           <SubmitButton className='btn'>Login</SubmitButton>

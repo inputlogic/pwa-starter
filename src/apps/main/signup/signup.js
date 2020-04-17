@@ -10,7 +10,7 @@ export default function SignUp ({ formProps }) {
         <h2>Sign up</h2>
         <Form {...formProps}>
           <TextInput label='Email Address' name='email' placeholder='Your Email' required isFormField />
-          <TextInput type='password' label='Password Address' name='password' placeholder='Your Password' required isFormField />
+          <TextInput type='password' label='Password' name='password' placeholder='Your Password' required isFormField />
           <SubmitButton className='btn'>SignUp</SubmitButton>
           <div className='pt-1'>
             <span className='field-hint'>
