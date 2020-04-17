@@ -9,7 +9,7 @@ export default function ForgotPassword () {
 
   const formProps = useMemo(() => ({
     name: 'ForgotPassword',
-    action: url('mock.forgotPassword'),
+    action: url('api.forgotPassword'),
     method: 'post',
     noAuth: true,
     onSuccess: () => {

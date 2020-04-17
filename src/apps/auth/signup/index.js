@@ -21,7 +21,7 @@ export default function SignUp () {
   // props you can pass, see the [`<Form />` docs](https://github.com/inputlogic/elements/tree/master/components/form)
   const formProps = useMemo(() => ({
     name: 'SignUp',
-    action: url('mock.signup'),
+    action: url('api.signup'),
     method: 'post',
     noAuth: true,
     validations: {

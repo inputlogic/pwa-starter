@@ -17,7 +17,7 @@ const PROTOCOL = window.location.protocol
 
 export const API_URL = {
   test: '',
-  development: `${PROTOCOL}//pwa-starter-api-dev.herokuapp.com`,
+  development: `${PROTOCOL}//localhost:8000`,
   staging: `${PROTOCOL}//pwa-starter-api-dev.herokuapp.com`,
   production: `${PROTOCOL}//api.pwa-starter.co`
 }[environment]
