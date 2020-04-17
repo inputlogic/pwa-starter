@@ -1,7 +1,7 @@
 import connect from '@app-elements/connect'
 
 const Base = () =>
-  <div>
+  <div className='container pt-10'>
     Not Found :(
   </div>
 
