@@ -50,7 +50,7 @@ import '/styles/form.less'
 
 import Main, { routes as mainRoutes } from '/apps/main'
 import Auth, { routes as authRoutes } from '/apps/auth'
-import Dashboard, { routes as dashboardRoutes } from '/apps/dashboard'
+import Users, { routes as usersRoutes } from '/apps/users'
 
 // Define our top-level routes
 const routes = {
@@ -62,9 +62,9 @@ const routes = {
     routes: authRoutes,
     component: Auth
   },
-  dashboard: {
-    routes: dashboardRoutes,
-    component: Dashboard
+  users: {
+    routes: usersRoutes,
+    component: Users
   }
 }
 

@@ -19,7 +19,7 @@ export const GlobalHeader = connect({
         <h1>PWA {clicks >= 1 && <span className='clicks'>{clicks}</span>}</h1>
         <ul className='nav'>
           <li><Link name='home' activeClass='active-link'>Main App</Link></li>
-          <li><Link name='users' activeClass='active-link'>Dashboard App</Link></li>
+          <li><Link name='users' activeClass='active-link'>Users</Link></li>
           <li><button onClick={increment}>+</button></li>
         </ul>
 

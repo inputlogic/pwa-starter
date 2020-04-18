@@ -4,13 +4,13 @@ import { showNotification } from '@app-elements/notification'
 import { getState, logout } from '/store'
 import { routes } from './index'
 
-const DashboardFooter = () =>
+const UserDashboardFooter = () =>
   <header className='container'>
     <Link name='users'>Users</Link>&nbsp;
     <button onClick={ev => logout()}>Logout</button>
   </header>
 
-export default function DashboardApp () {
+export default function UserDashboardApp () {
   const { token } = getState()
   if (token == null) {
     showNotification({ message: 'Please login to view that page.' })
@@ -19,7 +19,7 @@ export default function DashboardApp () {
   return (
     <div id='dashboard-layout'>
       <Router routes={routes} />
-      <DashboardFooter />
+      <UserDashboardFooter />
     </div>
   )
 }

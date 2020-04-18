@@ -14,8 +14,8 @@ export const routes = {
   }
 }
 
-const LazyDashboard = asyncComponent(() =>
+const LazyUserDashboard = asyncComponent(() =>
   import('./dashboard.js').then(m => m.default)
 )
 
-export default LazyDashboard
+export default LazyUserDashboard
