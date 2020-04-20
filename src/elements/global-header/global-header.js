@@ -1,18 +1,18 @@
 import Avatar from '@app-elements/avatar'
-import connect from '@app-elements/connect'
 import { Link } from '@app-elements/router'
+import { useMappedState } from '@app-elements/use-mapped-state'
 
 import './global-header.less'
 
-export const GlobalHeader = connect({
-  name: 'GlobalHeader',
-  withActions: {
-    increment: ({ clicks }) => ({ clicks: (clicks || 0) + 1 })
-  },
-  withState: ({ clicks }) => ({ clicks })
-})(({ clicks, increment }) => (
-  <header class='global-header'>
+function GlobalHeader () {
+  const clicks = useMappedState(
+    this.context.store,
+    ({ clicks }) => clicks
+  )
 
+  const increment = () => this.context.store.setState({ clicks: clicks + 1 })
+
+  return <header class='global-header'>
     <div className='container'>
 
       <div className='logo'>
@@ -22,18 +22,17 @@ export const GlobalHeader = connect({
           <li><Link name='users' activeClass='active-link'>Dashboard App</Link></li>
           <li><button onClick={increment}>+</button></li>
         </ul>
-
       </div>
 
       <div className='user-actions'>
-
         <Avatar
           src='/images/_temp/avatar.png'
           fullName='John Smith'
-
         />
-
       </div>
+
     </div>
   </header>
-))
+}
+
+export { GlobalHeader }
