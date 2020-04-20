@@ -1,15 +1,16 @@
-import connect from '@app-elements/connect'
+import { useMappedState } from '@app-elements/use-mapped-state'
+
+import store from '/store'
 
 const Base = () =>
   <div className='container pt-10'>
     Not Found :(
   </div>
 
-const NotFound = connect({
-  name: 'NotFound',
-  withState: ({ currentRoute }) => ({ currentRoute })
-})(({ currentRoute }) =>
-  !currentRoute ? Base() : null
-)
+const NotFound = () => {
+  const currentRoute = useMappedState(store, ({ currentRoute }) => currentRoute)
+
+  return !currentRoute ? Base() : null
+}
 
 export default NotFound
