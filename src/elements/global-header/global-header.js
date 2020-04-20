@@ -2,12 +2,17 @@ import Avatar from '@app-elements/avatar'
 import { Link } from '@app-elements/router'
 import { useMappedState } from '@app-elements/use-mapped-state'
 
-import store from '/store'
-
 import './global-header.less'
 
-const Base = ({ clicks, increment }) =>
-  <header class='global-header'>
+function GlobalHeader () {
+  const clicks = useMappedState(
+    this.context.store,
+    ({ clicks }) => clicks
+  )
+
+  const increment = () => this.context.store.setState({ clicks: clicks + 1 })
+
+  return <header class='global-header'>
     <div className='container'>
 
       <div className='logo'>
@@ -28,11 +33,6 @@ const Base = ({ clicks, increment }) =>
 
     </div>
   </header>
-
-export const GlobalHeader = () => {
-  const clicks = useMappedState(store, ({ clicks }) => clicks)
-
-  const increment = () => store.setState({ clicks: clicks + 1 })
-
-  return Base({ clicks, increment })
 }
+
+export { GlobalHeader }
