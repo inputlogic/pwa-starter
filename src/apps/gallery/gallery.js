@@ -19,7 +19,7 @@ import { ElementHolder } from './elements/element-holder'
 
 import store from '/store'
 
-import './home.less'
+import './gallery.less'
 
 const anchors = [
   'Avatar',
@@ -60,7 +60,7 @@ const Anchors = () => {
   )
 }
 
-export default function Home () {
+export default function Gallery () {
   const {
     selectedDate,
     startDate,
@@ -132,7 +132,7 @@ export default function Home () {
           </ElementHolder>
 
           <ElementHolder heading='Dropdown'>
-            <Dropdown uid='home-example'>
+            <Dropdown uid='gallery-example'>
               <ul>
                 <li><a href='#'>Account</a></li>
                 <li><a href='#'>Settings</a></li>

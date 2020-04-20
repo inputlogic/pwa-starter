@@ -6,6 +6,7 @@ export default [
     url: '',
     routes: {
       home: '/',
+      gallery: '/elements-gallery',
       login: '/login',
       signup: '/signup',
       forgotPassword: '/forgot-password',
