@@ -11,10 +11,10 @@ const UserDashboardFooter = () =>
   </header>
 
 export default function UserDashboardApp () {
-  const { token } = getState()
+  const { token, currentPath } = getState()
   if (token == null) {
     showNotification({ message: 'Please login to view that page.' })
-    return <RouteTo name='login' />
+    return <RouteTo name='login' queries={{ next: currentPath }} />
   }
   return (
     <div id='dashboard-layout'>
