@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="#"><img src="https://i.imgur.com/kJ7g4WG.jp" alt="PWA Starter Logo" /></a>
+  <a href="#"><img src="https://i.imgur.com/kJ7g4WG.jpg" alt="PWA Starter Logo" /></a>
 </p>
 
 **PWA-Starter** is a project skeleton for building Single Page Apps and/or
