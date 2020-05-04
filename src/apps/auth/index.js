@@ -26,10 +26,10 @@ export const routes = {
   }
 }
 
+const AuthTree = (
+  <Router routes={routes} />
+)
+
 export default function AuthApp () {
-  return (
-    <div>
-      <Router routes={routes} />
-    </div>
-  )
+  return AuthTree
 }
