@@ -1,23 +1,20 @@
-![PWA Starter](https://i.imgur.com/kJ7g4WG.jpg)
-
 **PWA-Starter** is a project skeleton for building Single Page Apps and/or
 Progressive Web Apps.
 
 The key technology to be familiar with is React. This skeleton embraces
 component based architecture, and tries to introduce very few libraries
-where an API needs to be learned or memorized. To facilitate this, we
-embrace [Higher Order Components](https://reactjs.org/docs/higher-order-components.html) (HoC) and [renderProps](https://reactjs.org/docs/render-props.html#use-render-props-for-cross-cutting-concerns). You should be familiar
-with both terms, along with General [React](https://reactjs.org/docs/thinking-in-react.html) and [JSX](https://reactjs.org/docs/introducing-jsx.html) knowledge.
+where an API needs to be learned or memorized. You should have a strong understanding of [React](https://reactjs.org/docs/thinking-in-react.html) and [Hooks](https://reactjs.org/docs/hooks-intro.html).
 
 #### Example Deployments
 
 - [https://pwa-starter.netlify.com/](https://pwa-starter.netlify.com/)
 - [https://pwa-starter.herokuapp.com/](https://pwa-starter.herokuapp.com/)
 
-Focus
-=====
+Features
+========
 
-- Small bundle size
+- Small bundle size [Why Preact over React?](https://gist.github.com/staydecent/9c43364c8f52e944fdb1100bcc4bae82)
+- Pre-rendered pages (via [React Snap](https://github.com/stereobooster/react-snap))
 - Efficient networking
 - Speedy development
 - *Simplicity*
@@ -26,25 +23,17 @@ Simplicity
 ==========
 
 Simplicity is **always** encouraged. Generally, this means Components
-that do one thing. For example, the [WithRequest](/hoc/WithRequest.html)
-HoC, only manages one request. It could be modified in order to handle
-multiple requests, but you're encouraged to build Components that handle
-one resource.
+that do one thing. If you component definition is getting dense, think about how you can break it up into smaller components, or move functionality into a Hook.
 
 Documentation
 =============
 
-[http://pwa-starter.surge.sh/](http://pwa-starter.surge.sh/)
+**PWA-Starter** is mostly just folder structure. The basic concepts you _need_ to understand are actually broken into three main components/hooks:
 
-To enable/configure PWA features (including icons), follow [this guide](https://developers.google.com/web/fundamentals/codelabs/your-first-pwapp/#support_native_integration).
+- [Routing](https://github.com/inputlogic/elements/tree/master/components/router)
+- [Global State](https://github.com/inputlogic/elements/tree/master/components/use-mapped-state)
+- [Making Requests](https://github.com/inputlogic/elements/tree/master/components/use-request)
 
-[React Style Guide](https://github.com/inputlogic/styleguides/blob/master/react.md)
-
-[Why Preact over React?](https://gist.github.com/staydecent/9c43364c8f52e944fdb1100bcc4bae82)
-
-[Hooks Intro](https://reactjs.org/docs/hooks-intro.html)
-
-[Thinking in React](https://reactjs.org/docs/thinking-in-react.html)
 
 Deploying
 =========
