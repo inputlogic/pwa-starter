@@ -8,7 +8,8 @@ const port = process.env.PORT || 5000
 const enforceHttps = (req, res, next) => {
   // The 'x-forwarded-proto' check is for Heroku
   const proto = req.headers['x-forwarded-proto']
-  if (!req.secure && proto !== 'https' && process.env.NODE_ENV !== 'development') {
+  const isLocal = req.headers.host.includes('localhost')
+  if (!req.secure && !isLocal && proto !== 'https' && process.env.NODE_ENV !== 'development') {
     res.writeHead(301, { Location: 'https://' + req.headers.host + req.url })
     res.end()
   } else {

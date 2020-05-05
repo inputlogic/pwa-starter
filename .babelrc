@@ -1,25 +1,18 @@
 {
   "presets": [
-    ["env", {
-      "modules": false
-    }],
-    "react"
+    ["@babel/preset-env", {}],
+    ["@babel/preset-react", {
+      "runtime": "classic"
+    }]
   ],
   "plugins": [
-    "external-helpers",
-    "syntax-dynamic-import",
-    "transform-es2015-spread",
-    "transform-object-rest-spread",
-    ["transform-class-properties", { "spec": true }],
-    ["module-resolver/lib/index.js", {
+    "@babel/plugin-syntax-dynamic-import",
+    "@babel/plugin-transform-spread",
+    "@babel/plugin-proposal-object-rest-spread",
+    ["module-resolver", {
       "alias": {
         "": "./src"
       }
-    }],
-    ["jsx-import/src/index.js", {
-      "identifier": "{ h }",
-      "moduleName": "preact"
-    }],
-    ["transform-react-jsx", {"pragma": "h"}]
+    }]
   ]
 }

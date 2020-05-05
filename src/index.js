@@ -48,9 +48,9 @@ import '/styles/form.less'
 
 // ### Our top-level components
 
-import Main, { routes as mainRoutes } from '/apps/main'
 import Auth, { routes as authRoutes } from '/apps/auth'
-import Dashboard, { routes as dashboardRoutes } from '/apps/dashboard'
+import Main, { routes as mainRoutes } from '/apps/main'
+import Marketing, { routes as marketingRoutes } from '/apps/marketing'
 
 // Define our top-level routes
 const routes = {
@@ -62,9 +62,9 @@ const routes = {
     routes: authRoutes,
     component: Auth
   },
-  dashboard: {
-    routes: dashboardRoutes,
-    component: Dashboard
+  marketing: {
+    routes: marketingRoutes,
+    component: Marketing
   }
 }
 
@@ -97,55 +97,3 @@ function Root () {
 }
 
 render(<Root />, document.getElementById('root'))
-
-// Contents
-// --------
-
-// **/**
-
-// - [consts.js](/consts.html)
-// - [routes.js](/routes.html)
-// - [store.js](/store.html)
-
-// **apps/**
-
-// This is where we organize project specific code into logical groupings.
-// Each app will need to export a Component and `{routes}` Object.
-
-// - [main](/apps/main) (Includes Login example)
-// - [dashboard](/apps/dashboard) (Includes data fetching and display)
-
-// **assets/**
-
-// Put any static files you want copied over to the `public/` folder.
-
-// **elements/**
-
-// Elements are reusable Components that render some JSX. These are generic
-// and are common to use throughout all apps.
-
-// - [global-header.js](/elements/global-header)
-// - [not-found.js](/elements/not-found)
-
-// **modals/**
-
-// Any global (cross-app) modals can go here. These should all use the
-// [Modal](https://github.com/inputlogic/elements/tree/master/packages/Modal) element in their `render` method.
-
-// - [example-modal.js](/modals/example-modal)
-
-// **styles/**
-
-// Global LESS files can go here. They should be manually imported by
-// `src/index.js`
-
-// **util/**
-
-// Simple helper functions used throughout your project.
-
-// Common Patterns / Recipes
-// --------
-
-// - [Login Form](/apps/main/login)
-// - [Fetch and display list of data](/apps/dashboard/users)
-// - [Use route param to fetch resource by id](/apps/dashboard/user)
