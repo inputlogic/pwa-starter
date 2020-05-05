@@ -23,6 +23,6 @@ export const environment = (() => {
     }
     return current
   } catch (_) {
-    return process.env.NODE_ENV || 'development'
+    return '__ENV__' || 'development'
   }
 })()

@@ -2,7 +2,7 @@ import { useState, useMemo } from 'preact/hooks'
 import { RouteTo } from '@app-elements/router'
 import { showNotification } from '@app-elements/notification'
 
-import { dispatch, set } from '/store'
+import { setState } from '/store'
 import url from '/util/url'
 
 import SignUpBase from './signup'
@@ -30,10 +30,7 @@ export default function SignUp () {
     },
     onSuccess: ({ token, userId }) => {
       window.localStorage.setItem('token', token)
-      dispatch(
-        set('token', token),
-        set('userId', userId)
-      )
+      setState({ token, userId })
       setSuccess(true)
       showNotification({
         type: 'success',

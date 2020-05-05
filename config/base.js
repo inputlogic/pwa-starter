@@ -6,11 +6,13 @@ import less from 'less'
 import alias from '@rollup/plugin-alias'
 import babel from '@rollup/plugin-babel'
 import cjs from '@rollup/plugin-commonjs'
-import resolve from '@rollup/plugin-node-resolve'
 import css from 'rollup-plugin-css-only'
+import inject from '@rollup/plugin-inject'
+import resolve from '@rollup/plugin-node-resolve'
 
 export default {
   input: 'src/index.js',
+  preserveEntrySignatures: false,
   output: [
     // ES module version, for modern browsers
     {
@@ -63,6 +65,11 @@ export default {
         'node_modules/debounce/**',
         'node_modules/atom/**'
       ]
+    }),
+    inject({
+      // import { createElement } from 'react'
+      createElement: ['react', 'createElement'],
+      Fragment: ['react', 'Fragment']
     }),
     alias({
       entries: [

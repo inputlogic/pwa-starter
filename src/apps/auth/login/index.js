@@ -3,7 +3,7 @@ import { RouteTo } from '@app-elements/router'
 import { showNotification } from '@app-elements/notification'
 import { useMappedState } from '@app-elements/use-mapped-state'
 
-import store, { dispatch, set } from '/store'
+import store, { setState } from '/store'
 import url from '/util/url'
 
 import LoginBase from './login'
@@ -38,10 +38,7 @@ export default function Login () {
     },
     onSuccess: ({ token, userId }) => {
       window.localStorage.setItem('token', token)
-      dispatch(
-        set('token', token),
-        set('userId', userId)
-      )
+      setState({ token, userId })
       setSuccess(true)
     },
     onFailure: (err) => {

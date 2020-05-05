@@ -6,8 +6,6 @@ import W from 'wasmuth'
 import createStore from 'atom'
 import devtools from 'atom/devtools'
 
-import pathReducer, { actions } from '@wasmuth/path-reducer'
-
 import { DEBUG } from '/consts'
 
 // Load state set by react-snap during prerendering
@@ -34,9 +32,7 @@ export const initialState = {
 
 // You can either define your reducers here, or add them later with:
 // `store.addReducer(reducer)`
-const reducers = [
-  pathReducer
-]
+const reducers = []
 
 // If DEBUG is true, we will enable Redux devtools
 const store = typeof window !== 'undefined' && DEBUG
@@ -52,10 +48,6 @@ export default store
 
 export const getState = store.getState
 export const setState = store.setState
-
-export const set = actions.set
-export const update = actions.update
-export const remove = actions.remove
 export const dispatch = store.dispatch
 
 export function logout (stateToKeep = {}) {
