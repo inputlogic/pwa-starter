@@ -2,7 +2,7 @@ import Modal from '@app-elements/modal'
 
 import { setState } from '/store'
 
-export default function ExampleModal () {
+export function ExampleModal () {
   return (
     <Modal className='styled-modal small'>
       <div className='modal-header'>

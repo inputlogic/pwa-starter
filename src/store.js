@@ -2,7 +2,6 @@
 // which is immutable. Meaning you cannot mutate the object directly, but instead must call
 // `store.setState` or dispatch actions similar to redux.
 
-import W from 'wasmuth'
 import createStore from 'atom'
 import devtools from 'atom/devtools'
 

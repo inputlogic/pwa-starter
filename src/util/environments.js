@@ -1,5 +1,3 @@
-import W from 'wasmuth'
-
 const environments = {
   test: 'localhost:5001',
   development: [

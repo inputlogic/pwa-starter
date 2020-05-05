@@ -12,10 +12,8 @@ export const TextInput = ({
   ...props
 }) =>
   <div className={`input-component ${variant || ''}`}>
-
     {label &&
-    <label htmlFor={name}>{label}</label>
-    }
+      <label htmlFor={name}>{label}</label>}
 
     <input
       type={type}
@@ -24,8 +22,7 @@ export const TextInput = ({
       placeholder={placeholder}
       {...props}
     />
-    {props.formName != null &&
-      <ErrorOrHint formName={props.formName} name={name} />
-    }
 
+    {props.formName != null &&
+      <ErrorOrHint formName={props.formName} name={name} />}
   </div>

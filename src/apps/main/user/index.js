@@ -1,26 +1,14 @@
-// Here is a page that will display details about a specific resource.
-// In our case, it will be a user specified by the current routes `:id`
-// segment.
-
-// We'll include Helmet for setting title and meta tags dynamically,
-// based on the result of our API request.
-// And we'll use the `useRequest` hook for requesting the resource data.
 import Helmet from '@app-elements/helmet'
 import LoadingIndicator from '@app-elements/loading-indicator'
 import { Link } from '@app-elements/router'
 import { useRequest } from '@app-elements/use-request'
 
-// `url` is a util for getting route paths by name. It's a project
-// level util because it reads the statically defined [routes.js](/routes.html)
 import url from '/util/url'
-
-// We'll need to pass our store to `useRequest`
-import store from '/store'
 
 import { WEB_URL } from '/consts'
 
-// Here is our page component which will use the `useRequest` hook.
-export default function User ({ id }) {
+export function User ({ id }) {
+  const { store } = this.context
   const { result, error, isLoading } = useRequest(store, url('api.user', { args: { id } }))
 
   if (isLoading) {
@@ -52,8 +40,7 @@ export default function User ({ id }) {
       <p>{email}</p>
       <p><Link name='users'>&larr; Back to all users</Link></p>
       {parseInt(id, 10) < 10 &&
-        <Link name='user' args={{ id: parseInt(id, 10) + 1 }}>Next</Link>
-      }
+        <Link name='user' args={{ id: parseInt(id, 10) + 1 }}>Next</Link>}
     </div>
   )
 }

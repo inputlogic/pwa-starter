@@ -9,10 +9,8 @@ export const routes = {
   }
 }
 
-const MarketingTree = (
-  <Router routes={routes} />
-)
-
-export default function MarketingApp () {
-  return MarketingTree
+export function MarketingApp () {
+  return (
+    <Router routes={routes} />
+  )
 }

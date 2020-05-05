@@ -26,6 +26,9 @@
     ]
   },
   "standard": {
+    "globals": [
+      "W"
+    ],
     "ignore": [
       "server/bundle.js"
     ]

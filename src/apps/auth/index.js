@@ -2,10 +2,10 @@ import Router from '@app-elements/router'
 
 import url from '/util/url'
 
-import Login from './login'
-import SignUp from './signup'
-import ForgotPassword from './forgot-password'
-import ResetPassword from './reset-password'
+import { Login } from './login'
+import { SignUp } from './signup'
+import { ForgotPassword } from './forgot-password'
+import { ResetPassword } from './reset-password'
 
 export const routes = {
   login: {
@@ -26,10 +26,8 @@ export const routes = {
   }
 }
 
-const AuthTree = (
-  <Router routes={routes} />
-)
-
-export default function AuthApp () {
-  return AuthTree
+export function AuthApp () {
+  return (
+    <Router routes={routes} />
+  )
 }

@@ -69,7 +69,7 @@ export default {
     inject({
       // import { createElement } from 'react'
       createElement: ['react', 'createElement'],
-      Fragment: ['react', 'Fragment']
+      W: 'wasmuth'
     }),
     alias({
       entries: [

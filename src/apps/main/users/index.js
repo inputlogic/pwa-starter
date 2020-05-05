@@ -24,7 +24,7 @@ const UserItem = ({ id, name, email }) =>
 // In our page component we render a ListResource instance, telling it
 // the endpoint to fetch results from, to limit the results to `10`, and
 // to render each result item with our `UserItem` component.
-const Users = () =>
+export const Users = () =>
   <div className='container pt-7 pb-4'>
     <ListResource
       endpoint={url('api.users')}
@@ -32,5 +32,3 @@ const Users = () =>
       render={UserItem}
     />
   </div>
-
-export default Users

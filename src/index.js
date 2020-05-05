@@ -21,7 +21,7 @@ import Router from '@app-elements/router'
 // we include a GlobalHeader, and a *NotFound* component which renders when no route is
 // matched. (If your app does not need these global elements, you can of course remove them.)
 import { GlobalHeader } from '/elements/global-header'
-import NotFound from '/elements/not-found'
+import { NotFound } from '/elements/not-found'
 
 // And our apps' global store.
 import store, { Provider } from '/store'
@@ -42,29 +42,29 @@ import '/styles/base.less'
 import '/styles/variables.less'
 import '/styles/typography.less'
 import '/styles/button.less'
-import '/styles/containers.less'
+import '/styles/layout.less'
 import '/styles/modals.less'
 import '/styles/form.less'
 
 // ### Our top-level components
 
-import Auth, { routes as authRoutes } from '/apps/auth'
-import Main, { routes as mainRoutes } from '/apps/main'
-import Marketing, { routes as marketingRoutes } from '/apps/marketing'
+import { AuthApp, routes as authRoutes } from '/apps/auth'
+import { MainApp, routes as mainRoutes } from '/apps/main'
+import { MarketingApp, routes as marketingRoutes } from '/apps/marketing'
 
 // Define our top-level routes
 const routes = {
   main: {
     routes: mainRoutes,
-    component: Main
+    component: MainApp
   },
   auth: {
     routes: authRoutes,
-    component: Auth
+    component: AuthApp
   },
   marketing: {
     routes: marketingRoutes,
-    component: Marketing
+    component: MarketingApp
   }
 }
 

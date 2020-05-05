@@ -10,6 +10,7 @@ export default [
       signup: '/signup',
       forgotPassword: '/forgot-password',
       resetPassword: '/reset-password/:resetToken/:userId',
+      app: '/users',
       users: '/users',
       user: '/users/:id'
     }
