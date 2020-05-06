@@ -18,7 +18,7 @@ const UserActions = () =>
       </div>
     )}
   >
-    <nav className='flex column'>
+    <nav className='user-actions-nav flex column'>
       <Link name='home' activeClass='active-link'>Home</Link>
       <Link name='login' activeClass='active-link'>Log In</Link>
     </nav>
