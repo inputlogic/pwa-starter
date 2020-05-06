@@ -7,6 +7,7 @@ export default [
     routes: {
       home: '/',
       login: '/login',
+      logout: '/logout',
       signup: '/signup',
       forgotPassword: '/forgot-password',
       resetPassword: '/reset-password/:resetToken/:userId',

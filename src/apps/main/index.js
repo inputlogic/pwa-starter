@@ -1,9 +1,9 @@
-import Router, { RouteTo, Link } from '@app-elements/router'
+import Router, { RouteTo } from '@app-elements/router'
 import { showNotification } from '@app-elements/notification'
 
 import { asyncComponent } from '/elements/async-component'
 import url from '/util/url'
-import { getState, logout } from '/store'
+import { getState } from '/store'
 
 export const routes = {
   app: {
@@ -29,10 +29,6 @@ export function MainApp () {
   return (
     <div id='main-layout'>
       <Router routes={routes} />
-      <header className='container'>
-        <Link name='users'>Users</Link>&nbsp;
-        <button onClick={ev => logout()}>Logout</button>
-      </header>
     </div>
   )
 }

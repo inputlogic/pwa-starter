@@ -20,7 +20,7 @@ const UserActions = () =>
   >
     <nav className='user-actions-nav flex column'>
       <Link name='home' activeClass='active-link'>Home</Link>
-      <Link name='login' activeClass='active-link'>Log In</Link>
+      <Link name='logout' activeClass='active-link'>Log Out</Link>
     </nav>
   </Dropdown>
 
@@ -35,7 +35,7 @@ export function GlobalHeader () {
           {authed
             ? (
               <Fragment>
-                <nav>
+                <nav className='header-nav'>
                   <Link name='users' activeClass='active-link'>Users</Link>
                 </nav>
                 <UserActions />
@@ -43,11 +43,11 @@ export function GlobalHeader () {
             )
             : (
               <Fragment>
-                <nav>
+                <nav className='header-nav'>
                   <Link name='home' activeClass='active-link'>Home</Link>
                   <Link name='login' activeClass='active-link'>Log In</Link>
                 </nav>
-                <Link name='signup' className='btn'>Sign Up</Link>}
+                <Link name='signup' className='btn'>Sign Up</Link>
               </Fragment>
             )}
         </div>
