@@ -43,7 +43,7 @@ export function Home () {
         </div>
       </div>
 
-      <div className='alt-bg'>
+      <div className='bg-off-white'>
         <div className='container'>
           <div className='mt-4 pt-8 pb-10'>
             <ReverseHero
