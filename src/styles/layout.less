@@ -1,3 +1,7 @@
+.alt-bg {
+  background-color: @border-color;
+}
+
 .container {
   margin-right: auto;
   margin-left: auto;
@@ -101,4 +105,23 @@
   .pb-loop(@i - 1);
 }
 .pb-loop (@iterations);
+
+// padding horizontal
+.ph-loop (@i) when (@i > 0) {
+  .ph-@{i} {
+    padding-left: ~"@{i}em";
+    padding-right: ~"@{i}em";
+  }
+  .ph-loop(@i - 1);
+}
+.ph-loop (@iterations);
+
+// padding left
+.pl-loop (@i) when (@i > 0) {
+  .pl-@{i} {
+    padding-left: ~"@{i}em";
+  }
+  .pl-loop(@i - 1);
+}
+.pl-loop (@iterations);
 

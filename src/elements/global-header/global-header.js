@@ -1,4 +1,3 @@
-import { Fragment } from 'react'
 import Avatar from '@app-elements/avatar'
 import Dropdown from '@app-elements/dropdown'
 import { Link } from '@app-elements/router'
@@ -30,25 +29,26 @@ export function GlobalHeader () {
   return (
     <header class='global-header'>
       <div className='container'>
-        <div className='level'>
+        <div className='level no-padding'>
           <h1><Link name={authed ? 'app' : 'home'}>PWA</Link></h1>
           {authed
             ? (
-              <Fragment>
+              <div className='level pl-2'>
                 <nav className='header-nav'>
                   <Link name='users' activeClass='active-link'>Users</Link>
+                  <a href='https://github.com/inputlogic/pwa-starter' data-external-link>GitHub</a>
                 </nav>
                 <UserActions />
-              </Fragment>
+              </div>
             )
             : (
-              <Fragment>
+              <div className='level pl-2'>
                 <nav className='header-nav'>
                   <Link name='home' activeClass='active-link'>Home</Link>
                   <Link name='login' activeClass='active-link'>Log In</Link>
                 </nav>
                 <Link name='signup' className='btn'>Sign Up</Link>
-              </Fragment>
+              </div>
             )}
         </div>
       </div>
