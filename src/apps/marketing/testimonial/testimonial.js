@@ -11,8 +11,11 @@ export function Testimonial ({
   return (
     <div className='testimonial'>
       <div className='level'>
-        <Avatar src={avatarSrc} fullName={attribution} />
-        <div className='quote'>{quote}</div>
+        <Avatar src={avatarSrc} fullName={attribution} size='200' />
+        <div className='text'>
+          <div className='quote'>{quote}</div>
+          {attribution && <div className='attribution'>{attribution}</div>}
+        </div>
       </div>
     </div>
   )

@@ -1,10 +1,10 @@
 import { Fragment } from 'react'
 
 import Carousel from '@app-elements/carousel'
-import Image from '@app-elements/image'
 import { Link } from '@app-elements/router'
 
 import { Hero, ReverseHero } from './hero'
+import { Testimonial } from './testimonial'
 
 const items = ['fff', 'a7c', '09d', '411', '111']
 
@@ -111,12 +111,12 @@ export function Home () {
           <div className='mt-4 pt-8 pb-10'>
             <h1 className='tc tertiary-color'>Don't just take our word for it.</h1>
 
-            <Carousel withDots>
+            <Carousel withDots noNav wrapperClass='testimonials'>
               {items.map(hex => (
-                <Image
-                  src={`http://www.placehold.it/400x100/${hex}/f44?text=${hex}`}
-                  unloadedSrc={`http://www.placehold.it/400x300/eee/eee?text=Loading`}
-                  style='width: 100%'
+                <Testimonial
+                  avatarSrc={`http://www.placehold.it/400x100/${hex}/f44?text=${hex}`}
+                  quote={`It's new. It's out of the ordinary. It's rather extrordinary, so yo bust this commentary. Garrulous, Chicanery, recalcitrant, Eudaimonic, promulgating, Loquacious, ecumenical.`}
+                  attribution='Fresh Prince'
                 />
               ))}
             </Carousel>
