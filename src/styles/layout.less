@@ -6,6 +6,10 @@
   background-color: @light-blue;
 }
 
+.bg-alt {
+  background-color: @border-color-alt;
+}
+
 .container {
   margin-right: auto;
   margin-left: auto;
@@ -43,6 +47,8 @@
   }
 }
 
+// Flex helpers
+
 .flex {
   display: flex;
 }
@@ -54,6 +60,18 @@
 .column {
   flex-direction: column;
 }
+
+// Grid helpers
+
+.generate-grids(@i) when (@i > 0) {
+  .grid-@{i} {
+    display: grid;
+    grid-template-columns: repeat(@i, 1fr);
+    grid-gap: @gutter * 2;
+  }
+  .generate-grids((@i - 1));
+}
+.generate-grids(6);
 
 // width helpers
 .w-loop (@i) when (@i > 0) {

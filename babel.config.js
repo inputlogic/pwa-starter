@@ -14,6 +14,7 @@ module.exports = function (api) {
     plugins: [
       '@babel/plugin-syntax-dynamic-import',
       '@babel/plugin-transform-spread',
+      '@babel/plugin-proposal-class-properties',
       '@babel/plugin-proposal-object-rest-spread',
       ['module-resolver', {
         alias: {
