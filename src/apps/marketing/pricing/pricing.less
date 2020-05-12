@@ -1,0 +1,30 @@
+.pricing {
+  padding: @gutter;
+  border-radius: @border-radius;
+  border: 1px solid @border-color;
+  box-shadow: @box-shadow;
+
+  &.primary .pricing-inner h2 {
+    color: @secondary-color;
+  }
+}
+
+.pricing-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: @gutter;
+
+  h2 {
+  }
+
+  .cost {
+    color: @tertiary-color;
+    font-size: 3em;
+  }
+
+  .pricing-subtitle {
+    color: @grey;
+  }
+}
