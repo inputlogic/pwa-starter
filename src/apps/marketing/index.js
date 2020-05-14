@@ -1,6 +1,10 @@
+import { Fragment } from 'react'
 import Router from '@app-elements/router'
-import url from '/util/url'
+
 import { Home } from './home'
+import { MarketingFooter } from './footer'
+
+import url from '/util/url'
 
 export const routes = {
   home: {
@@ -11,6 +15,9 @@ export const routes = {
 
 export function MarketingApp () {
   return (
-    <Router routes={routes} />
+    <Fragment>
+      <Router routes={routes} />
+      <MarketingFooter />
+    </Fragment>
   )
 }

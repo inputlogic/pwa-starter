@@ -126,32 +126,36 @@ export function Home () {
       </div>
 
       {/* Pricing */}
-      <div className='container pt-10 pb-10'>
-        <div className='grid-3'>
-          <Pricing
-            title='Free Trial'
-            cost='14 days'
-            subTitle='Try the 14 day free trial to see if our product is for you.'
-          >
-            <Link name='signup' className='btn btn-ghost'>Start Free Trial</Link>
-          </Pricing>
-          <Pricing
-            primary
-            title='Yearly'
-            cost={9}
-            perTex='per Month'
-            subTitle='Pay yearly for a wicked discount!'
-          >
-            <Link name='signup' className='btn btn-secondary btn-stretchy'>Get Started</Link>
-          </Pricing>
-          <Pricing
-            title='Monthly'
-            cost={14}
-            perTex='per Month'
-            subTitle='No contact, cancel anytime.'
-          >
-            <Link name='signup' className='btn btn-secondary'>Sign Up</Link>
-          </Pricing>
+      <div className='bg-off-white'>
+        <div className='container pt-10 pb-10'>
+          <h1 className='tc tertiary-color'>Pricing you can understand.</h1>
+
+          <div className='grid-3'>
+            <Pricing
+              title='Free Trial'
+              cost='14 days'
+              subTitle='Try the 14 day free trial to see if our product is for you.'
+            >
+              <Link name='signup' className='btn btn-ghost'>Start Free Trial</Link>
+            </Pricing>
+            <Pricing
+              primary
+              title='Yearly'
+              cost={9}
+              perTex='per Month'
+              subTitle='Pay yearly for a wicked discount!'
+            >
+              <Link name='signup' className='btn btn-secondary btn-stretchy'>Get Started</Link>
+            </Pricing>
+            <Pricing
+              title='Monthly'
+              cost={14}
+              perTex='per Month'
+              subTitle='No contact, cancel anytime.'
+            >
+              <Link name='signup' className='btn btn-secondary'>Sign Up</Link>
+            </Pricing>
+          </div>
         </div>
       </div>
 
