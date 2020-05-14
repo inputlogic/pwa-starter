@@ -1,17 +1,37 @@
 import { Fragment } from 'react'
 
 import Carousel from '@app-elements/carousel'
+import Helmet from '@app-elements/helmet'
 import { Link } from '@app-elements/router'
 
 import { Hero, ReverseHero } from './hero'
 import { Testimonial } from './testimonial'
 import { Pricing } from './pricing'
 
+import url from '/util/url'
+import { WEB_URL } from '/consts'
+
 const items = ['fff', 'a7c', '09d', '411', '111']
 
 export function Home () {
   return (
     <Fragment>
+
+      {/* ___CHANGEME___ */}
+      <Helmet
+        title='Welcome'
+        meta={[
+          { property: 'og:title', content: 'PWA Starter | Welcome' },
+          { property: 'og:site_name', content: 'PWA Starter, Inc.' },
+          { property: 'og:description', content: 'PWA Starter is your starting point for your next Preact app.' },
+          // { property: 'og:image', content: 'https://www.fulldomain.com/images/image-1.jpg' },
+          // { property: 'twitter:image:alt', content: 'Alt text for image' },
+          { property: 'og:url', content: `${WEB_URL}${url('home')}` },
+          { property: 'twitter:card', content: 'summary_large_image' }
+          // { property: 'fb:app_id', content: 'your_app_id' },
+          // { property: 'twitter:site', content: '@twitter-handle' }
+        ]}
+      />
 
       {/* Primary Hero and Features */}
       <div className='container'>

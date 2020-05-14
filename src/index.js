@@ -79,6 +79,8 @@ function Root () {
   return (
     <Provider store={store} routes={routes}>
       <div className='main-app-container'>
+
+        {/* ___CHANGEME___ */}
         <Helmet
           title='Welcome'
           titleTemplate='PWA Starter | %s'
