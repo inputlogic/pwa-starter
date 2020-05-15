@@ -2,13 +2,17 @@
 <html lang="en">
 <head>
   <base href="/">
+
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no, viewport-fit=cover">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="msapplication-starturl" content="/">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
-  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#4285F4">
+
+  <link rel="manifest" href="/manifest.json">
 
   <link rel="apple-touch-icon-precomposed" sizes="128x128" href="images/app-graphics/icon-128x128.png" />
   <link rel="apple-touch-icon-precomposed" sizes="152x152" href="images/app-graphics/icon-152x152.png" />
@@ -23,11 +27,19 @@
   <link rel="apple-touch-startup-image" href="images/app-graphics/launch-1668x2224.png" media="(min-device-width: 834px) and (max-device-width: 834px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait)">
   <link rel="apple-touch-startup-image" href="images/app-graphics/launch-2048x2732.png" media="(min-device-width: 1024px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait)">
 
-  <link rel="stylesheet" href="./bundle.css" />
+  <link rel="stylesheet" href="/bundle.css" />
 </head>
 <body>
   <div id='modals'></div>
   <div id='root'></div>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('/workers/cache.js')
+        .catch(e => console.warn('Service Worker not supported.'))
+      console.log(navigator.serviceWorker.controller)
+    }
+  </script>
   <script>
     import('/module/index.js')
     window.supportsDynamicImport = true

@@ -21,6 +21,7 @@ export function Home () {
       <Helmet
         title='Welcome'
         meta={[
+          { property: 'description', content: 'Your life is better with our app.' },
           { property: 'og:title', content: 'PWA Starter | Welcome' },
           { property: 'og:site_name', content: 'PWA Starter, Inc.' },
           { property: 'og:description', content: 'PWA Starter is your starting point for your next Preact app.' },
@@ -165,7 +166,7 @@ export function Home () {
               perTex='per Month'
               subTitle='Pay yearly for a wicked discount!'
             >
-              <Link name='signup' className='btn btn-secondary btn-stretchy'>Get Started</Link>
+              <Link name='signup' className='btn'>Get Started</Link>
             </Pricing>
             <Pricing
               title='Monthly'
