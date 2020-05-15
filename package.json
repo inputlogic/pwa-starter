@@ -40,6 +40,9 @@
       "--disable-setuid-sandbox"
     ]
   },
+  "engines": {
+    "node": ">=10.0.0"
+  },
   "keywords": [],
   "author": "Adrian Unger",
   "license": "MIT",
