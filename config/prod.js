@@ -1,3 +1,5 @@
+/* eslint import/no-default-export: 0 */
+
 import replace from '@rollup/plugin-replace'
 import { terser } from 'rollup-plugin-terser'
 

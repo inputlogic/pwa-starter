@@ -1,3 +1,5 @@
+/* eslint import/no-default-export: 0 */
+
 import { resolve as pathResolve } from 'path'
 import { writeFileSync } from 'fs'
 import less from 'less'

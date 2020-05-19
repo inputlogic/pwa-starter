@@ -60,7 +60,7 @@ export function Home () {
             </div>
 
             <div className='measure-narrow'>
-              <h3>Another, neato feature</h3>
+              <h3>Another, great feature</h3>
               <p>Really, you've never seen a feature this good. This feature alone is worth signing up for. Our app exists, because of this feature.</p>
             </div>
 
