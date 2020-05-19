@@ -4,7 +4,7 @@ import ListResource from '@app-elements/list-resource'
 
 import { Link } from '@app-elements/router'
 
-import url from '/util/url'
+import { url } from '/util/url'
 
 // Just some simple styles for this page
 import './users.less'

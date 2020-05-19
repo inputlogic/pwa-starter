@@ -34,7 +34,7 @@ export const initialState = {
 const reducers = []
 
 // If DEBUG is true, we will enable Redux devtools
-const store = typeof window !== 'undefined' && DEBUG
+export const store = typeof window !== 'undefined' && DEBUG
   ? devtools(createStore(reducers, initialState))
   : createStore(reducers, initialState)
 
@@ -42,8 +42,6 @@ const store = typeof window !== 'undefined' && DEBUG
 window.snapSaveState = () => ({
   __PRELOADED_STATE__: W.without(['currentPath', 'currentRoute', 'token'], store.getState())
 })
-
-export default store
 
 export const getState = store.getState
 export const setState = store.setState

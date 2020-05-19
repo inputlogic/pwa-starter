@@ -8,7 +8,7 @@ import { Hero, ReverseHero } from './hero'
 import { Testimonial } from './testimonial'
 import { Pricing } from './pricing'
 
-import url from '/util/url'
+import { url } from '/util/url'
 import { WEB_URL } from '/consts'
 
 const items = ['fff', 'a7c', '09d', '411', '111']

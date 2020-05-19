@@ -1,6 +1,6 @@
 // import { API_URL } from '/consts'
 
-export default [
+export const routes = [
   {
     namespace: '',
     url: '',

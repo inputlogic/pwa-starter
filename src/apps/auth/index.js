@@ -1,6 +1,6 @@
 import Router from '@app-elements/router'
 
-import url from '/util/url'
+import { url } from '/util/url'
 
 import { Login } from './login'
 import { Logout } from './logout'

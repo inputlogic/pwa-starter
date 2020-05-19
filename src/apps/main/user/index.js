@@ -3,7 +3,7 @@ import LoadingIndicator from '@app-elements/loading-indicator'
 import { Link } from '@app-elements/router'
 import { useRequest } from '@app-elements/use-request'
 
-import url from '/util/url'
+import { url } from '/util/url'
 
 import { WEB_URL } from '/consts'
 
@@ -39,8 +39,8 @@ export function User ({ id }) {
       <h1>{name}</h1>
       <p>{email}</p>
       <p><Link name='users'>&larr; Back to all users</Link></p>
-      {parseInt(id, 10) < 10 &&
-        <Link name='user' args={{ id: parseInt(id, 10) + 1 }}>Next</Link>}
+      {parseInt(id, 10) < 10
+        && <Link name='user' args={{ id: parseInt(id, 10) + 1 }}>Next</Link>}
     </div>
   )
 }

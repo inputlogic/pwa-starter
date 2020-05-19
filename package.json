@@ -15,13 +15,13 @@
     "prebuild": "npm run test",
     "build": "rollup -c config/prod.js",
     "prelint": "rm -rf public; mkdir public; cp -r src/assets/* public/; cp -r src/assets/* public/",
-    "lint": "eslint ./",
+    "lint": "eslint ./src",
     "pretest": "npm run lint",
     "test": "exit 0"
   },
   "lint-staged": {
     "*.js": [
-      "eslint ./"
+      "eslint ./src"
     ]
   },
   "reactSnap": {

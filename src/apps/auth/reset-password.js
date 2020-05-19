@@ -3,7 +3,7 @@ import { showNotification } from '@app-elements/notification'
 import Form, { SubmitButton } from '@app-elements/form'
 
 import { TextInput } from '/elements/text-input'
-import url from '/util/url'
+import { url } from '/util/url'
 
 export function ResetPassword ({ resetToken, userId }) {
   const formProps = {

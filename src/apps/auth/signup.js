@@ -6,7 +6,7 @@ import Form, { SubmitButton } from '@app-elements/form'
 import { TextInput } from '/elements/text-input'
 
 import { setState } from '/store'
-import url from '/util/url'
+import { url } from '/util/url'
 
 export function SignUp () {
   const [isSuccess, setSuccess] = useState(false)

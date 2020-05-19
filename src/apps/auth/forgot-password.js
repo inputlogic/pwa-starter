@@ -5,7 +5,7 @@ import { Link } from '@app-elements/router'
 
 import { TextInput } from '/elements/text-input'
 
-import url from '/util/url'
+import { url } from '/util/url'
 
 export function ForgotPassword () {
   const [isSuccess, setSuccess] = useState(false)

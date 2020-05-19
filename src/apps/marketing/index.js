@@ -4,7 +4,7 @@ import Router from '@app-elements/router'
 import { Home } from './home'
 import { MarketingFooter } from './footer'
 
-import url from '/util/url'
+import { url } from '/util/url'
 
 export const routes = {
   home: {

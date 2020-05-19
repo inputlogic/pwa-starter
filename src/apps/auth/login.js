@@ -6,7 +6,7 @@ import Form, { SubmitButton } from '@app-elements/form'
 
 import { TextInput } from '/elements/text-input'
 
-import url from '/util/url'
+import { url } from '/util/url'
 
 export function Login () {
   const { store } = this.context

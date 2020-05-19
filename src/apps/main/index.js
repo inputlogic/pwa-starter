@@ -2,7 +2,7 @@ import Router, { RouteTo } from '@app-elements/router'
 import { showNotification } from '@app-elements/notification'
 
 import { asyncComponent } from '/elements/async-component'
-import url from '/util/url'
+import { url } from '/util/url'
 import { getState } from '/store'
 
 export const routes = {
