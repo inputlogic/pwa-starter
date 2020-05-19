@@ -1,6 +1,6 @@
 import qs from '@app-elements/router/qs'
 
-import allRoutes from '/routes'
+import { routes } from '/routes'
 
 // Get the path string for the route with name `name`
 // Best understood with an example:
@@ -22,7 +22,7 @@ export const url = (name, { args = {}, queries = {} } = {}) => {
     [ns, name] = name.split('.')
   }
 
-  const scheme = allRoutes.find(({ namespace }) => namespace === ns)
+  const scheme = routes.find(({ namespace }) => namespace === ns)
   if (!scheme) console.warn('No route scheme with namespace', ns)
 
   const rule = scheme.routes[name]
@@ -35,5 +35,3 @@ export const url = (name, { args = {}, queries = {} } = {}) => {
 
   return `${scheme.url}${replaced}${!hasQueries ? '' : '?' + qs.stringify(queries)}`
 }
-
-export default url

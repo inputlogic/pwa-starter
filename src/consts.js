@@ -2,7 +2,7 @@ import { environment } from '/util/environments'
 
 export const DEBUG = typeof window !== 'undefined'
   ? (window.location.hostname.indexOf('local') > -1)
-  : process.env.NODE_ENV !== 'production'
+  : '__ENV__' !== 'production'
 
 export const WEB_URL = (function () {
   const href = window.location.href

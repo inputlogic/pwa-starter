@@ -1,0 +1,33 @@
+.testimonials {
+  max-width: 800px;
+}
+
+.carousel .carousel-dots button {
+  background-color: @white;
+  margin: @gutter / 2;
+}
+
+.carousel .carousel-dots button.active {
+  background-color: @secondary-color;
+}
+
+.testimonial {
+  border-radius: @border-radius;
+  background-color: @white;
+  box-shadow: @box-shadow;
+  margin: @gutter;
+  padding: @gutter;
+
+  .text {
+    margin-left: @gutter * 2;
+  }
+
+  .attribution {
+    font-style: italic;
+    margin-top: @gutter / 2;
+
+    &:before {
+      content: '— ';
+    }
+  }
+}

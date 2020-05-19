@@ -2,11 +2,8 @@
 // which is immutable. Meaning you cannot mutate the object directly, but instead must call
 // `store.setState` or dispatch actions similar to redux.
 
-import W from 'wasmuth'
 import createStore from 'atom'
 import devtools from 'atom/devtools'
-
-import pathReducer, { actions } from '@wasmuth/path-reducer'
 
 import { DEBUG } from '/consts'
 
@@ -34,12 +31,10 @@ export const initialState = {
 
 // You can either define your reducers here, or add them later with:
 // `store.addReducer(reducer)`
-const reducers = [
-  pathReducer
-]
+const reducers = []
 
 // If DEBUG is true, we will enable Redux devtools
-const store = typeof window !== 'undefined' && DEBUG
+export const store = typeof window !== 'undefined' && DEBUG
   ? devtools(createStore(reducers, initialState))
   : createStore(reducers, initialState)
 
@@ -48,14 +43,8 @@ window.snapSaveState = () => ({
   __PRELOADED_STATE__: W.without(['currentPath', 'currentRoute', 'token'], store.getState())
 })
 
-export default store
-
 export const getState = store.getState
 export const setState = store.setState
-
-export const set = actions.set
-export const update = actions.update
-export const remove = actions.remove
 export const dispatch = store.dispatch
 
 export function logout (stateToKeep = {}) {

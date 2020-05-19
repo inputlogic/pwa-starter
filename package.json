@@ -1,6 +1,6 @@
 {
   "name": "pwa-starter",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "PWA Starter with Preact",
   "main": "server/index.js",
   "heroku-run-build-script": true,
@@ -14,23 +14,14 @@
     "browse": "node server/index.js",
     "prebuild": "npm run test",
     "build": "rollup -c config/prod.js",
-    "postbuild": "react-snap",
     "prelint": "rm -rf public; mkdir public; cp -r src/assets/* public/; cp -r src/assets/* public/",
-    "lint": "standard --verbose --parser babel-eslint | snazzy",
+    "lint": "eslint ./src",
     "pretest": "npm run lint",
-    "test": "exit 0",
-    "docs": "cd src/ && docco {**,.,**/**,**/**/**}/*.js --output ../docs --layout parallel",
-    "postdocs": "surge --d pwa-starter.surge.sh -p docs/"
+    "test": "exit 0"
   },
   "lint-staged": {
     "*.js": [
-      "standard --verbose --parser babel-eslint",
-      "git add"
-    ]
-  },
-  "standard": {
-    "ignore": [
-      "server/bundle.js"
+      "eslint ./src"
     ]
   },
   "reactSnap": {
@@ -40,63 +31,69 @@
       "--disable-setuid-sandbox"
     ]
   },
+  "engines": {
+    "node": ">=10.0.0"
+  },
   "keywords": [],
   "author": "Adrian Unger",
   "license": "MIT",
   "dependencies": {
     "@app-elements/avatar": "1.1.1",
     "@app-elements/carousel": "1.2.3",
-    "@app-elements/date-picker": "0.2.0",
-    "@app-elements/dropdown": "3.0.1",
+    "@app-elements/dropdown": "3.0.2",
     "@app-elements/form": "2.2.1",
     "@app-elements/helmet": "2.1.0",
     "@app-elements/image": "1.1.5",
     "@app-elements/list-resource": "2.1.5",
     "@app-elements/loading-indicator": "1.1.0",
-    "@app-elements/modal": "3.1.0",
+    "@app-elements/modal": "3.1.1",
     "@app-elements/notification": "2.0.0",
     "@app-elements/router": "2.5.0",
-    "@app-elements/tooltip": "2.0.0",
     "@app-elements/use-mapped-state": "0.3.2",
     "@app-elements/use-request": "1.6.0",
-    "@wasmuth/path-reducer": "0.1.6",
     "atom": "1.4.1",
     "compression": "1.7.4",
     "polka": "0.5.2",
-    "preact": "10.3.4",
-    "prop-types": "15.7.2",
+    "preact": "10.4.1",
     "sirv": "0.4.2",
     "wasmuth": "2.0.6"
   },
   "devDependencies": {
-    "babel-core": "6.26.3",
+    "@babel/core": "7.9.6",
+    "@babel/plugin-proposal-class-properties": "7.8.3",
+    "@babel/plugin-proposal-object-rest-spread": "7.9.6",
+    "@babel/plugin-syntax-dynamic-import": "7.8.3",
+    "@babel/plugin-transform-spread": "7.8.3",
+    "@babel/preset-env": "7.9.6",
+    "@babel/preset-react": "7.9.4",
+    "@rollup/plugin-alias": "3.1.0",
+    "@rollup/plugin-babel": "5.0.0",
+    "@rollup/plugin-commonjs": "11.1.0",
+    "@rollup/plugin-inject": "4.0.1",
+    "@rollup/plugin-node-resolve": "7.1.3",
+    "@rollup/plugin-replace": "2.3.2",
+    "@rollup/plugin-run": "2.0.2",
     "babel-eslint": "10.1.0",
-    "babel-plugin-external-helpers": "6.22.0",
-    "babel-plugin-jsx-import": "github:staydecent/babel-plugin-jsx-import",
-    "babel-plugin-module-resolver": "3.2.0",
-    "babel-plugin-syntax-dynamic-import": "6.18.0",
-    "babel-plugin-transform-class-properties": "6.24.1",
-    "babel-plugin-transform-es2015-spread": "6.22.0",
-    "babel-plugin-transform-object-rest-spread": "6.26.0",
-    "babel-preset-env": "1.7.0",
-    "babel-preset-react": "6.24",
-    "docco": "0.8.0",
+    "babel-plugin-module-resolver": "4.0.0",
+    "eslint": "7.0.0",
+    "eslint-config-standard": "14.1.1",
+    "eslint-plugin-babel": "5.3.0",
+    "eslint-plugin-import": "2.20.2",
+    "eslint-plugin-node": "11.1.0",
+    "eslint-plugin-promise": "4.2.1",
+    "eslint-plugin-react": "7.20.0",
+    "eslint-plugin-react-hooks": "4.0.2",
+    "eslint-plugin-standard": "4.0.1",
     "less": "3.11.1",
-    "lint-staged": "9.4.2",
+    "lint-staged": "10.2.2",
     "npm-run-all": "4.1.5",
     "react-snap": "1.23.0",
-    "rollup": "1.19.4",
-    "rollup-plugin-alias": "1.5.2",
-    "rollup-plugin-babel": "3.0.7",
-    "rollup-plugin-babel-minify": "9.1.0",
-    "rollup-plugin-browsersync": "1.0.0",
-    "rollup-plugin-commonjs": "10.1.0",
-    "rollup-plugin-css-only": "1.0.0",
-    "rollup-plugin-node-globals": "1.4.0",
-    "rollup-plugin-node-resolve": "5.2.0",
-    "rollup-plugin-replace": "2.2.0",
-    "sane": "4.1.0",
-    "snazzy": "8.0.0",
-    "standard": "13.1.0"
+    "rollup": "2.7.6",
+    "rollup-plugin-css-only": "2.0.0",
+    "rollup-plugin-dev": "1.1.2",
+    "rollup-plugin-livereload": "1.3.0",
+    "rollup-plugin-serve": "1.0.1",
+    "rollup-plugin-terser": "5.3.0",
+    "sane": "4.1.0"
   }
 }

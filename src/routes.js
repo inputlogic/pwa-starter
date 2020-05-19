@@ -1,15 +1,17 @@
 // import { API_URL } from '/consts'
 
-export default [
+export const routes = [
   {
     namespace: '',
     url: '',
     routes: {
       home: '/',
       login: '/login',
+      logout: '/logout',
       signup: '/signup',
       forgotPassword: '/forgot-password',
       resetPassword: '/reset-password/:resetToken/:userId',
+      app: '/users',
       users: '/users',
       user: '/users/:id'
     }
@@ -36,7 +38,7 @@ export default [
     url: API_URL,
     routes: {
       login: '/auth/login',
-      signup: '/auth/login',
+      signup: '/auth/signup',
       forgotPassword: '/auth/forgot-password',
       resetPassword: '/auth/reset-password',
       users: '/users',

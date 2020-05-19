@@ -1,6 +1,6 @@
 import { h, Component } from 'preact'
 
-const asyncComponent = getComponent => {
+export const asyncComponent = getComponent => {
   class AsyncComponent extends Component {
     componentWillMount () {
       getComponent().then(component => {
@@ -20,5 +20,3 @@ const asyncComponent = getComponent => {
 
   return AsyncComponent
 }
-
-export default asyncComponent

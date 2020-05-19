@@ -1,26 +1,34 @@
-import { Modals } from '@app-elements/modal'
-import Router from '@app-elements/router'
+import Router, { RouteTo } from '@app-elements/router'
+import { showNotification } from '@app-elements/notification'
 
-import ExampleModal from '/modals/example-modal'
-
-import url from '/util/url'
-
-import Home from './home'
+import { asyncComponent } from '/elements/async-component'
+import { url } from '/util/url'
+import { getState } from '/store'
 
 export const routes = {
-  home: {
-    path: url('home'),
-    component: Home
+  app: {
+    path: url('app'),
+    component: asyncComponent(() => import('./users').then(m => m.Users))
+  },
+  users: {
+    path: url('users'),
+    component: asyncComponent(() => import('./users').then(m => m.Users))
+  },
+  user: {
+    path: url('user'),
+    component: asyncComponent(() => import('./user').then(m => m.User))
   }
 }
 
-export default function MainApp () {
+export function MainApp () {
+  const { token, currentPath } = getState()
+  if (token == null) {
+    showNotification({ message: 'Please login to view that page.' })
+    return <RouteTo name='login' queries={{ next: currentPath }} />
+  }
   return (
-    <div>
+    <div id='main-layout'>
       <Router routes={routes} />
-      <Modals>
-        <ExampleModal />
-      </Modals>
     </div>
   )
 }

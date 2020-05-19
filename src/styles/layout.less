@@ -1,0 +1,149 @@
+.bg-off-white {
+  background-color: @off-white;
+}
+
+.bg-light-blue {
+  background-color: @light-blue;
+}
+
+.bg-alt {
+  background-color: @border-color-alt;
+}
+
+.container {
+  margin-right: auto;
+  margin-left: auto;
+  max-width: @container-width;
+  width: 94%;
+  position: relative;
+
+  .dot-flashing {
+    margin: 0 auto;
+  }
+}
+
+.level {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--gutter);
+  padding-bottom: var(--gutter); 
+  width: 100%;
+}
+
+.level.no-padding {
+  padding: 0;
+}
+
+.level.no-padding-bottom {
+  padding-bottom: 0;
+}
+
+.level:not(.no-margin) > *:not(.level-right) {
+  margin-right: var(--gutter);
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+// Flex helpers
+
+.flex {
+  display: flex;
+}
+
+.justify-content-around {
+  justify-content: space-around;
+}
+
+.column {
+  flex-direction: column;
+}
+
+// Grid helpers
+
+.generate-grids(@i) when (@i > 0) {
+  .grid-@{i} {
+    display: grid;
+    grid-template-columns: repeat(@i, 1fr);
+    grid-gap: @gutter * 2;
+  }
+  .generate-grids((@i - 1));
+}
+.generate-grids(6);
+
+// width helpers
+.w-loop (@i) when (@i > 0) {
+  .w-@{i} {
+    width: ~"@{i}%";
+  }
+  .w-loop(@i - 25);
+}
+.w-loop (100);
+
+.w-third {
+  width: calc(100% / 3);
+}
+
+.w-two-thirds {
+  width: calc(100% / 1.5);
+}
+
+@iterations: 50;
+
+// margin-top helper class
+.mt-loop (@i) when (@i > 0) {
+  .mt-@{i} {
+    margin-top: ~"@{i}em";
+  }
+  .mt-loop(@i - 1);
+}
+.mt-loop (@iterations);
+
+// margin-bottom helper class
+.mb-loop (@i) when (@i > 0) {
+  .mb-@{i} {
+    margin-bottom: ~"@{i}em";
+  }
+  .mb-loop(@i - 1);
+}
+.mb-loop (@iterations);
+
+// padding-top helper class
+.pt-loop (@i) when (@i > 0) {
+  .pt-@{i} {
+    padding-top: ~"@{i}em";
+  }
+  .pt-loop(@i - 1);
+}
+.pt-loop (@iterations);
+
+// padding-bottom helper class
+.pb-loop (@i) when (@i > 0) {
+  .pb-@{i} {
+    padding-bottom: ~"@{i}em";
+  }
+  .pb-loop(@i - 1);
+}
+.pb-loop (@iterations);
+
+// padding horizontal
+.ph-loop (@i) when (@i > 0) {
+  .ph-@{i} {
+    padding-left: ~"@{i}em";
+    padding-right: ~"@{i}em";
+  }
+  .ph-loop(@i - 1);
+}
+.ph-loop (@iterations);
+
+// padding left
+.pl-loop (@i) when (@i > 0) {
+  .pl-@{i} {
+    padding-left: ~"@{i}em";
+  }
+  .pl-loop(@i - 1);
+}
+.pl-loop (@iterations);
+

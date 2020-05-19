@@ -1,17 +1,20 @@
+/* eslint import/no-default-export: 0 */
+
 import { resolve as pathResolve } from 'path'
 import { writeFileSync } from 'fs'
 import less from 'less'
 
 // Rollup plugins.
-import alias from 'rollup-plugin-alias'
-import babel from 'rollup-plugin-babel'
-import cjs from 'rollup-plugin-commonjs'
+import alias from '@rollup/plugin-alias'
+import babel from '@rollup/plugin-babel'
+import cjs from '@rollup/plugin-commonjs'
 import css from 'rollup-plugin-css-only'
-import globals from 'rollup-plugin-node-globals'
-import resolve from 'rollup-plugin-node-resolve'
+import inject from '@rollup/plugin-inject'
+import resolve from '@rollup/plugin-node-resolve'
 
 export default {
   input: 'src/index.js',
+  preserveEntrySignatures: false,
   output: [
     // ES module version, for modern browsers
     {
@@ -42,6 +45,7 @@ export default {
       }
     }),
     babel({
+      babelHelpers: 'bundled',
       include: ['src/**', 'server/**', 'node_modules/@app-elements/**']
     }),
     resolve({
@@ -64,16 +68,22 @@ export default {
         'node_modules/atom/**'
       ]
     }),
-    globals(),
+    inject({
+      // import { createElement } from 'react'
+      createElement: ['react', 'createElement'],
+      W: 'wasmuth'
+    }),
     alias({
-      react: pathResolve(
-        __dirname,
-        '../node_modules/preact/compat/src/index.js'
-      ),
-      'react-dom': pathResolve(
-        __dirname,
-        '../node_modules/preact/compat/src/index.js'
-      )
+      entries: [
+        {
+          find: 'react',
+          replacement: pathResolve(__dirname, '../node_modules/preact/compat/src/index.js')
+        },
+        {
+          find: 'react-dom',
+          replacement: pathResolve(__dirname, '../node_modules/preact/compat/src/index.js')
+        }
+      ]
     })
   ]
 }

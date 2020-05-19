@@ -1,16 +1,21 @@
 import Router from '@app-elements/router'
 
-import url from '/util/url'
+import { url } from '/util/url'
 
-import Login from './login'
-import SignUp from './signup'
-import ForgotPassword from './forgot-password'
-import ResetPassword from './reset-password'
+import { Login } from './login'
+import { Logout } from './logout'
+import { SignUp } from './signup'
+import { ForgotPassword } from './forgot-password'
+import { ResetPassword } from './reset-password'
 
 export const routes = {
   login: {
     path: url('login'),
     component: Login
+  },
+  logout: {
+    path: url('logout'),
+    component: Logout
   },
   signup: {
     path: url('signup'),
@@ -26,10 +31,8 @@ export const routes = {
   }
 }
 
-export default function AuthApp () {
+export function AuthApp () {
   return (
-    <div>
-      <Router routes={routes} />
-    </div>
+    <Router routes={routes} />
   )
 }

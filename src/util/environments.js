@@ -1,5 +1,3 @@
-import W from 'wasmuth'
-
 const environments = {
   test: 'localhost:5001',
   development: [
@@ -23,6 +21,6 @@ export const environment = (() => {
     }
     return current
   } catch (_) {
-    return process.env.NODE_ENV || 'development'
+    return '__ENV__' || 'development'
   }
 })()

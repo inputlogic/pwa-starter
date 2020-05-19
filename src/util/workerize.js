@@ -12,7 +12,7 @@
 // // Won't be needing this anymore
 // URL.revokeObjectURL( blobURL );
 
-export default function workerize (name, ...args) {
+export function workerize (name, ...args) {
   const worker = new window.Worker(`workers/${name}.js`)
   const promise = new Promise((resolve, reject) => {
     worker.onmessage = ev => resolve(ev.data)
