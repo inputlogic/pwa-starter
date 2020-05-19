@@ -1,9 +1,9 @@
 <p align="center">
-  <a href="#"><img src="https://i.imgur.com/kJ7g4WG.jpg" alt="PWA Starter Logo" style="max-width: 50%;" /></a>
+  <a href="#"><img src="https://i.imgur.com/kJ7g4WG.jpg" alt="PWA Starter Logo" width="300" /></a>
+  <br />  <br />  <br />
 </p>
 
-**PWA-Starter** is a project skeleton for building Single Page Apps and/or
-Progressive Web Apps.
+**PWA-Starter** is a project skeleton for building Single Page & Progressive Web Apps.
 
 The key technology to be familiar with is React. This skeleton embraces
 component based architecture, and tries to introduce very few libraries
@@ -32,11 +32,17 @@ that do one thing. If you component definition is getting dense, think about how
 Documentation
 =============
 
-**PWA-Starter** is mostly just folder structure. The basic concepts you _need_ to understand are actually broken into three main components/hooks:
+**PWA-Starter** is mostly just folder structure. The basic concepts you _need_ to understand are actually broken into Components and Hooks:
 
 - [Routing](https://github.com/inputlogic/elements/tree/master/components/router)
 - [Global State](https://github.com/inputlogic/elements/tree/master/components/use-mapped-state)
 - [Making Requests](https://github.com/inputlogic/elements/tree/master/components/use-request)
+- [Forms](https://github.com/inputlogic/elements/tree/master/components/form)
+
+Cookbook
+--------
+
+- [Using a 3rd party React library](https://github.com/inputlogic/pwa-starter/wiki/Using-3rd-Party-React-Libraries-Via-%60preact-compat%60)
 
 
 Deploying
