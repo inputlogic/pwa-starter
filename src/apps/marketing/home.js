@@ -136,7 +136,7 @@ export function Home () {
             <Carousel withDots noNav wrapperClass='testimonials'>
               {items.map(hex => (
                 <Testimonial
-                  avatarSrc={`http://www.placehold.it/400x100/${hex}/f44?text=${hex}`}
+                  avatarSrc={`//www.placehold.it/400x100/${hex}/f44?text=${hex}`}
                   quote={`It's new. It's out of the ordinary. It's rather extrordinary, so yo bust this commentary. Garrulous, Chicanery, recalcitrant, Eudaimonic, promulgating, Loquacious, ecumenical.`}
                   attribution='Fresh Prince'
                 />
