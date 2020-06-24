@@ -1,4 +1,4 @@
-import qs from '@app-elements/router/qs'
+import { stringify } from '@app-elements/router/qs'
 
 import { routes } from '/routes'
 
@@ -33,5 +33,5 @@ export const url = (name, { args = {}, queries = {} } = {}) => {
     .reduce((acc, k) => acc.replace(`:${k}`, args[k]), rule)
   const hasQueries = Object.keys(queries).length > 0
 
-  return `${scheme.url}${replaced}${!hasQueries ? '' : '?' + qs.stringify(queries)}`
+  return `${scheme.url}${replaced}${!hasQueries ? '' : '?' + stringify(queries)}`
 }

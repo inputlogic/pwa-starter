@@ -1,4 +1,4 @@
-import Router, { RouteTo } from '@app-elements/router'
+import { Router, RouteTo } from '@app-elements/router'
 import { showNotification } from '@app-elements/notification'
 
 import { asyncComponent } from '/elements/async-component'

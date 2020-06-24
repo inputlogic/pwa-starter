@@ -1,4 +1,4 @@
-import Router from '@app-elements/router'
+import { Router } from '@app-elements/router'
 
 import { url } from '/util/url'
 

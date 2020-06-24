@@ -15,7 +15,7 @@ import { render } from 'react'
 // the most important Component of all.
 import Helmet from '@app-elements/helmet'
 import Notification from '@app-elements/notification'
-import Router from '@app-elements/router'
+import { Router, RouteProvider } from '@app-elements/router'
 
 // Here, we import Components we want to render on *all* routes. For example,
 // we include a GlobalHeader, and a *NotFound* component which renders when no route is
@@ -78,22 +78,23 @@ const routes = {
 function Root () {
   return (
     <Provider store={store} routes={routes}>
-      <div className='main-app-container'>
+      <RouteProvider routes={routes}>
+        <div className='main-app-container'>
+          {/* ___CHANGEME___ */}
+          <Helmet
+            title='Welcome'
+            titleTemplate='PWA Starter | %s'
+            defaultTitle='Welcome'
+          />
 
-        {/* ___CHANGEME___ */}
-        <Helmet
-          title='Welcome'
-          titleTemplate='PWA Starter | %s'
-          defaultTitle='Welcome'
-        />
+          <GlobalHeader />
+          <Notification />
 
-        <GlobalHeader />
-        <Notification />
+          <Router routes={routes} />
 
-        <Router routes={routes} />
-
-        <NotFound />
-      </div>
+          <NotFound />
+        </div>
+      </RouteProvider>
     </Provider>
   )
 }

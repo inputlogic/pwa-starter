@@ -1,12 +1,9 @@
-// We are going to use ListResource to fetch and display results of
-// an API request. You could also use the lower-level [withRequest HoC](https://github.com/inputlogic/elements/tree/master/components/with-request)
-import ListResource from '@app-elements/list-resource'
-
 import { Link } from '@app-elements/router'
+import { LoadingIndicator } from '@app-elements/loading-indicator'
+import { useRequest } from '@app-elements/use-request'
 
 import { url } from '/util/url'
 
-// Just some simple styles for this page
 import './users.less'
 
 // We need to define a Component that represents each item returned
@@ -21,14 +18,12 @@ const UserItem = ({ id, name, email }) =>
     <p>{email}</p>
   </div>
 
-// In our page component we render a ListResource instance, telling it
-// the endpoint to fetch results from, to limit the results to `10`, and
-// to render each result item with our `UserItem` component.
-export const Users = () =>
-  <div className='container pt-7 pb-4'>
-    <ListResource
-      endpoint={url('api.users')}
-      limit={10}
-      render={UserItem}
-    />
-  </div>
+export function Users (props) {
+  const { result, isLoading } = useRequest(this.context.store, url('api.users', { args: { limit: 10 } }))
+  return (
+    <div className='container pt-7 pb-4'>
+      {isLoading && <LoadingIndicator />}
+      {result != null && result.map(UserItem)}
+    </div>
+  )
+}

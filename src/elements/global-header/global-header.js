@@ -1,5 +1,5 @@
-import Avatar from '@app-elements/avatar'
-import Dropdown from '@app-elements/dropdown'
+import { Avatar } from '@app-elements/avatar'
+import { Dropdown } from '@app-elements/dropdown'
 import { Link } from '@app-elements/router'
 import { useMappedState } from '@app-elements/use-mapped-state'
 

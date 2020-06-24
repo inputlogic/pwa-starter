@@ -1,4 +1,4 @@
-import Avatar from '@app-elements/avatar'
+import { Avatar } from '@app-elements/avatar'
 
 import './testimonial.less'
 

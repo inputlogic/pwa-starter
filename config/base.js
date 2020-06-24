@@ -3,6 +3,7 @@
 import { resolve as pathResolve } from 'path'
 import { writeFileSync } from 'fs'
 import less from 'less'
+import lessGlob from 'less-plugin-glob'
 
 // Rollup plugins.
 import alias from '@rollup/plugin-alias'
@@ -34,7 +35,7 @@ export default {
       include: ['**/*.less', 'node_modules/@app-elements/**/*.less'],
       output: function (styles, styleNodes) {
         less
-          .render(styles, {})
+          .render(styles, { plugins: [lessGlob] })
           .then(output => {
             // output.css = string of css
             // output.map = string of sourcemap
@@ -46,7 +47,7 @@ export default {
     }),
     babel({
       babelHelpers: 'bundled',
-      include: ['src/**', 'server/**', 'node_modules/@app-elements/**']
+      include: ['src/**', 'server/**', 'node_modules/@app-elements/form/**', 'node_modules/@app-elements/with-state/**']
     }),
     resolve({
       browser: false,

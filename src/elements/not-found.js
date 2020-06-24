@@ -1,10 +1,8 @@
-import { useMappedState } from '@app-elements/use-mapped-state'
+import { useRouter } from '@app-elements/router'
 
 export function NotFound () {
-  const currentRoute = useMappedState(
-    this.context.store, ({ currentRoute }) => currentRoute)
-
-  if (!currentRoute) {
+  const { route } = useRouter()
+  if (route && route.notFound) {
     return (
       <div className='container pt-10'>
         Not Found :(

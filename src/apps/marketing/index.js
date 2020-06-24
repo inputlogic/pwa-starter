@@ -1,5 +1,5 @@
 import { Fragment } from 'react'
-import Router from '@app-elements/router'
+import { Router } from '@app-elements/router'
 
 import { Home } from './home'
 import { MarketingFooter } from './footer'

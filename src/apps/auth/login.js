@@ -1,7 +1,7 @@
+import W from 'wasmuth'
 import { useState } from 'react'
-import { RouteTo, Link } from '@app-elements/router'
+import { RouteTo, Link, useRouter } from '@app-elements/router'
 import { showNotification } from '@app-elements/notification'
-import { useMappedState } from '@app-elements/use-mapped-state'
 import Form, { SubmitButton } from '@app-elements/form'
 
 import { TextInput } from '/elements/text-input'
@@ -13,7 +13,8 @@ export function Login () {
   const [isSuccess, setSuccess] = useState(false)
 
   // We can use the 'next' argument to redirect back to the user's destination
-  const redirect = useMappedState(store, state => state.currentRoute.args.next)
+  const router = useRouter()
+  const redirect = W.path('route.args.next', router)
 
   if (isSuccess) {
     return redirect

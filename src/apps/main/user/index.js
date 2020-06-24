@@ -1,5 +1,5 @@
 import Helmet from '@app-elements/helmet'
-import LoadingIndicator from '@app-elements/loading-indicator'
+import { LoadingIndicator } from '@app-elements/loading-indicator'
 import { Link } from '@app-elements/router'
 import { useRequest } from '@app-elements/use-request'
 
