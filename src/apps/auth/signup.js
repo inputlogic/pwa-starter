@@ -1,38 +1,29 @@
-import { useState } from 'react'
-import { RouteTo, Link } from '@app-elements/router'
+import { useRouter, Link } from '@app-elements/router'
 import { showNotification } from '@app-elements/notification'
-import Form, { SubmitButton } from '@app-elements/form'
+import { useForm } from '@app-elements/use-form'
+import { LoadingIndicator } from '@app-elements/loading-indicator'
 
 import { TextInput } from '/elements/text-input'
-
 import { setState } from '/store'
 import { url } from '/util/url'
 
 export function SignUp () {
-  const [isSuccess, setSuccess] = useState(false)
-
-  // If we have signed in successfully, use RouteTo to navigate to a new page.
-  if (isSuccess) {
-    return <RouteTo name='app' />
-  }
-
-  const formProps = {
-    name: 'SignUp',
+  const { routeTo } = useRouter()
+  const { submit, field, isSubmitting } = useForm({
     action: url('api.signup'),
-    method: 'post',
-    noAuth: true,
     validations: {
-      password: (val = '') =>
-        val.length < 6 && 'Password must be greater than 6 characters!'
+      email: s => !s && 'Please provide your email address.',
+      password: s => (!s || s.length < 6) && 'Password must be at least 6 characters'
     },
-    onSuccess: ({ token, userId }) => {
+    onSuccess: ({ response }) => {
+      const { token, userId } = response
       window.localStorage.setItem('token', token)
       setState({ token, userId })
-      setSuccess(true)
       showNotification({
         type: 'success',
         message: 'Your account has been created!'
       })
+      routeTo(url('app'))
     },
     onFailure: (err) => {
       console.error('SignUp', { err })
@@ -40,17 +31,21 @@ export function SignUp () {
         message: 'We were not able to create an account for you!'
       })
     }
-  }
+  })
 
   return (
     <div className='container pt-10'>
       <div className='flex justify-content-around'>
         <div className='w-third'>
           <h2>Sign up</h2>
-          <Form {...formProps}>
-            <TextInput label='Email Address' name='email' placeholder='Your Email' required isFormField />
-            <TextInput type='password' label='Password' name='password' placeholder='Your Password' required isFormField />
-            <SubmitButton className='btn'>Sign Up</SubmitButton>
+          <form onSubmit={submit}>
+            <TextInput label='Email Address' placeholder='Your Email' required {...field('email')} />
+            <TextInput type='password' label='Password' placeholder='Your Password' required {...field('password')} />
+            <button type='submit' className='btn' disabled={isSubmitting}>
+              {isSubmitting
+                ? <LoadingIndicator />
+                : 'Sign Up'}
+            </button>
             <div className='pt-1'>
               <span className='field-hint'>
                 <Link name='login'>Have an account? Log in.</Link>
@@ -58,7 +53,7 @@ export function SignUp () {
                 <Link name='forgotPassword'>Forgot password?</Link>
               </span>
             </div>
-          </Form>
+          </form>
         </div>
       </div>
     </div>

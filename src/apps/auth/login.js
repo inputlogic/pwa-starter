@@ -1,40 +1,29 @@
 import W from 'wasmuth'
-import { useState } from 'react'
-import { RouteTo, Link, useRouter } from '@app-elements/router'
+import { Link, useRouter } from '@app-elements/router'
+import { LoadingIndicator } from '@app-elements/loading-indicator'
 import { showNotification } from '@app-elements/notification'
-import Form, { SubmitButton } from '@app-elements/form'
+import { useForm } from '@app-elements/use-form'
 
 import { TextInput } from '/elements/text-input'
-
 import { url } from '/util/url'
+import { setState } from '/store'
 
 export function Login () {
-  const { store } = this.context
-  const [isSuccess, setSuccess] = useState(false)
-
   // We can use the 'next' argument to redirect back to the user's destination
   const router = useRouter()
   const redirect = W.path('route.args.next', router)
 
-  if (isSuccess) {
-    return redirect
-      ? <RouteTo url={redirect} />
-      : <RouteTo name='app' />
-  }
-
-  const formProps = {
-    name: 'Login',
+  const { submit, field, isSubmitting } = useForm({
     action: url('api.login'),
-    method: 'post',
-    noAuth: true,
     validations: {
       password: (val = '') =>
         val.length < 6 && 'Password must be greater than 6 characters!'
     },
-    onSuccess: ({ token, userId }) => {
+    onSuccess: ({ response }) => {
+      const { token, userId } = response
       window.localStorage.setItem('token', token)
-      store.setState({ token, userId })
-      setSuccess(true)
+      setState({ token, userId })
+      router.routeTo(redirect || url('app'))
     },
     onFailure: (err) => {
       console.error('Login', { err })
@@ -42,25 +31,29 @@ export function Login () {
         message: 'We were not able to log you in!'
       })
     }
-  }
+  })
 
   return (
     <div className='container pt-10'>
       <div className='flex justify-content-around'>
         <div className='w-third'>
           <h2>Log in</h2>
-          <Form {...formProps}>
-            <TextInput label='Email Address' name='email' placeholder='Your Email' required isFormField />
-            <TextInput type='password' label='Password' name='password' placeholder='Your Password' required isFormField />
-            <SubmitButton className='btn'>Login</SubmitButton>
+          <form onSubmit={submit}>
+            <TextInput label='Email Address' placeholder='Your Email' required {...field('email')} />
+            <TextInput type='password' label='Password' placeholder='Your Password' required {...field('password')} />
+            <button type='submit' className='btn' disabled={isSubmitting}>
+              {isSubmitting
+                ? <LoadingIndicator />
+                : 'Log in'}
+            </button>
             <div className='pt-1'>
               <div className='field-hint'>
-                <Link name='signup'>Need an account? Sign Up.</Link>
+                <Link to='signup'>Need an account? Sign Up.</Link>
                 <br />
-                <Link name='forgotPassword'>Forgot password?</Link>
+                <Link to='forgotPassword'>Forgot password?</Link>
               </div>
             </div>
-          </Form>
+          </form>
         </div>
       </div>
     </div>

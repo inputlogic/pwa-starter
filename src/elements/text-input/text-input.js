@@ -1,5 +1,3 @@
-import { ErrorOrHint } from '@app-elements/form'
-
 import './text-input.less'
 
 export const TextInput = ({
@@ -9,11 +7,11 @@ export const TextInput = ({
   label,
   placeholder,
   variant,
+  title,
   ...props
 }) =>
   <div className={`input-component ${variant || ''}`}>
-    {label
-      && <label htmlFor={name}>{label}</label>}
+    {label && <label htmlFor={name}>{label}</label>}
 
     <input
       type={type}
@@ -23,6 +21,9 @@ export const TextInput = ({
       {...props}
     />
 
-    {props.formName != null
-      && <ErrorOrHint formName={props.formName} name={name} />}
+    {title && (
+      <span className='field-hint is-error'>
+        {title}
+      </span>
+    )}
   </div>
