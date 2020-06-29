@@ -27,6 +27,8 @@ module.exports = {
     'react-hooks',
   ],
   rules: {
+    'no-unused-vars': ['error', {'argsIgnorePattern': '^_'}],
+    'quote-props': 'off',
     'comma-dangle': ["error", "only-multiline"],
     'operator-linebreak': ['error', 'before'],
     'import/no-absolute-path': "off",
