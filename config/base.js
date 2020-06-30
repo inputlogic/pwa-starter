@@ -11,6 +11,7 @@ import babel from '@rollup/plugin-babel'
 import cjs from '@rollup/plugin-commonjs'
 import css from 'rollup-plugin-css-only'
 import inject from '@rollup/plugin-inject'
+import replace from '@rollup/plugin-replace'
 import resolve from '@rollup/plugin-node-resolve'
 
 export default {
@@ -55,24 +56,27 @@ export default {
     }),
     cjs({
       exclude: [
-        'node_modules/process-es6/**'
+        // 'node_modules/process-es6/**'
       ],
       include: [
+        'node_modules/atom/**',
+        'node_modules/autobind-decorator/**',
+        'node_modules/debounce/**',
+        'node_modules/object-assign/**',
         'node_modules/preact/**',
         'node_modules/prop-types/**',
         'node_modules/react-is/**',
-        'node_modules/object-assign/**',
-        'node_modules/autobind-decorator/**',
-        'node_modules/warning/**',
         'node_modules/to-snake-case/**',
-        'node_modules/debounce/**',
-        'node_modules/atom/**'
+        'node_modules/warning/**'
       ]
     }),
     inject({
       // import { createElement } from 'react'
       createElement: ['react', 'createElement'],
       W: 'wasmuth'
+    }),
+    replace({
+      'process.env.NODE_ENV': JSON.stringify('development')
     }),
     alias({
       entries: [
