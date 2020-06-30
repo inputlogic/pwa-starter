@@ -147,3 +147,65 @@
 }
 .pl-loop (@iterations);
 
+
+// Router
+
+.stack {
+  flex: 1;
+  position: relative;
+  margin-top: 20px;
+  border: 1px solid slateblue;
+  width: 100%;
+  height: 100vh;
+}
+
+.item-enter {
+  opacity: 0;
+  z-index: 1;
+}
+
+.item-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.item-exit {
+  opacity: 1;
+}
+
+.item-exit-active {
+  opacity: 0;
+  transition: opacity 500ms ease-in;
+  z-index: 1;
+}
+
+.item-enter-done {
+  opacity: 1;
+}
+
+.item-enter-done + div {
+  opacity: 1;
+}
+
+
+.fade-enter {
+  opacity: 0;
+  transform: translateY(-100%);
+}
+.fade-enter-active {
+  opacity: 1;
+  transform: translateY(0%);
+}
+.fade-exit {
+  opacity: 1;
+  transform: translateY(0%);
+}
+.fade-exit-active {
+  opacity: 0;
+  transform: translateY(100%);
+}
+.fade-enter-active,
+.fade-exit-active {
+  transition: opacity 500ms, transform 500ms;
+}
+

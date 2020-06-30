@@ -42,17 +42,20 @@ export function MainApp () {
       */}
       <StackRouter routes={routes}>
         {({ stack, limit = 1 }) => {
-          const { name, args, Component } = stack[stack.length - 1]
+          const { path, args, Component } = stack[stack.length - 1]
+          console.log({ stack })
           return (
             <SwitchTransition mode='out-in'>
               <CSSTransition
-                key={name}
+                key={path}
                 classNames="fade"
                 addEndListener={(node, done) => {
                   node.addEventListener("transitionend", done, false)
                 }}
               >
-                <Component key={name} {...args} />
+                <div className='page'>
+                  <Component {...args} />
+                </div>
               </CSSTransition>
             </SwitchTransition>
           )
