@@ -159,38 +159,9 @@
   height: 100vh;
 }
 
-.item-enter {
-  opacity: 0;
-  z-index: 1;
-}
-
-.item-enter-active {
-  opacity: 1;
-  transition: opacity 500ms ease-in;
-}
-
-.item-exit {
-  opacity: 1;
-}
-
-.item-exit-active {
-  opacity: 0;
-  transition: opacity 500ms ease-in;
-  z-index: 1;
-}
-
-.item-enter-done {
-  opacity: 1;
-}
-
-.item-enter-done + div {
-  opacity: 1;
-}
-
-
 .fade-enter {
   opacity: 0;
-  transform: translateY(-100%);
+  transform: translateY(-100px);
 }
 .fade-enter-active {
   opacity: 1;
@@ -202,7 +173,7 @@
 }
 .fade-exit-active {
   opacity: 0;
-  transform: translateY(100%);
+  transform: translateY(100px);
 }
 .fade-enter-active,
 .fade-exit-active {

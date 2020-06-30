@@ -1,7 +1,7 @@
 import { Avatar } from '@app-elements/avatar'
 import { Dropdown } from '@app-elements/dropdown'
 import { Link } from '@app-elements/router'
-import { useMappedState } from '@app-elements/use-mapped-state'
+import { useStorePath } from '@app-elements/use-store-path'
 
 import './global-header.less'
 
@@ -24,7 +24,7 @@ const UserActions = () =>
   </Dropdown>
 
 export function GlobalHeader () {
-  const authed = useMappedState(this.context.store, ({ token }) => token != null)
+  const [authed] = useStorePath(this.context.store, 'token')
 
   return (
     <header class='global-header'>
