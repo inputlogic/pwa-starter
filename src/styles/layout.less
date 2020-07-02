@@ -161,22 +161,26 @@
 
 .fade-enter {
   opacity: 0;
-  transform: translateY(-100px);
+  transform: translateX(100px);
 }
+
 .fade-enter-active {
   opacity: 1;
-  transform: translateY(0%);
+  transform: translateX(0%);
+  // transition: transform 400ms cubic-bezier(0.4, 0.1, 0.7, 0.95);
 }
+
 .fade-exit {
   opacity: 1;
-  transform: translateY(0%);
+  transform: translateX(0%);
 }
+
 .fade-exit-active {
   opacity: 0;
-  transform: translateY(100px);
+  transform: translateX(-100px);
 }
+
 .fade-enter-active,
 .fade-exit-active {
   transition: opacity 500ms, transform 500ms;
 }
-
