@@ -1,6 +1,6 @@
 import { StackRouter, RouteTo } from '@app-elements/router'
 import { showNotification } from '@app-elements/notification'
-import { CSSTransition, SwitchTransition } from "react-transition-group"
+import { CSSTransition, TransitionGroup } from "react-transition-group"
 
 import { asyncComponent } from '/elements/async-component'
 import { url } from '/util/url'
@@ -38,17 +38,16 @@ export function MainApp () {
         The current active route is always the last in the `stack`
         array. In this case, we are going to limit the stack to only
         hold 1 route, and just utilize the function as child pattern,
-        so we can wrap the route component with a SwitchTransition.
+        so we can wrap the route component with a TransitionGroup.
       */}
       <StackRouter routes={routes}>
         {({ stack, limit = 1 }) => {
-          const { path, args, Component } = stack[stack.length - 1]
-          console.log({ stack })
+          const { path, args, isBack, Component } = stack[stack.length - 1]
           return (
-            <SwitchTransition mode='out-in'>
+            <TransitionGroup className="stack">
               <CSSTransition
                 key={path}
-                classNames="fade"
+                classNames={isBack ? "fade-reverse" : "fade"}
                 addEndListener={(node, done) => {
                   node.addEventListener("transitionend", done, false)
                 }}
@@ -57,7 +56,7 @@ export function MainApp () {
                   <Component {...args} />
                 </div>
               </CSSTransition>
-            </SwitchTransition>
+            </TransitionGroup>
           )
         }}
       </StackRouter>
