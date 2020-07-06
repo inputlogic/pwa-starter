@@ -1,5 +1,6 @@
-import { Router, RouteTo } from '@app-elements/router'
+import { StackRouter, RouteTo } from '@app-elements/router'
 import { showNotification } from '@app-elements/notification'
+import { CSSTransition, TransitionGroup } from "react-transition-group"
 
 import { asyncComponent } from '/elements/async-component'
 import { url } from '/util/url'
@@ -28,7 +29,37 @@ export function MainApp () {
   }
   return (
     <div id='main-layout'>
-      <Router routes={routes} />
+      {/*
+        We are going to use a StackRouter so we can wrap our route
+        components with components from ReactTransitionGroup.
+        StackRouter maintains a stack (much like window.history)
+        of the routes that have been rendered.
+
+        The current active route is always the last in the `stack`
+        array. In this case, we are going to limit the stack to only
+        hold 1 route, and just utilize the function as child pattern,
+        so we can wrap the route component with a TransitionGroup.
+      */}
+      <StackRouter routes={routes}>
+        {({ stack, limit = 1 }) => {
+          const { path, args, isBack, Component } = stack[stack.length - 1]
+          return (
+            <TransitionGroup className="stack">
+              <CSSTransition
+                key={path}
+                classNames={isBack ? "fade-reverse" : "fade"}
+                addEndListener={(node, done) => {
+                  node.addEventListener("transitionend", done, false)
+                }}
+              >
+                <div className='page'>
+                  <Component {...args} />
+                </div>
+              </CSSTransition>
+            </TransitionGroup>
+          )
+        }}
+      </StackRouter>
     </div>
   )
 }
