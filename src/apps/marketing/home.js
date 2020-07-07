@@ -9,6 +9,7 @@ import { Testimonial } from './testimonial'
 import { Pricing } from './pricing'
 
 import { url } from '/util/url'
+import { setState } from '/store'
 import { WEB_URL } from '/consts'
 
 const items = ['fff', 'a7c', '09d', '411', '111']
@@ -166,7 +167,9 @@ export function Home () {
               perTex='per Month'
               subTitle='Pay yearly for a wicked discount!'
             >
-              <Link name='signup' className='btn'>Get Started</Link>
+              <button className='btn' onClick={ev => setState({ modal: 'ExampleModal', chosenPlan: 'Yearly' })}>
+                Get Started
+              </button>
             </Pricing>
             <Pricing
               title='Monthly'
@@ -174,7 +177,9 @@ export function Home () {
               perTex='per Month'
               subTitle='No contact, cancel anytime.'
             >
-              <Link name='signup' className='btn btn-secondary'>Sign Up</Link>
+              <button className='btn btn-secondary' onClick={ev => setState({ modal: 'ExampleModal', chosenPlan: 'Monthly' })}>
+                Get Started
+              </button>
             </Pricing>
           </div>
         </div>

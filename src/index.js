@@ -20,6 +20,7 @@ import { Router, RouteProvider } from '@app-elements/router'
 // Here, we import Components we want to render on *all* routes. For example,
 // we include a GlobalHeader, and a *NotFound* component which renders when no route is
 // matched. (If your app does not need these global elements, you can of course remove them.)
+import { AllModals } from '/elements/all-modals'
 import { GlobalHeader } from '/elements/global-header'
 import { NotFound } from '/elements/not-found'
 
@@ -95,6 +96,7 @@ function Root () {
           <NotFound />
         </div>
       </RouteProvider>
+      <AllModals />
     </Provider>
   )
 }
