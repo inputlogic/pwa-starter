@@ -34,7 +34,7 @@ export const initialState = {
 const reducers = []
 
 // If DEBUG is true, we will enable Redux devtools
-export const store = typeof window !== 'undefined' && DEBUG
+export const store = DEBUG && !window.isJest
   ? devtools(createStore(reducers, initialState))
   : createStore(reducers, initialState)
 
