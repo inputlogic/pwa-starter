@@ -17,7 +17,7 @@
     "prelint": "rm -rf public; mkdir public; cp -r src/assets/* public/; cp -r src/assets/* public/",
     "lint": "eslint ./src",
     "pretest": "npm run lint",
-    "test": "exit 0"
+    "test": "jest"
   },
   "lint-staged": {
     "*.js": [
@@ -86,6 +86,8 @@
     "eslint-plugin-react": "7.20.3",
     "eslint-plugin-react-hooks": "4.0.5",
     "eslint-plugin-standard": "4.0.1",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^26.1.0",
     "less": "3.11.3",
     "less-plugin-glob": "^3.0.0",
     "lint-staged": "10.2.11",
