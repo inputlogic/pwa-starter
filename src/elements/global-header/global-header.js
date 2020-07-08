@@ -1,6 +1,6 @@
 import { Avatar } from '@app-elements/avatar'
 import { Dropdown } from '@app-elements/dropdown'
-import { Link } from '@app-elements/router'
+import { Link, useScrollToTop } from '@app-elements/router'
 import { useStorePath } from '@app-elements/use-store-path'
 
 import './global-header.less'
@@ -24,6 +24,8 @@ const UserActions = () =>
   </Dropdown>
 
 export function GlobalHeader () {
+  useScrollToTop()
+
   const [authed] = useStorePath(this.context.store, 'token')
 
   return (
