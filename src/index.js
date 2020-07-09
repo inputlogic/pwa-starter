@@ -24,9 +24,6 @@ import { AllModals } from '/elements/all-modals'
 import { GlobalHeader } from '/elements/global-header'
 import { NotFound } from '/elements/not-found'
 
-// And our apps' global store.
-import { store, Provider } from '/store'
-
 // We'll also import this file that extends some native functions.
 import '/util/extend-xhr'
 
@@ -72,32 +69,28 @@ const routes = {
 // And, finally, our Root! This is the top-level Component to render
 // into the DOM and kick-start our entire app!
 
-// First, our entire app is wrapped in the _atom_ `Provider` component.
-// This adds the store to the React context, meaning any child can access our
-// store reference.
-// Then we include those Component's that we want to be rendered on *all* routes.
+// First, our entire app is wrapped in the RouteProvider component, which must
+// be given the top-level routes object. RouteProvider exposes the route context
+// to all child components.
+// Then we include the Component's that we want to be rendered on *all* routes.
 function Root () {
   return (
-    <Provider store={store} routes={routes}>
-      <RouteProvider routes={routes}>
-        <div className='main-app-container'>
-          {/* ___CHANGEME___ */}
-          <Helmet
-            title='Welcome'
-            titleTemplate='PWA Starter | %s'
-            defaultTitle='Welcome'
-          />
+    <RouteProvider routes={routes}>
+      <div className='main-app-container'>
+        {/* ___CHANGEME___ */}
+        <Helmet
+          title='Welcome'
+          titleTemplate='PWA Starter | %s'
+          defaultTitle='Welcome'
+        />
 
-          <GlobalHeader />
-          <Notification />
-
-          <Router routes={routes} />
-
-          <NotFound />
-        </div>
-      </RouteProvider>
-      <AllModals />
-    </Provider>
+        <AllModals />
+        <GlobalHeader />
+        <Notification />
+        <Router routes={routes} />
+        <NotFound />
+      </div>
+    </RouteProvider>
   )
 }
 

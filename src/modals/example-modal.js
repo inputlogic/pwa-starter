@@ -1,14 +1,16 @@
 import { Modal } from '@app-elements/modal'
-import { useStorePath } from '@app-elements/use-store-path'
 
 import { setState } from '/store'
+import { useStorePath } from '/store/hooks'
 
 export function ExampleModal () {
-  const [chosenPlan] = useStorePath(this.context.store, 'chosenPlan')
+  const [chosenPlan] = useStorePath('chosenPlan')
+
   const close = ev => {
     ev.preventDefault()
     setState({ modal: null })
   }
+
   return (
     <Modal className='styled-modal small'>
       <div className='modal-header'>

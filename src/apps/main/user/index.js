@@ -1,15 +1,13 @@
-import Helmet from '@app-elements/helmet'
+import { Helmet } from '@app-elements/helmet'
 import { LoadingIndicator } from '@app-elements/loading-indicator'
 import { Link } from '@app-elements/router'
-import { useRequest } from '@app-elements/use-request'
 
 import { url } from '/util/url'
-
+import { useRequest } from '/store/hooks'
 import { WEB_URL } from '/consts'
 
 export function User ({ id }) {
-  const { store } = this.context
-  const { result, error, isLoading } = useRequest(store, url('api.user', { args: { id } }))
+  const { result, error, isLoading } = useRequest(url('api.user', { args: { id } }))
 
   if (isLoading) {
     return <div className='container mt-2'><LoadingIndicator /></div>

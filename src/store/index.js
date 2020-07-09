@@ -6,28 +6,7 @@ import createStore from 'atom'
 import devtools from 'atom/devtools'
 
 import { DEBUG } from '/consts'
-
-// Load state set by react-snap during prerendering
-const preloadedState = window.__PRELOADED_STATE__
-delete window.__PRELOADED_STATE__ // let it get garbage-collected
-
-// Define the global state on page load.
-export const initialState = {
-  clicks: 0,
-  token: window.localStorage.getItem('token'),
-  // In the browser, we initialize the currentPath prop, which is set
-  // by [Router](https://github.com/inputlogic/elements/tree/master/components/router)
-  currentPath: typeof window !== 'undefined'
-    ? window.location.pathname + window.location.search
-    : '/',
-  // Pre-rendering will have already computed some values for global state,
-  // and should be initialized on the client.
-  ...(
-    typeof window !== 'undefined'
-      ? preloadedState || {}
-      : {}
-  )
-}
+import { initialState } from './initial-state'
 
 // You can either define your reducers here, or add them later with:
 // `store.addReducer(reducer)`
@@ -43,6 +22,7 @@ window.snapSaveState = () => ({
   __PRELOADED_STATE__: W.without(['currentPath', 'currentRoute', 'token'], store.getState())
 })
 
+// Expose some store methods directly for convenience
 export const getState = store.getState
 export const setState = store.setState
 export const dispatch = store.dispatch
@@ -59,9 +39,3 @@ export function logout (stateToKeep = {}) {
     })
   })
 }
-
-// This is a simple Provider used in the RootApp to provide the
-// store instance on the React Context, so any child Component can
-// access it.
-export function Provider (props) { this.getChildContext = () => props }
-Provider.prototype.render = props => props.children
