@@ -4,28 +4,31 @@
 
 import createStore from 'atom'
 import devtools from 'atom/devtools'
+import { requestsReducer, actions as reqActions } from '@app-elements/use-request'
 
 import { DEBUG } from '/consts'
 import { initialState } from './initial-state'
 
 // You can either define your reducers here, or add them later with:
 // `store.addReducer(reducer)`
-const reducers = []
+const reducers = [
+  requestsReducer
+]
 
 // If DEBUG is true, we will enable Redux devtools
 export const store = DEBUG && !window.isJest
   ? devtools(createStore(reducers, initialState))
   : createStore(reducers, initialState)
 
-// Tell react-snap how to save Redux state
-window.snapSaveState = () => ({
-  __PRELOADED_STATE__: W.without(['currentPath', 'currentRoute', 'token'], store.getState())
-})
-
 // Expose some store methods directly for convenience
 export const getState = store.getState
 export const setState = store.setState
 export const dispatch = store.dispatch
+
+export const appendRequest = reqActions.appendRequest
+export const clearRequest = reqActions.clearRequest
+export const clearRequests = reqActions.clearRequests
+export const patchListRequest = reqActions.patchListRequest
 
 export function logout (stateToKeep = {}) {
   window.localStorage.removeItem('token')
@@ -39,3 +42,8 @@ export function logout (stateToKeep = {}) {
     })
   })
 }
+
+// Tell react-snap how to save Redux state
+window.snapSaveState = () => ({
+  __PRELOADED_STATE__: W.without(['currentPath', 'currentRoute', 'token'], store.getState())
+})
