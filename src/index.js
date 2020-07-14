@@ -15,7 +15,7 @@ import { render } from 'react'
 // the most important Component of all.
 import Helmet from '@app-elements/helmet'
 import Notification from '@app-elements/notification'
-import { Router, RouteProvider } from '@app-elements/router'
+import { Router, RouteProvider, SyncRouterState } from '@app-elements/router'
 
 // Here, we import Components we want to render on *all* routes. For example,
 // we include a GlobalHeader, and a *NotFound* component which renders when no route is
@@ -26,6 +26,7 @@ import { NotFound } from '/elements/not-found'
 
 // We'll also import this file that extends some native functions.
 import '/util/extend-xhr'
+import { setState } from '/store'
 
 // ### Styling
 
@@ -88,6 +89,9 @@ function Root () {
         <GlobalHeader />
         <Notification />
         <Router routes={routes} />
+        <SyncRouterState>
+          {({ path, route }) => setState({ currentPath: path, currentRoute: route })}
+        </SyncRouterState>
         <NotFound />
       </div>
     </RouteProvider>
