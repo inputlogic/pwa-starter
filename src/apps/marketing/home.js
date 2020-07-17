@@ -1,5 +1,4 @@
 import { Fragment } from 'react'
-
 import Carousel from '@app-elements/carousel'
 import Helmet from '@app-elements/helmet'
 import { Link } from '@app-elements/router'
@@ -16,7 +15,7 @@ const items = ['fff', 'a7c', '09d', '411', '111']
 
 export function Home () {
   return (
-    <Fragment>
+    <>
 
       {/* ___CHANGEME___ */}
       <Helmet
@@ -39,7 +38,7 @@ export function Home () {
       <div className='container'>
         <Hero
           text={(
-            <Fragment>
+            <>
               <h2 className='f1 fweight-400'>Your life is better with our app.</h2>
               <p className='f3'>Seriously, try it out now.</p>
 
@@ -47,7 +46,7 @@ export function Home () {
                 <Link name='signup' className='btn'>Get Started</Link>
                 <a href='#features' className='btn btn-ghost'>Learn more</a>
               </div>
-            </Fragment>
+            </>
           )}
           media={(
             <img src='https://via.placeholder.com/450/4285F4/FFFFFF?Text=Cool Screenshot' alt='Screenshot of our app in use' />
@@ -80,7 +79,7 @@ export function Home () {
             <ReverseHero
               measure='measure-wide'
               text={(
-                <Fragment>
+                <>
                   <h2 className='f1 fweight-400'>Your life is better with our app.</h2>
                   <p className='f3'>Seriously, try it out now.</p>
 
@@ -88,7 +87,7 @@ export function Home () {
                     <Link name='signup' className='btn'>Get Started</Link>
                     <a href='#features' className='btn btn-ghost'>Learn more</a>
                   </div>
-                </Fragment>
+                </>
               )}
               media={(
                 <img src='https://via.placeholder.com/450/00D1F7/FFFFFF?Text=Cool Screenshot' alt='Screenshot of our app in use' />
@@ -185,6 +184,6 @@ export function Home () {
         </div>
       </div>
 
-    </Fragment>
+    </>
   )
 }
