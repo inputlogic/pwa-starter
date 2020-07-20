@@ -44,6 +44,15 @@ export function logout (stateToKeep = {}) {
 }
 
 // Tell react-snap how to save Redux state
+// We omit certain keys as we don't want to persist them from the pre-rendering
+// build step.
+// We omit currentPath and currentRoute as they will reflect the
+// last URL visited by react-snap. When the user loads the website, if the URL
+// doesn't match what currentPath and currentRoute are set to, then there will
+// be a discrepancy until SyncRouterState updates the values.
+// We also omit token, to avoid it potentially being set to a bad value, which
+// could cause our app to perform an authenticated request, responding with
+// a 401.
 window.snapSaveState = () => ({
   __PRELOADED_STATE__: W.without(['currentPath', 'currentRoute', 'token'], store.getState())
 })
