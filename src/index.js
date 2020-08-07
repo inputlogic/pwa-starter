@@ -90,7 +90,8 @@ function Root () {
         <Notification />
         <Router routes={routes} />
         <SyncRouterState>
-          {({ path, route }) => setState({ currentPath: path, currentRoute: route })}
+          {({ path, route }) =>
+            console.log('SYNC', route) || setState({ currentPath: path, currentRoute: route })}
         </SyncRouterState>
         <NotFound />
       </div>

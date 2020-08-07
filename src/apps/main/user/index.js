@@ -3,11 +3,13 @@ import { LoadingIndicator } from '@app-elements/loading-indicator'
 import { Link } from '@app-elements/router'
 
 import { url } from '/util/url'
-import { useRequest } from '/store/hooks'
+import { useRequest, useMappedState } from '/store/hooks'
 import { WEB_URL } from '/consts'
 
-export function User ({ id }) {
-  const { result, error, isLoading } = useRequest(url('api.user', { args: { id } }))
+export function User () {
+  const id = useMappedState(({ currentRoute = {} }) => currentRoute.args && currentRoute.args.id)
+  console.log('User page component', { id })
+  const { result, error, isLoading } = useRequest(id != null ? url('api.user', { args: { id } }) : null)
 
   if (isLoading) {
     return <div className='container mt-2'><LoadingIndicator /></div>
