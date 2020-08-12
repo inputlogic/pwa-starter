@@ -19,7 +19,16 @@ const enforceHttps = (req, res, next) => {
 
 const assets = sirv('public', {
   maxAge: !DEV ? 31536000 : 0, // 1Y
-  immutable: false
+  immutable: false,
+  setHeaders: (res, pathname, stats) => {
+    if (pathname === '/') {
+      // Tell browsers not to cache index.html
+      // index.html is rather tiny and should be served fresh
+      // in case the linked bundle.css and index.js files
+      // are pointing to a new version.
+      res.setHeader('Cache-Control', 'public,max-age=0')
+    }
+  }
 })
 
 const notFound = (req, res) => {
