@@ -57,7 +57,7 @@
     "polka": "0.5.2",
     "preact": "10.4.5",
     "react-transition-group": "^4.4.1",
-    "sirv": "1.0.1",
+    "sirv": "1.0.6",
     "wasmuth": "2.0.6"
   },
   "devDependencies": {
