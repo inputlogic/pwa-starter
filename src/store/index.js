@@ -4,6 +4,7 @@
 
 import createStore from 'atom'
 import devtools from 'atom/devtools'
+import pathReducer, { actions as pathActions } from '@wasmuth/path-reducer'
 import { requestsReducer, actions as reqActions } from '@app-elements/use-request'
 
 import { DEBUG } from '/consts'
@@ -12,6 +13,7 @@ import { initialState } from './initial-state'
 // You can either define your reducers here, or add them later with:
 // `store.addReducer(reducer)`
 const reducers = [
+  pathReducer,
   requestsReducer
 ]
 
@@ -24,6 +26,10 @@ export const store = DEBUG && !window.isJest
 export const getState = store.getState
 export const setState = store.setState
 export const dispatch = store.dispatch
+
+export const set = pathActions.set
+export const update = pathActions.update
+export const remove = pathActions.remove
 
 export const appendRequest = reqActions.appendRequest
 export const clearRequest = reqActions.clearRequest
