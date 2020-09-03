@@ -4,7 +4,8 @@ import { showNotification } from '@app-elements/notification'
 import { useRouter } from '@app-elements/router'
 
 import { url } from '/util/url'
-import { LoginForm } from './elements/login-form'
+import { setState } from '/store'
+import { LoginForm } from '../elements/login-form'
 
 export function LoginModal () {
   // We can use the 'next' argument to redirect back to the user's destination
@@ -23,6 +24,8 @@ export function LoginModal () {
     <Modal className='styled-modal small'>
       <div className='modal-header'>
         <h2>Sign In</h2>
+      </div>
+      <div className='container pb-1'>
         <LoginForm onSuccess={onSuccess} onFailure={onFailure} />
       </div>
     </Modal>

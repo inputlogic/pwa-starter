@@ -25,8 +25,14 @@ const UserActions = () =>
 
 export function GlobalHeader () {
   const [authed] = useStorePath('token')
+  const [, setModal] = useStorePath('modal')
 
   useScrollToTop()
+
+  const openLoginModal = (ev) => {
+    ev.preventDefault()
+    setModal('LoginModal')
+  }
 
   return (
     <header class='global-header'>
@@ -48,6 +54,7 @@ export function GlobalHeader () {
                 <nav className='header-nav'>
                   <Link name='home' activeClass='active-link'>Home</Link>
                   <Link name='login' activeClass='active-link'>Log In</Link>
+                  <button onClick={openLoginModal}>Log In Modal</button>
                 </nav>
                 <Link name='signup' className='btn'>Sign Up</Link>
               </div>

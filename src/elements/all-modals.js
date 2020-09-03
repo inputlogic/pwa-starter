@@ -1,6 +1,6 @@
 import { Modals } from '@app-elements/modal'
 
-import { ExampleModal } from '/modals/example-modal'
+import { LoginModal } from '/apps/auth/modals/login-modal'
 import { useStorePath } from '/store/hooks'
 
 export function AllModals () {
@@ -8,7 +8,7 @@ export function AllModals () {
 
   return (
     <Modals value={modal} syncState={setModal}>
-      <ExampleModal />
+      <LoginModal />
     </Modals>
   )
 }
