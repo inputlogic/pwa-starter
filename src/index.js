@@ -16,6 +16,7 @@ import { render } from 'react'
 import Helmet from '@app-elements/helmet'
 import Notification from '@app-elements/notification'
 import { Router, RouteProvider } from '@app-elements/router'
+import { configure } from '@app-elements/use-request/request'
 
 // Here, we import Components we want to render on *all* routes. For example,
 // we include a GlobalHeader, and a *NotFound* component which renders when no route is
@@ -49,6 +50,12 @@ import '/styles/form.less'
 import { AuthApp, routes as authRoutes } from '/apps/auth'
 import { MainApp, routes as mainRoutes } from '/apps/main'
 import { MarketingApp, routes as marketingRoutes } from '/apps/marketing'
+
+// Settings
+import { API_URL } from '/consts'
+
+// Configure the request function
+configure({ apiUrl: API_URL, storage: window.localStorage })
 
 // Define our top-level routes
 const routes = {
