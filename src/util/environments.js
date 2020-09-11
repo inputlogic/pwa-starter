@@ -1,5 +1,7 @@
+import W from 'wasmuth'
+
 const environments = {
-  test: 'localhost:5001',
+  test: /^localhost$/,
   development: /^localhost:\d{4}$/,
   staging: /netlify\.app$/,
   production: ['pwa-starter.com', 'www.pwa-starter.com']
@@ -14,7 +16,7 @@ export const environment = (() => {
     Object.keys(environments)
   )
   if (!current) {
-    throw new Error('No environment matching current url: ' + host)
+    throw new Error('No environment matching current url: ' + window.location)
   }
   return current
 })()
