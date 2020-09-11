@@ -14,6 +14,10 @@ export function SignUpModal () {
 
   const onSuccess = () => {
     setState({ modal: null })
+    showNotification({
+      type: 'success',
+      message: 'Your account has been created!'
+    })
     router.routeTo(redirect || url('app'))
   }
 
