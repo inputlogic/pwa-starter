@@ -1,15 +1,11 @@
 /* eslint import/no-default-export: 0 */
 
 import { resolve as pathResolve } from 'path'
-import { writeFileSync } from 'fs'
-import less from 'less'
-import lessGlob from 'less-plugin-glob'
 
 // Rollup plugins.
 import alias from '@rollup/plugin-alias'
 import babel from '@rollup/plugin-babel'
 import cjs from '@rollup/plugin-commonjs'
-import css from 'rollup-plugin-css-only'
 import inject from '@rollup/plugin-inject'
 import replace from '@rollup/plugin-replace'
 import resolve from '@rollup/plugin-node-resolve'
@@ -32,20 +28,6 @@ export default {
     }
   ],
   plugins: [
-    css({
-      include: ['**/*.less', 'node_modules/@app-elements/**/*.less'],
-      output: function (styles, styleNodes) {
-        less
-          .render(styles, { plugins: [lessGlob] })
-          .then(output => {
-            // output.css = string of css
-            // output.map = string of sourcemap
-            // output.imports = array of string filenames of the imports referenced
-            writeFileSync('public/bundle.css', output.css)
-          },
-          error => console.log({ error }))
-      }
-    }),
     babel({
       babelHelpers: 'bundled',
       include: ['src/**', 'server/**', 'node_modules/@app-elements/form/**', 'node_modules/@app-elements/with-state/**']

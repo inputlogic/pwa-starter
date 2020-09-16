@@ -3,7 +3,6 @@ import { Dropdown } from '@app-elements/dropdown'
 import { Link, useScrollToTop } from '@app-elements/router'
 
 import { useStorePath } from '/store/hooks'
-import './global-header.less'
 
 const UserActions = () =>
   <Dropdown

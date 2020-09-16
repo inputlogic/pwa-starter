@@ -1,5 +1,3 @@
-import './textarea.less'
-
 export const TextArea = ({ name, value, label, placeholder, rows = '5', ...props }) =>
   <div className='textarea-component'>
     {label && <label>{label}</label>}

@@ -1,5 +1,3 @@
-import './pricing.less'
-
 export function Pricing ({
   primary = false,
   title,

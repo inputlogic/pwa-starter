@@ -1,5 +1,3 @@
-import './text-input.less'
-
 export const TextInput = ({
   type = 'text',
   name,

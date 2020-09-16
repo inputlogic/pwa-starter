@@ -1,7 +1,5 @@
 import { Avatar } from '@app-elements/avatar'
 
-import './testimonial.less'
-
 export function Testimonial ({
   quote,
   attribution,

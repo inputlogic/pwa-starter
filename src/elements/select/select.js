@@ -1,5 +1,3 @@
-import './select.less'
-
 export const Select = ({ name, label, children, ...props }) =>
   <div className='select-wrap'>
     {label && <label>{label}</label>}

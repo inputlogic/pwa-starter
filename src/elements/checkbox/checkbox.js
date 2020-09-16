@@ -1,5 +1,3 @@
-import './checkbox.less'
-
 export const Checkbox = ({
   id,
   name,
