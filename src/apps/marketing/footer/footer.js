@@ -1,7 +1,5 @@
 import { Link } from '@app-elements/router'
 
-import './footer.less'
-
 export function MarketingFooter () {
   return (
     <div className='footer bg-white'>

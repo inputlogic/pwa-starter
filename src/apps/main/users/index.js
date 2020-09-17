@@ -4,8 +4,6 @@ import { LoadingIndicator } from '@app-elements/loading-indicator'
 import { useRequest, useStorePath } from '/store/hooks'
 import { url } from '/util/url'
 
-import './users.less'
-
 // We need to define a Component that represents each item returned
 // from the API request. In our case, the API response looks like:
 //   [

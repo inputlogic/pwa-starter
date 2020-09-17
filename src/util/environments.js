@@ -16,6 +16,9 @@ export const environment = (() => {
     Object.keys(environments)
   )
   if (!current) {
+    if (navigator.userAgent === 'ReactSnap') {
+      return 'production'
+    }
     throw new Error('No environment matching current url: ' + window.location)
   }
   return current

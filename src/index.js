@@ -28,23 +28,6 @@ import { NotFound } from '/elements/not-found'
 // We'll also import this file that extends some native functions.
 import '/util/extend-xhr'
 
-// ### Styling
-
-// We use LESS for styling. And ideally, each element Component will
-// import a `style.less` file in the same directory. This allows us to
-// organize styles based on Component organization, without drastically
-// changing the way we write CSS.
-
-// In this case, we are loading the global styles.
-import '/styles/reset.less'
-import '/styles/base.less'
-import '/styles/variables.less'
-import '/styles/typography.less'
-import '/styles/button.less'
-import '/styles/layout.less'
-import '/styles/modals.less'
-import '/styles/form.less'
-
 // ### Our top-level components
 
 import { AuthApp, routes as authRoutes } from '/apps/auth'
