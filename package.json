@@ -16,7 +16,7 @@
     "browse": "node server/index.js",
     "prebuild": "npm run test",
     "build": "rollup -c config/prod.js & npm run less",
-    "postbuild": "react-snap",
+    "postbuild": "sleep 10 && react-snap",
     "prelint": "rm -rf public; mkdir public; cp -r src/assets/* public/",
     "lint": "eslint ./src",
     "pretest": "npm run lint",
