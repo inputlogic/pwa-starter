@@ -8,6 +8,10 @@ const environments = {
 }
 
 export const environment = (() => {
+  if (navigator.userAgent === 'ReactSnap') {
+    console.log('IS SNAP', process)
+    return 'production'
+  }
   const host = window.location.host
   const current = W.find(
     (env) => W.toType(environments[env]) === 'array'
@@ -16,9 +20,6 @@ export const environment = (() => {
     Object.keys(environments)
   )
   if (!current) {
-    if (navigator.userAgent === 'ReactSnap') {
-      return 'production'
-    }
     throw new Error('No environment matching current url: ' + window.location)
   }
   return current

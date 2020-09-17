@@ -84,4 +84,12 @@ function Root () {
   )
 }
 
-render(<Root />, document.getElementById('root'))
+const rootElement = document.getElementById('root')
+
+// for hydration:
+// https://github.com/preactjs/preact/issues/1060#issuecomment-389987994
+if (rootElement.hasChildNodes()) {
+  render(<Root />, rootElement, rootElement.firstElementChild)
+} else {
+  render(<Root />, rootElement)
+}
