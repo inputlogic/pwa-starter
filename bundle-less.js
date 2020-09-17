@@ -1,8 +1,8 @@
-import { resolve as pathResolve } from 'path'
-import { readFileSync, writeFileSync } from 'fs'
-import less from 'less'
-import lessGlob from 'less-plugin-glob'
+const { readFileSync, writeFileSync } = require('fs')
+const less = require('less')
+const lessGlob = require('less-plugin-glob')
 
+const index = 'src/styles/index.less'
 const out = 'public/bundle.css'
 const opts = {
   paths: ['./src/styles/'],
@@ -10,7 +10,7 @@ const opts = {
 }
 
 try {
-  const styles = readFileSync('src/styles/index.less', 'utf8')
+  const styles = readFileSync(index, 'utf8')
   less
     .render(styles, opts)
     .then(output => {
