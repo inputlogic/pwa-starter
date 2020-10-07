@@ -67,4 +67,15 @@ heroku buildpacks:add --index 2 heroku/nodejs
 Netlify
 -------
 
-Nothing! Well, setup a site at [netlify.com](https://netlify.com), then keep pushing to master.
+1. [Create a new Netlify site](https://app.netlify.com/start)
+2. When you get to `Basic build settings`, set the following values:
+```
+Build command: npm run build
+Publish Directory: public
+```
+3. On the same step, click `Show advanced` to define Environment Variables
+```
+NODE_ENV: netlify
+```
+
+And that should do it!
