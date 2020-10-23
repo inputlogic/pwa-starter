@@ -78,4 +78,10 @@ Publish Directory: public
 NODE_ENV: netlify
 ```
 
-And that should do it!
+If you encounter a deploy error on Netlify like:
+
+```
+TypeError: Failed to fetch dynamically imported module: http://localhost:45678/module/index.js
+```
+
+You can try increasing the `sleep` time in [package.json](/package.json). There seems to be the occassional race condition related to the file system on Netlify, where the cacheBuster rewrites the js and css includes in `index.html` to have a timestamp, but react-snap is invoked with the old `index.html`.
