@@ -1,4 +1,4 @@
-import { h, Component } from 'preact'
+import { h, Component } from 'react'
 
 export const asyncComponent = getComponent => {
   class AsyncComponent extends Component {

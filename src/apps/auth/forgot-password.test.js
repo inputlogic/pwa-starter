@@ -2,7 +2,7 @@
 
 jest.mock('@app-elements/use-form')
 
-import { render } from 'preact'
+import { render } from 'react'
 import { useForm } from '@app-elements/use-form'
 import { RouteProvider } from '@app-elements/router'
 
