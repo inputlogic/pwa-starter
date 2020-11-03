@@ -62,14 +62,6 @@ export default {
     }),
     alias({
       entries: [
-        {
-          find: 'react',
-          replacement: pathResolve(__dirname, '../node_modules/preact/compat/src/index.js')
-        },
-        {
-          find: 'react-dom',
-          replacement: pathResolve(__dirname, '../node_modules/preact/compat/src/index.js')
-        }
       ]
     })
   ]
