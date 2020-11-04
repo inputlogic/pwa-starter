@@ -1,6 +1,7 @@
 import { Fragment } from 'react'
-import Carousel from '@app-elements/carousel'
-import Helmet from '@app-elements/helmet'
+import { Carousel } from '@app-elements/carousel'
+import { Helmet } from '@app-elements/helmet'
+import { Image } from '@app-elements/image'
 import { Link } from '@app-elements/router'
 
 import { Hero, ReverseHero } from './hero'
@@ -49,7 +50,15 @@ export function Home () {
             </>
           )}
           media={(
-            <img src='https://via.placeholder.com/450/4285F4/FFFFFF?Text=Cool Screenshot' alt='Screenshot of our app in use' width='450' height='450' />
+            <Image
+              srcs={[
+                'https://via.placeholder.com/450/4285F4/FFFFFF?Text=Cool Screenshot',
+                'https://via.placeholder.com/900/4285F4/FFFFFF?Text=Cool Screenshot'
+              ]}
+              alt='Screenshot of our app in use'
+              width='450'
+              height='450'
+            />
           )}
         />
         <div id='features' className='pt-10'>

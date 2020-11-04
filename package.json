@@ -46,7 +46,7 @@
     "@app-elements/dropdown": "4.0.1",
     "@app-elements/equal": "^1.0.4",
     "@app-elements/helmet": "3.0.6",
-    "@app-elements/image": "2.0.0",
+    "@app-elements/image": "^2.0.0",
     "@app-elements/loading-indicator": "2.0.1",
     "@app-elements/modal": "4.0.3",
     "@app-elements/notification": "3.0.2",
