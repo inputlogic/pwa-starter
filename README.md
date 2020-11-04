@@ -13,7 +13,8 @@ where an API needs to be learned or memorized. You should have a strong understa
 Features
 ========
 
-- Small bundle size [Why Preact over React?](https://gist.github.com/staydecent/9c43364c8f52e944fdb1100bcc4bae82)
+- **100/100 Lighthouse score**, right out of the box ([proof](https://lighthouse-dot-webdotdevsite.appspot.com//lh/html?url=https%3A%2F%2Fpwa-starter.netlify.app%2F#))
+- Small bundle size ([Why Preact over React?](https://gist.github.com/staydecent/9c43364c8f52e944fdb1100bcc4bae82))
 - Pre-rendered pages (via [React Snap](https://github.com/stereobooster/react-snap))
 - Efficient networking
 - Speedy development
