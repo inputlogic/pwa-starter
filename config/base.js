@@ -47,6 +47,9 @@ export default {
         'node_modules/object-assign/**',
         'node_modules/preact/**',
         'node_modules/prop-types/**',
+        'node_modules/scheduler/**',
+        'node_modules/react/**',
+        'node_modules/react-dom/**',
         'node_modules/react-is/**',
         'node_modules/to-snake-case/**',
         'node_modules/warning/**'

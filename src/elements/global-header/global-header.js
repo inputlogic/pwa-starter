@@ -34,7 +34,7 @@ export function GlobalHeader () {
   }
 
   return (
-    <header class='global-header'>
+    <header className='global-header'>
       <div className='container'>
         <div className='level no-padding'>
           <h1><Link name={authed ? 'app' : 'home'}>PWA</Link></h1>
@@ -47,7 +47,7 @@ export function GlobalHeader () {
                 </nav>
                 <UserActions />
               </div>
-            )
+              )
             : (
               <div className='level pl-2'>
                 <nav className='header-nav'>
@@ -57,7 +57,7 @@ export function GlobalHeader () {
                 </nav>
                 <Link name='signup' className='btn'>Sign Up</Link>
               </div>
-            )}
+              )}
         </div>
       </div>
     </header>

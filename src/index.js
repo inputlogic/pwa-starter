@@ -1,4 +1,4 @@
-import { render } from 'react'
+import { render } from 'react-dom'
 
 // Entry Point of Your App
 // -----------------------

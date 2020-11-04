@@ -45,7 +45,7 @@ export function ForgotPassword () {
                   </span>
                 </div>
               </form>
-            )}
+              )}
         </div>
       </div>
     </div>

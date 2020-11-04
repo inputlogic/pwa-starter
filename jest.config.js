@@ -5,10 +5,7 @@ module.exports = {
     './tests-setup.js'
   ],
   moduleNameMapper: {
-    '\\.(css|less)$': 'identity-obj-proxy',
-    '^react$': 'preact/compat',
-    '^react-dom$': 'preact/compat',
-    '^react-dom/test-utils$': 'preact/test-utils'
+    '\\.(css|less)$': 'identity-obj-proxy'
   },
   // Let babel transpile certain node_modules
   transformIgnorePatterns: [

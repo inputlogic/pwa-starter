@@ -9,4 +9,5 @@ export function NotFound () {
       </div>
     )
   }
+  return null
 }

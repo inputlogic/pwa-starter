@@ -11,7 +11,7 @@ import { url } from '/util/url'
 //     ...
 //   ]
 const UserItem = ({ id, name, email }) =>
-  <div class='user-item'>
+  <div className='user-item'>
     <h2><Link name='user' args={{ id }}>{name}</Link></h2>
     <p>{email}</p>
   </div>
