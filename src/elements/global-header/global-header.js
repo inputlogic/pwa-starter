@@ -53,7 +53,7 @@ export function GlobalHeader () {
                 <nav className='header-nav'>
                   <Link name='home' activeClass='active-link'>Home</Link>
                   <Link name='login' activeClass='active-link'>Log In</Link>
-                  <button onClick={openLoginModal}>Log In Modal</button>
+                  <button className='btn btn-ghost' onClick={openLoginModal}>Log In Modal</button>
                 </nav>
                 <Link name='signup' className='btn'>Sign Up</Link>
               </div>

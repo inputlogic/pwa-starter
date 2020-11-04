@@ -12,14 +12,14 @@ export function MarketingFooter () {
             </div>
             <div className='measure-narrow'>&nbsp;</div>
             <nav>
-              <h3>Product</h3>
+              <h2 className='nav-title'>Product</h2>
               <Link name='home'>Home</Link>
               <Link name='home'>Home</Link>
               <Link name='home'>Home</Link>
               <Link name='home'>Home</Link>
             </nav>
             <nav>
-              <h3>Company</h3>
+              <h2 className='nav-title'>Company</h2>
               <Link name='home'>Home</Link>
               <Link name='home'>Home</Link>
             </nav>

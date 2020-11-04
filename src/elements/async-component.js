@@ -1,4 +1,4 @@
-import { h, Component } from 'react'
+import { createElement, Component } from 'react'
 
 export const asyncComponent = getComponent => {
   class AsyncComponent extends Component {
@@ -10,7 +10,7 @@ export const asyncComponent = getComponent => {
 
     render () {
       if (this.state.componentData) {
-        return h(this.state.componentData, this.props)
+        return createElement(this.state.componentData, this.props)
       } else if (this.props.loading) {
         return this.props.loading()
       }

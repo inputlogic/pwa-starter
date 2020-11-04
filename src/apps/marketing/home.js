@@ -21,7 +21,7 @@ export function Home () {
       <Helmet
         title='Welcome'
         meta={[
-          { property: 'description', content: 'Your life is better with our app.' },
+          { name: 'description', content: 'Your life is better with our app.' },
           { property: 'og:title', content: 'PWA Starter | Welcome' },
           { property: 'og:site_name', content: 'PWA Starter, Inc.' },
           { property: 'og:description', content: 'PWA Starter is your starting point for your next Preact app.' },
@@ -49,7 +49,7 @@ export function Home () {
             </>
           )}
           media={(
-            <img src='https://via.placeholder.com/450/4285F4/FFFFFF?Text=Cool Screenshot' alt='Screenshot of our app in use' />
+            <img src='https://via.placeholder.com/450/4285F4/FFFFFF?Text=Cool Screenshot' alt='Screenshot of our app in use' width='450' height='450' />
           )}
         />
         <div id='features' className='pt-10'>
@@ -90,7 +90,7 @@ export function Home () {
                 </>
               )}
               media={(
-                <img src='https://via.placeholder.com/450/00D1F7/FFFFFF?Text=Cool Screenshot' alt='Screenshot of our app in use' />
+                <img src='https://via.placeholder.com/450/00D1F7/FFFFFF?Text=Cool Screenshot' alt='Screenshot of our app in use' width='450' height='450' />
               )}
             />
           </div>
@@ -122,7 +122,7 @@ export function Home () {
             </div>
           )}
           media={(
-            <img src='https://via.placeholder.com/350/7F909F/FFFFFF?Text=Cool Screenshot' alt='Screenshot of our app in use' />
+            <img src='https://via.placeholder.com/350/7F909F/FFFFFF?Text=Cool Screenshot' alt='Screenshot of our app in use' width='450' height='450' />
           )}
         />
       </div>
